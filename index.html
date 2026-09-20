@@ -106,39 +106,66 @@
 
       <!-- 슬라이드 보기 -->
       <div id="slideView" class="slide-view hidden">
-        <div class="deck-bar">
-          <button id="sPrev" class="btn ghost small" title="이전 슬라이드 (←)">◀</button>
-          <span id="sCount" class="s-count">1 / 1</span>
-          <button id="sNext" class="btn ghost small" title="다음 슬라이드 (→)">▶</button>
-          <button id="sGrid" class="btn ghost small" title="슬라이드 목록 (G)">▦ 목록</button>
-          <span class="spacer"></span>
-          <span class="teacher-only timer" id="timerBox" title="수업 타이머 (T: 시작/정지)">
-            <span id="timerText">00:00</span>
-            <button id="timerBtn" class="icon-btn small" title="시작/정지">▶</button>
-            <button id="timerReset" class="icon-btn small" title="초기화">↺</button>
-          </span>
-          <button id="sNotes" class="btn ghost small teacher-only" title="교사 노트 (N)">🗒 노트</button>
-          <button id="sPresenter" class="btn ghost small teacher-only" title="발표자 창 열기">🖥 발표자 창</button>
-          <button id="sFull" class="btn primary small" title="전체 화면 (F)">⛶ 전체 화면</button>
+        <div id="deckBar" class="deck-bar">
+          <!-- 첫째 줄: 이동과 보기 -->
+          <div class="deck-row">
+            <button id="sFirst" class="dk-btn" title="처음 슬라이드 (Home)">⏮<span class="lbl">처음</span></button>
+            <button id="sPrev" class="dk-btn" title="이전 슬라이드 (← , PageUp)">◀</button>
+            <span id="sCount" class="s-count">1 / 1</span>
+            <button id="sNext" class="dk-btn" title="다음 슬라이드 (→ , Space, PageDown)">▶</button>
+            <input id="sSlider" class="s-slider" type="range" min="1" max="1" value="1" step="1" title="끌어서 원하는 쪽으로 이동" aria-label="슬라이드 이동">
+            <span id="sTitle" class="s-slide-title"></span>
+            <span class="spacer"></span>
+            <span class="teacher-only timer" id="timerBox">
+              <button id="timerBtn" class="timer-btn" title="수업 타이머 시작/일시정지 (T)">⏱ <span id="timerText">00:00</span></button>
+              <button id="timerReset" class="icon-btn small" title="타이머 초기화">↺</button>
+            </span>
+            <button id="sPresenter" class="dk-btn teacher-only" title="발표자 창: 교사 노트 · 다음 슬라이드 · 타이머를 다른 모니터에 표시">🗒<span class="lbl">발표자 창</span></button>
+            <button id="sGrid" class="dk-btn" title="슬라이드 목록 (G)">▦<span class="lbl">목록</span></button>
+            <button id="sDoc" class="dk-btn" title="문서 보기로 전환">📄<span class="lbl">문서</span></button>
+            <button id="sFull" class="dk-btn primary" title="전체 화면 발표 (F)">⛶<span class="lbl">전체 화면</span></button>
+          </div>
+          <!-- 둘째 줄: 판서 도구 (교사용) -->
+          <div class="deck-row ink-row teacher-only" id="inkBar">
+            <span class="ink-label">✏️<span class="lbl">판서</span></span>
+            <span class="ink-group" id="inkTools">
+              <button class="dk-btn ink-btn" data-tool="pen" title="펜">🖊<span class="lbl">펜</span></button>
+              <button class="dk-btn ink-btn" data-tool="marker" title="형광펜 (반투명 · 굵게)">🖍<span class="lbl">형광펜</span></button>
+              <button class="dk-btn ink-btn" data-tool="eraser" title="지우개 (스친 획을 통째로 삭제)">🧽<span class="lbl">지우개</span></button>
+              <button class="dk-btn ink-btn" data-tool="laser" title="지시봉 (그리지 않고 가리키기)">👆<span class="lbl">지시봉</span></button>
+            </span>
+            <span class="ink-group" id="inkColors"></span>
+            <span class="ink-group" id="inkWidths"></span>
+            <span class="ink-group">
+              <button class="dk-btn ink-btn" id="inkUndo" title="되돌리기 (Ctrl+Z)">↶<span class="lbl">되돌리기</span></button>
+              <button class="dk-btn ink-btn" id="inkClear" title="이 슬라이드의 판서 지우기">🗑<span class="lbl">이 장 지우기</span></button>
+              <button class="dk-btn ink-btn" id="inkClearAll" title="이 강의의 판서 모두 지우기">🗑<span class="lbl">모두</span></button>
+            </span>
+          </div>
+          <div class="deck-progress"><i id="deckProgress"></i></div>
         </div>
         <div id="deckWrap" class="deck-wrap">
           <div id="stageHost" class="stage-host">
-            <div id="stage" class="stage"></div>
-            <div id="blackout" class="blackout hidden"></div>
+            <div id="stage" class="stage">
+              <div id="slideLayer" class="slide-layer"></div>
+              <canvas id="inkCanvas" class="ink-canvas"></canvas>
+              <div class="edge edge-prev" data-edge="prev" title="이전 슬라이드"><span>‹</span></div>
+              <div class="edge edge-next" data-edge="next" title="다음 슬라이드"><span>›</span></div>
+              <div id="blackout" class="blackout hidden"></div>
+            </div>
           </div>
           <div id="fsConsoleSlot" class="fs-console-slot"></div>
-          <div class="fs-controls">
-            <button data-fs="prev" title="이전 (←)">◀</button>
-            <span id="fsCount">1 / 1</span>
-            <button data-fs="next" title="다음 (→)">▶</button>
-            <button data-fs="grid" title="목록 (G)">▦</button>
-            <button data-fs="console" title="실행 결과 패널 (R)">▣ 결과</button>
-            <button data-fs="black" title="화면 가리기 (B)">◼</button>
-            <button data-fs="exit" title="전체 화면 종료 (Esc)">✕</button>
-          </div>
           <div id="gridOverlay" class="grid-overlay hidden"></div>
         </div>
-        <div id="notesPane" class="notes-pane teacher-only"></div>
+        <div id="notesPane" class="notes-pane teacher-only">
+          <div class="notes-head" id="notesHead">
+            <b>🗒 교사용 노트</b>
+            <span class="spacer"></span>
+            <span id="notesNext" class="notes-next"></span>
+            <button id="notesToggle" class="btn ghost small" title="교사 노트 접기/펴기 (N)">▾ 접기</button>
+          </div>
+          <div id="notesBody" class="notes-body"></div>
+        </div>
       </div>
     </main>
     <div class="gutter" data-resize="out" title="드래그하여 너비 조절"></div>
@@ -191,6 +218,7 @@
 
   <script src="js/course.js"></script>
   <script src="js/highlight.js"></script>
+  <script src="js/annotate.js"></script>
   <script src="js/py-engine.js"></script>
   <script src="js/gui.js"></script>
   <script src="js/runner.js"></script>

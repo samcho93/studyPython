@@ -68,10 +68,29 @@
     store.set('jc.theme', t);
   }
 
+  /** 교사용 화면은 비밀번호를 한 번 확인한다 (확인하면 이 브라우저에서는 다시 묻지 않음) */
+  function teacherAllowed() {
+    const pass = String(C.teacherPass || 'py2026');
+    if (store.get('jc.teacherOk', '') === pass) return true;
+    const v = window.prompt('교사용 화면 비밀번호를 입력하세요.', '');
+    if (v == null) return false;
+    if (v.trim() !== pass) {
+      app.toast('비밀번호가 맞지 않습니다');
+      return false;
+    }
+    store.set('jc.teacherOk', pass);
+    return true;
+  }
+
   function setRole(role, silent) {
+    if (role === 'teacher' && !teacherAllowed()) {
+      document.querySelectorAll('.role-switch button').forEach((b) => b.classList.toggle('active', b.dataset.role === app.role));
+      return;
+    }
     app.role = role;
     store.set('jc.role', role);
     document.body.classList.toggle('role-teacher', role === 'teacher');
+    if (window.Ink) Ink.enabled = role === 'teacher';   // 판서는 교사용에서만
     document.querySelectorAll('.role-switch button').forEach((b) => b.classList.toggle('active', b.dataset.role === role));
     $('brandSub').textContent = role === 'teacher' ? '🧑‍🏫 교사용 · PPT 수업 모드' : '🎓 학생용 · 문서 + 실습';
     const q = new URLSearchParams(location.search);
@@ -88,6 +107,7 @@
     app.view = view;
     render();
   }
+  app.setView = setView;
 
   // ================================================================== 에디터
   function setupEditor() {
@@ -139,6 +159,7 @@
 
   app.runCode = function (code, opts = {}) {
     app.activeEditor = opts.editor || null;
+    if (app.deck && app.deck.isFull()) app.deck.showConsole(true);   // 발표 중 코드를 실행하면 결과 창을 연다
     let stdin = opts.stdin;
     if (opts.repl && stdin) {
       // 대화형 예제: 들여쓴 블록이 끝나도록 빈 줄을 붙인다
@@ -151,6 +172,27 @@
       repl: !!opts.repl,
       onDiagnostics: (d) => { if (opts.editor) opts.editor.markErrors(d); }
     });
+  };
+
+  /** 그림 크게 보기 — 전체 화면 발표 중에도 보이도록 전체 화면 요소 안에 넣는다 */
+  app.lightbox = function (src, caption) {
+    app.closeLightbox();
+    const host = document.fullscreenElement || document.querySelector('.deck-wrap.pfull') || document.body;
+    const back = document.createElement('div');
+    back.className = 'lb-back';
+    back.innerHTML = `<div class="lb-head"><span>${esc(caption || '')}</span><span class="spacer"></span>
+        <button class="btn small ghost" data-lb-close>✕ 닫기 (Esc)</button></div>
+      <img src="${esc(src)}" alt="${esc(caption || '')}">`;
+    back.addEventListener('click', (e) => { if (e.target === back || e.target.closest('[data-lb-close]')) app.closeLightbox(); });
+    host.appendChild(back);
+    app._lb = back;
+    return back;
+  };
+  app.closeLightbox = function () {
+    if (!app._lb) return false;
+    app._lb.remove();
+    app._lb = null;
+    return true;
   };
 
   app.toast = function (msg) {
@@ -268,6 +310,7 @@
   };
 
   app.onSlideChange = function (sec, index) {
+    store.set('jc.slidePos', JSON.stringify({ id: sec.id, i: index }));
     const h = `#${sec.id}@${index + 1}`;
     if (location.hash !== h) history.replaceState(null, '', location.pathname + location.search + h);
   };
@@ -294,7 +337,13 @@
     } else {
       $('crumb').innerHTML = `Chapter ${esc(r.ch.no)} ${esc(r.ch.title)} › <b>${esc(r.sec.title)}</b>`;
       if (slides) {
-        const idx = app.pendingSlide != null ? app.pendingSlide : (r.slide != null ? r.slide : 0);
+        let idx = app.pendingSlide != null ? app.pendingSlide : (r.slide != null ? r.slide : null);
+        if (idx == null) {
+          // 같은 교시를 새로 고치거나 보기 방식만 바꾼 경우에는 보던 쪽에서 이어 본다
+          let pos = null;
+          try { pos = JSON.parse(store.get('jc.slidePos', 'null')); } catch (e) { pos = null; }
+          idx = pos && pos.id === r.sec.id ? pos.i : 0;
+        }
         app.pendingSlide = null;
         app.deck.open(r.ch, r.sec, idx);
       } else {
@@ -620,13 +669,21 @@
       const url = URL.createObjectURL(blob);
       const dl = `<a class="btn small ghost" href="${url}" download="${esc(name.split('/').pop())}">⬇ 내려받기</a>`;
       let body;
-      if (/\.(gif|png|jpe?g|bmp|webp)$/i.test(name)) body = `<img src="${URL.createObjectURL(new Blob([f.bytes], { type: 'image/' + name.split('.').pop().toLowerCase().replace('jpg', 'jpeg') }))}" style="max-width:100%;image-rendering:pixelated;background:#eee">`;
+      if (/\.(gif|png|jpe?g|bmp|webp)$/i.test(name)) {
+        const isrc = URL.createObjectURL(new Blob([f.bytes], { type: 'image/' + name.split('.').pop().toLowerCase().replace('jpg', 'jpeg') }));
+        body = `<img src="${isrc}" style="max-width:100%;image-rendering:pixelated;background:#eee" data-zoom="${esc(isrc)}">
+          <div class="meta-row"><button class="btn small ghost" data-zoom-btn="${esc(isrc)}">⤢ 크게 보기</button></div>`;
+      }
       else {
         let text = new TextDecoder('utf-8', { fatal: false }).decode(f.bytes.slice(0, 200000));
         const binary = /[\u0000-\u0008\u000e-\u001f]/.test(text.slice(0, 2000));
         body = binary ? `<p class="muted">이진(binary) 파일입니다 — ${size(f.bytes.length)}</p>` : `<pre>${esc(text)}</pre>`;
       }
       $('fileView').innerHTML = `<h4 style="margin:10px 0 4px">${esc(name)} ${dl}</h4>${body}`;
+      $('fileView').querySelectorAll('[data-zoom], [data-zoom-btn]').forEach((el) => {
+        el.style.cursor = 'zoom-in';
+        el.onclick = () => app.lightbox(el.dataset.zoom || el.dataset.zoomBtn, name);
+      });
     });
     $('filesRefresh').onclick = filesModal;
     $('filesUpload').onchange = async (e) => {
@@ -679,7 +736,11 @@
     $('replBtn').onclick = () => app.runCode('', { label: '대화형 모드 (>>>)', repl: true });
     $('modalClose').onclick = closeModal;
     $('modal').addEventListener('click', (e) => { if (e.target === $('modal')) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('modal').classList.contains('hidden')) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (app.closeLightbox()) { e.preventDefault(); return; }
+      if (!$('modal').classList.contains('hidden')) closeModal();
+    });
 
     $('content').addEventListener('click', (e) => {
       const act = e.target.closest('[data-code-act]');

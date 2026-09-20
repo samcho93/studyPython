@@ -3,6 +3,7 @@
  */
 window.PY_COURSE = {
   title: '파이썬 프로그래밍',
+  teacherPass: 'py2026',   // 교사용 화면 비밀번호 (바꿔서 쓰세요)
   subtitle: '강의자료 기반 웹 실습 강좌',
   order: [
     { id: 'ch01', no: '01', title: '파이썬 들여다보기', icon: '🐍', src: 'Ch01_파이썬 들여다보기.pptx' },

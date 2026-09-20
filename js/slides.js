@@ -36,8 +36,10 @@
       this.editor = null;
       this.notesOpen = Runner.store.get('jc.notesOpen', '1') === '1';
       this.stage = $('stage');
+      this.layer = $('slideLayer');
       this.wrap = $('deckWrap');
       this.host = $('stageHost');
+      this.bar = $('deckBar');
       this.timer = { start: 0, acc: 0 };
       this.channel = 'BroadcastChannel' in window ? new BroadcastChannel('python-presenter') : null;
       this.bind();
@@ -53,6 +55,7 @@
       const n = this.slides.length;
       this.index = index === 'last' ? n - 1 : Math.max(0, Math.min(n - 1, (index | 0)));
       $('notesPane').classList.toggle('collapsed', !this.notesOpen);
+      $('notesToggle').textContent = this.notesOpen ? '▾ 접기' : '▸ 펴기';
       this.render();
     }
 
@@ -76,7 +79,7 @@
     // ---------------------------------------------------------------- 렌더링
     render() {
       const s = this.slides[this.index];
-      if (!s) { this.stage.innerHTML = ''; return; }
+      if (!s) { this.layer.innerHTML = ''; return; }
       const teacher = this.app.role === 'teacher';
       this.editor = null;
       const key = `${this.sec.id}@${this.index}`;
@@ -167,8 +170,8 @@
           html = top + title + `<div class="s-body">${s.html ? JU.scoped(s.html) : bulletsHtml(s.bullets)}</div>` + foot;
       }
 
-      this.stage.innerHTML = `<div class="${cls}">${html}</div>`;
-      const slideEl = this.stage.firstElementChild;
+      this.layer.innerHTML = `<div class="${cls}">${html}</div>`;
+      const slideEl = this.layer.firstElementChild;
 
       // 코드 편집기
       const edHost = slideEl.querySelector('.s-editor-host');
@@ -189,6 +192,8 @@
       }
 
       slideEl.addEventListener('click', (e) => this.onSlideClick(e, s));
+      if (window.Ink) Ink.setSlide(`${this.sec.id}@${this.index}`);
+      if (this.isFull()) this.showConsole(false);   // 발표 중에는 쪽을 넘기면 결과 창을 닫는다
       this.updateChrome();
       this.renderNotes();
       this.broadcast();
@@ -202,7 +207,7 @@
       if (opt && s.layout === 'quiz') {
         const i = +opt.dataset.opt;
         opt.classList.add(i === s.answer ? 'right' : 'wrong');
-        if (i === s.answer) this.stage.querySelector('.explain').classList.remove('hidden');
+        if (i === s.answer) this.layer.querySelector('.explain').classList.remove('hidden');
         return;
       }
       if (!act) return;
@@ -214,15 +219,15 @@
         const cur = +(Runner.store.get('jc.slideCodeFont', '0')) || 1.45;
         const next = Math.max(0.9, Math.min(2.6, cur + (a === 'font+' ? 0.15 : -0.15)));
         Runner.store.set('jc.slideCodeFont', next.toFixed(2));
-        this.stage.querySelector('.s-editor').style.setProperty('--s-code-font', next.toFixed(2) + 'cqw');
+        this.layer.querySelector('.s-editor').style.setProperty('--s-code-font', next.toFixed(2) + 'cqw');
         this.editor && this.editor.refresh();
       } else if (a === 'solution') {
         const key = `${this.sec.id}@${this.index}`;
         this.solutionOn[key] = !this.solutionOn[key];
         this.render();
       } else if (a === 'reveal') {
-        this.stage.querySelectorAll('.opt').forEach((o) => { if (+o.dataset.opt === s.answer) o.classList.add('right'); });
-        this.stage.querySelector('.explain').classList.remove('hidden');
+        this.layer.querySelectorAll('.opt').forEach((o) => { if (+o.dataset.opt === s.answer) o.classList.add('right'); });
+        this.layer.querySelector('.explain').classList.remove('hidden');
       } else if (a === 'run-col') {
         const c = s[act.dataset.col];
         this.showConsole(true);
@@ -240,7 +245,7 @@
     }
 
     renderNotes() {
-      const pane = $('notesPane');
+      const pane = $('notesBody');
       if (this.app.role !== 'teacher') { pane.innerHTML = ''; return; }
       const s = this.slides[this.index];
       let answer = '';
@@ -253,6 +258,7 @@
       }
       const flow = (this.sec.flow || []).map((f) => `<div class="row"><span>${esc(f[0])}</span><b>${f[1]}분</b></div>`).join('');
       const nextS = this.slides[this.index + 1];
+      $('notesNext').textContent = nextS ? `다음: ${String(nextS.title || '').replace(/<[^>]+>/g, '')}` : '마지막 슬라이드';
       pane.innerHTML = `<div class="n-grid"><div class="n-notes">
           <h5>🗒 교사 노트 <span class="muted" style="font-weight:500">${LAYOUT_ICON[s.layout] || ''} ${LAYOUT_NAME[s.layout] || ''} · ${this.index + 1}/${this.slides.length}</span></h5>
           ${s.notes || '<p class="muted">노트 없음</p>'}${answer}</div>
@@ -265,10 +271,47 @@
     }
 
     updateChrome() {
-      const txt = `${this.index + 1} / ${this.slides.length}`;
-      $('sCount').textContent = txt;
-      $('fsCount').textContent = txt;
+      const n = this.slides.length;
+      const s = this.slides[this.index] || {};
+      $('sCount').textContent = `${this.index + 1} / ${n}`;
+      const sl = $('sSlider');
+      sl.max = String(Math.max(1, n));
+      sl.value = String(this.index + 1);
+      $('sTitle').textContent = String(s.title || '').replace(/<[^>]+>/g, '');
+      $('deckProgress').style.width = (n > 1 ? (this.index / (n - 1)) * 100 : 100) + '%';
+      this.updateInkBar();
       if (!$('gridOverlay').classList.contains('hidden')) this.renderGrid();
+    }
+
+    // ---------------------------------------------------------------- 판서 도구 막대
+    buildInkBar() {
+      if (!window.Ink) return;
+      $('inkColors').innerHTML = Ink.COLORS.map(([c, name]) =>
+        `<button class="ink-color" data-color="${c}" title="${name}" style="--c:${c}"></button>`).join('');
+      $('inkWidths').innerHTML = Ink.WIDTHS.map(([w, name]) =>
+        `<button class="ink-width" data-width="${w}" title="${name} (${w})"><i style="width:${Math.min(14, w)}px;height:${Math.min(14, w)}px"></i></button>`).join('');
+      $('inkBar').addEventListener('click', (e) => {
+        const t = e.target.closest('[data-tool]');
+        if (t) return Ink.setTool(t.dataset.tool);
+        const c = e.target.closest('[data-color]');
+        if (c) return Ink.setColor(c.dataset.color);
+        const w = e.target.closest('[data-width]');
+        if (w) return Ink.setWidth(+w.dataset.width);
+      });
+      $('inkUndo').onclick = () => Ink.undo();
+      $('inkClear').onclick = () => Ink.clearSlide();
+      $('inkClearAll').onclick = () => { if (confirm('이 강의의 판서를 모두 지울까요?')) Ink.clearAll(); };
+      Ink.onChange = () => this.updateInkBar();
+      Ink.init(this.stage, $('inkCanvas'));
+    }
+
+    updateInkBar() {
+      if (!window.Ink) return;
+      document.querySelectorAll('#inkTools [data-tool]').forEach((b) => b.classList.toggle('on', b.dataset.tool === Ink.tool));
+      document.querySelectorAll('#inkColors [data-color]').forEach((b) => b.classList.toggle('on', b.dataset.color === Ink.color));
+      document.querySelectorAll('#inkWidths [data-width]').forEach((b) => b.classList.toggle('on', +b.dataset.width === Ink.width));
+      $('inkUndo').disabled = !Ink.canUndo();
+      $('inkClear').disabled = !Ink.hasInk();
     }
 
     // ---------------------------------------------------------------- 이동
@@ -299,6 +342,7 @@
       this.notesOpen = !this.notesOpen;
       Runner.store.set('jc.notesOpen', this.notesOpen ? '1' : '0');
       $('notesPane').classList.toggle('collapsed', !this.notesOpen);
+      $('notesToggle').textContent = this.notesOpen ? '▾ 접기' : '▸ 펴기';
       this.fit();
     }
 
@@ -327,12 +371,22 @@
       const slot = $('fsConsoleSlot');
       const full = document.fullscreenElement === this.wrap || this.wrap.classList.contains('pfull');
       this.wrap.classList.toggle('is-full', full);
+      this.wrap.classList.remove('bar-on');
+      this.barHover = false;
       if (full) {
         slot.appendChild(panel);
-        slot.classList.toggle('off', !this.fsConsole);
+        this.fsConsole = false;
+        slot.classList.add('off');
+        this.wrap.insertBefore(this.bar, this.wrap.firstChild);   // 상단 메뉴: 마우스를 위로 올리면 나타남
+        this.wrap.appendChild($('modal'));
+        this.wrap.appendChild($('toast'));
       } else {
         $('output').appendChild(panel);
+        $('slideView').insertBefore(this.bar, this.wrap);
+        document.body.appendChild($('modal'));
+        document.body.appendChild($('toast'));
       }
+      document.body.classList.toggle('presenting', full);
       this.fit();
       setTimeout(() => this.fit(), 120);
     }
@@ -352,6 +406,7 @@
       const width = Math.floor(Math.min(w, h * 16 / 9));
       if (this.stage.style.width !== width + 'px') {
         this.stage.style.width = width + 'px';
+        this.stage.style.setProperty('--edge-w', Math.max(28, Math.round(width * 0.06)) + 'px');
         if (this.editor) requestAnimationFrame(() => this.editor && this.editor.refresh());
       }
     }
@@ -374,7 +429,7 @@
       $('timerText').textContent = `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
       $('timerBox').classList.toggle('running', !!this.timer.start);
       $('timerBox').classList.toggle('over', this.sec && m >= (this.sec.minutes || 50));
-      $('timerBtn').textContent = this.timer.start ? '⏸' : '▶';
+      $('timerBox').title = this.timer.start ? '수업 타이머 진행 중 — 눌러서 일시정지 (T)' : '수업 타이머 — 눌러서 시작 (T)';
     }
 
     // ---------------------------------------------------------------- 발표자 창
@@ -392,42 +447,50 @@
 
     // ---------------------------------------------------------------- 이벤트
     bind() {
+      $('sFirst').onclick = () => this.go(0);
       $('sPrev').onclick = () => this.prev();
       $('sNext').onclick = () => this.next();
       $('sGrid').onclick = () => this.toggleGrid();
-      $('sNotes').onclick = () => this.toggleNotes();
+      $('sDoc').onclick = () => this.app.setView('doc');
       $('sFull').onclick = () => this.toggleFull();
       $('sPresenter').onclick = () => { window.open('presenter.html', 'python-presenter', 'width=1100,height=720'); setTimeout(() => this.broadcast(), 800); };
       $('timerBtn').onclick = () => this.timerToggle();
       $('timerReset').onclick = () => this.timerReset();
       $('consoleHideBtn').onclick = () => this.showConsole(false);
+      $('notesHead').onclick = (e) => { if (!e.target.closest('a')) this.toggleNotes(); };
+      $('sSlider').addEventListener('input', (e) => { const i = +e.target.value - 1; if (i !== this.index) { this.index = Math.max(0, Math.min(this.slides.length - 1, i)); this.render(); } });
+      this.buildInkBar();
       setInterval(() => this.timerDraw(), 500);
+
+      // 슬라이드 좌우 가장자리 클릭 = 이전/다음
+      this.stage.addEventListener('click', (e) => {
+        const edge = e.target.closest('.edge');
+        if (!edge) return;
+        if (window.Ink && (Ink.drawing || Ink.justDrew)) return;
+        if (edge.dataset.edge === 'prev') this.prev(); else this.next();
+      });
 
       $('gridOverlay').addEventListener('click', (e) => {
         const it = e.target.closest('[data-i]');
         if (it) { this.toggleGrid(false); this.go(+it.dataset.i); }
         if (e.target.closest('[data-close]')) this.toggleGrid(false);
       });
-      this.wrap.querySelector('.fs-controls').addEventListener('click', (e) => {
-        const b = e.target.closest('[data-fs]');
-        if (!b) return;
-        const a = b.dataset.fs;
-        if (a === 'prev') this.prev();
-        if (a === 'next') this.next();
-        if (a === 'grid') this.toggleGrid();
-        if (a === 'console') this.showConsole(!this.fsConsole);
-        if (a === 'black') this.blackout();
-        if (a === 'exit') this.toggleFull();
-      });
       document.addEventListener('fullscreenchange', () => this.onFullChange());
       new ResizeObserver(() => this.fit()).observe(this.host);
 
       let idleT = 0;
-      this.wrap.addEventListener('mousemove', () => {
+      this.wrap.addEventListener('mousemove', (e) => {
         this.wrap.classList.remove('idle');
         clearTimeout(idleT);
-        idleT = setTimeout(() => { if (this.isFull()) this.wrap.classList.add('idle'); }, 2500);
+        idleT = setTimeout(() => { if (this.isFull() && !this.barHover) this.wrap.classList.add('idle'); }, 2500);
+        if (this.isFull()) {
+          const r = this.wrap.getBoundingClientRect();
+          const near = e.clientY - r.top < Math.max(70, this.bar.offsetHeight + 10);
+          this.wrap.classList.toggle('bar-on', near);
+        }
       });
+      this.bar.addEventListener('pointerenter', () => { this.barHover = true; this.wrap.classList.add('bar-on'); });
+      this.bar.addEventListener('pointerleave', () => { this.barHover = false; });
 
       document.addEventListener('keydown', (e) => {
         if (!this.active || !this.sec) return;
@@ -436,6 +499,10 @@
         if (t.closest && (t.closest('.gw') || t.closest('.gd-back'))) return; // 파이썬 GUI 창(거북이 · tkinter)의 키 입력
         if (t.closest && (t.closest('.CodeMirror') || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) {
           if (e.key === 'Escape' && t.closest('.CodeMirror')) t.blur ? document.activeElement.blur() : 0;
+          return;
+        }
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) {
+          if (this.app.role === 'teacher' && window.Ink) { e.preventDefault(); Ink.undo(); }
           return;
         }
         if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -451,8 +518,12 @@
         else if (k === 'b' || k === 'B' || k === '.') { e.preventDefault(); this.blackout(); }
         else if ((k === 't' || k === 'T') && this.app.role === 'teacher') { e.preventDefault(); this.timerToggle(); }
         else if (k === 'Escape') {
-          if ($('gridOverlay').classList.contains('hidden') && this.wrap.classList.contains('pfull')) this.toggleFull();
-          this.toggleGrid(false); this.blackout(false);
+          if (this.app.closeLightbox && this.app.closeLightbox()) { e.preventDefault(); return; }   // 크게 보기만 닫는다
+          const gridOpen = !$('gridOverlay').classList.contains('hidden');
+          const black = !$('blackout').classList.contains('hidden');
+          if (gridOpen) { this.toggleGrid(false); return; }
+          if (black) { this.blackout(false); return; }
+          if (this.wrap.classList.contains('pfull')) this.toggleFull();
         }
       });
 

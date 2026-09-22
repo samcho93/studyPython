@@ -4,9 +4,9 @@
      SVG 그리기 도우미
      ================================================================ */
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const MK = '<defs><marker id="c11ah" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--muted)"/></marker>' +
-    '<marker id="c11ok" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--ok)"/></marker>' +
-    '<marker id="c11ac" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--accent)"/></marker></defs>';
+  const MK = '<defs><marker viewBox="0 0 16 16" id="c11ah" markerWidth="11" markerHeight="11" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--muted)"/></marker>' +
+    '<marker viewBox="0 0 16 16" id="c11ok" markerWidth="11" markerHeight="11" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--ok)"/></marker>' +
+    '<marker viewBox="0 0 16 16" id="c11ac" markerWidth="11" markerHeight="11" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--accent)"/></marker></defs>';
   const SVG = (w, h, label, body) => `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="${label}">${MK}${body}</svg>`;
 
   // 글자 ('|' 로 줄바꿈)

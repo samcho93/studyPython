@@ -15,7 +15,7 @@
   };
 
   const arrowDefs = (id, color) =>
-    `<marker id="${id}" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${color}"/></marker>`;
+    `<marker viewBox="0 0 12 12" id="${id}" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${color}"/></marker>`;
 
   /* 이 장에서 만들 프로그램 미리보기 */
   const SVG_PREVIEW = `<svg viewBox="0 0 1280 520" width="100%" role="img" aria-label="이 장에서 만들 두 프로그램의 실행 화면">

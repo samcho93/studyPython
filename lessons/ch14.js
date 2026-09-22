@@ -12,7 +12,7 @@
   const T = (x, y, s, o = {}) => `<text x="${x}" y="${y}" text-anchor="${o.a || 'middle'}" font-size="${o.fs || 20}" fill="${o.c || 'var(--fg)'}"${o.b ? ' font-weight="bold"' : ''}${o.mono ? ' font-family="Consolas,monospace"' : ''}>${s}</text>`;
   const R = (x, y, w, h, o = {}) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx == null ? 8 : o.rx}" fill="${o.f || 'var(--card)'}"${o.op ? ` fill-opacity="${o.op}"` : ''} stroke="${o.s || 'var(--line)'}" stroke-width="${o.sw || 2}"${o.dash ? ' stroke-dasharray="7 5"' : ''}/>`;
   const Ln = (x1, y1, x2, y2, o = {}) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${o.s || 'var(--muted)'}" stroke-width="${o.sw || 2}"${o.dash ? ' stroke-dasharray="6 5"' : ''}${o.arrow ? ' marker-end="url(#arr14)"' : ''}/>`;
-  const DEFS = `<defs><marker id="arr14" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>`;
+  const DEFS = `<defs><marker id="arr14" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>`;
   const BOX = (x, y, w, h, s, o = {}) => R(x, y, w, h, { s: o.s || 'var(--accent)', f: o.f, op: o.op }) + T(x + w / 2, y + h / 2 + 7, s, { fs: o.fs || 20, b: o.b, c: o.c });
 
   /* 그림 14-5 메뉴 구성도 */

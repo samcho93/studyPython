@@ -1,7 +1,7 @@
 /* Chapter 09. 함수와 모듈 (파이썬 for Beginner 3판 Ch09) */
 (function () {
   /* ---------- 공통 SVG 도우미 ---------- */
-  const MK = (id, color) => `<marker id="${id}" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${color}"/></marker>`;
+  const MK = (id, color) => `<marker viewBox="0 0 12 12" id="${id}" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${color}"/></marker>`;
   const BOX = (x, y, w, h, t, c, fs, fill) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="${fill || 'var(--card)'}" stroke="${c || 'var(--line)'}" stroke-width="3"/>` +
     `<text x="${x + w / 2}" y="${y + h / 2 + (fs || 22) * 0.36}" text-anchor="middle" style="font-size:${fs || 22}px;fill:var(--fg)">${t}</text>`;
   const MONO = "font-family:Consolas,'D2Coding',monospace";

@@ -13,7 +13,7 @@
   ${body || ''}</g>`;
   const BTN = (x, y, w, h, t, col) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="var(--card)" stroke="${col || 'var(--muted)'}" stroke-width="2.5"/>
   <text x="${x + w / 2}" y="${y + h / 2 + 7}" text-anchor="middle" font-size="19" fill="var(--fg)">${t}</text>`;
-  const ARROW = (id, col) => `<marker id="${id}" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${col}"/></marker>`;
+  const ARROW = (id, col) => `<marker viewBox="0 0 12 12" id="${id}" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${col}"/></marker>`;
 
   const FIG_PROGRAMS = `<svg viewBox="0 0 1280 520" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
   ${WIN(30, 30, 590, 430, '사진 앨범 보기', `${BTN(190, 82, 110, 34, '&lt;&lt; 이전', 'var(--danger)')}${BTN(350, 82, 110, 34, '다음 &gt;&gt;', 'var(--danger)')}

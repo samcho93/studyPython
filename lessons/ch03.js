@@ -48,7 +48,7 @@
     if (sub) s += `<text x="${x + 65}" y="${y + 172}" text-anchor="middle" font-size="18" fill="var(--muted)">${esc(sub)}</text>`;
     return s;
   }
-  const svg = (w, h, body) => `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" style="width:100%"><defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--accent2)"/></marker></defs>${body}</svg>`;
+  const svg = (w, h, body) => `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" style="width:100%"><defs><marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--accent2)"/></marker></defs>${body}</svg>`;
 
   /* ───────── 자주 쓰는 그림 ───────── */
   const FIG_PRINT_PAIR = svg(1280, 330, `

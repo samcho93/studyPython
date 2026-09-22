@@ -4,7 +4,7 @@
      SVG 그리기 도우미 (순서도 · 코드 상자)
      ================================================================ */
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const MK = '<defs><marker id="c5ah" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--muted)"/></marker></defs>';
+  const MK = '<defs><marker viewBox="0 0 16 16" id="c5ah" markerWidth="11" markerHeight="11" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 z" fill="var(--muted)"/></marker></defs>';
   const SVG = (w, h, label, body, style) => `<svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="${label}"${style ? ` style="${style}"` : ''}>${MK}${body}</svg>`;
 
   // 글자 ('|' 로 줄바꿈)

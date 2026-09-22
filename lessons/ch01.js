@@ -4,7 +4,7 @@
 (function () {
   /* ───────────── 공용 그림(SVG) ───────────── */
   const FIG_PROGRAMMER = `<svg viewBox="0 0 1280 440" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <defs><marker id="c1arrA" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--ok)"/></marker></defs>
+  <defs><marker viewBox="0 0 12 12" id="c1arrA" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--ok)"/></marker></defs>
   <rect x="60" y="70" width="300" height="240" rx="22" fill="var(--card)" stroke="var(--accent)" stroke-width="4"/>
   <circle cx="210" cy="140" r="38" fill="none" stroke="var(--accent)" stroke-width="5"/>
   <path d="M140,250 Q210,170 280,250" fill="none" stroke="var(--accent)" stroke-width="5"/>
@@ -52,7 +52,7 @@
 </svg>`;
 
   const FIG_COMPILE = `<svg viewBox="0 0 1280 560" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <defs><marker id="c1arrB" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--fg)"/></marker></defs>
+  <defs><marker viewBox="0 0 12 12" id="c1arrB" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--fg)"/></marker></defs>
   <text x="40" y="50" font-size="28" font-weight="bold" fill="var(--accent)">컴파일러 언어 (C, C++, 자바 …)</text>
   <rect x="40" y="80" width="220" height="140" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="3"/>
   <text x="150" y="140" text-anchor="middle" font-size="24" fill="var(--fg)">소스 코드</text>
@@ -111,7 +111,7 @@
 </svg>`;
 
   const FIG_MODES = `<svg viewBox="0 0 1280 520" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <defs><marker id="c1arrC" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--fg)"/></marker></defs>
+  <defs><marker viewBox="0 0 12 12" id="c1arrC" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--fg)"/></marker></defs>
   <text x="310" y="50" text-anchor="middle" font-size="30" font-weight="bold" fill="var(--accent)">대화형 모드 (Interactive)</text>
   <circle cx="310" cy="260" r="150" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="10 8"/>
   <rect x="200" y="85" width="220" height="60" rx="12" fill="var(--card)" stroke="var(--accent)" stroke-width="3"/>
@@ -136,7 +136,7 @@
 </svg>`;
 
   const FIG_INSTALL = `<svg viewBox="0 0 1280 400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
-  <defs><marker id="c1arrD" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--fg)"/></marker></defs>
+  <defs><marker viewBox="0 0 12 12" id="c1arrD" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="var(--fg)"/></marker></defs>
   ${[['①', '다운로드', 'python.org', 'Downloads'], ['②', '설치 파일 실행', '☑ Add Python', 'to PATH'], ['③', 'Customize', 'installation', '→ Next'], ['④', '설치 위치', 'C:\\Python\\', 'Python3xx'], ['⑤', 'Install', '→ 진행', '→ Close']].map(([n, a, b, c], i) => {
     const x = 30 + i * 250;
     return `<rect x="${x}" y="90" width="210" height="220" rx="18" fill="var(--card)" stroke="${i === 1 ? 'var(--danger)' : 'var(--accent)'}" stroke-width="4"/>

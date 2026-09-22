@@ -7,7 +7,7 @@
     (txt !== '' ? `<text x="${x + w / 2}" y="${y + h / 2 + (o.fs || 26) * 0.35}" text-anchor="middle" style="${MONO};font-size:${o.fs || 26}px;fill:${o.color || 'var(--fg)'}">${txt}</text>` : '');
   const label = (x, y, txt, o = {}) =>
     `<text x="${x}" y="${y}" text-anchor="${o.anchor || 'middle'}" style="${o.mono ? MONO + ';' : ''}font-size:${o.fs || 22}px;fill:${o.color || 'var(--muted)'};${o.bold ? 'font-weight:700' : ''}">${txt}</text>`;
-  const arrowDefs = (id, color) => `<marker id="${id}" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${color}"/></marker>`;
+  const arrowDefs = (id, color) => `<marker viewBox="0 0 12 12" id="${id}" markerWidth="4.5" markerHeight="4.5" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="${color}"/></marker>`;
   const line = (x1, y1, x2, y2, o = {}) =>
     `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${o.color || 'var(--accent)'}" stroke-width="${o.sw || 4}"${o.dash ? ' stroke-dasharray="8 6"' : ''}${o.arrow ? ` marker-end="url(#${o.arrow})"` : ''}/>`;
   const row = (x, y, vals, cw, o = {}) => vals.map((v, i) => box(x + i * cw, y, cw, o.h || 70, v, { fs: o.fs || 26, stroke: o.strokeFn ? o.strokeFn(i) : (o.stroke || 'var(--accent)'), fill: o.fillFn ? o.fillFn(i) : undefined, color: o.colorFn ? o.colorFn(i) : undefined })).join('');

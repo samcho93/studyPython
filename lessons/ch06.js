@@ -91,7 +91,7 @@ print("안녕하세요? for 문을 공부 중입니다. ^^")`, expect: `안녕�
         '들여쓰기가 끝나는 곳이 반복 블록의 끝입니다. 들여쓰지 않은 다음 문장은 반복이 <b>모두 끝난 뒤 한 번</b> 실행됩니다.'
       ] },
       { type: 'figure', caption: 'for 문의 동작 순서 — range() 에 남은 값이 있는 동안 블록을 반복한다', html: `<svg viewBox="0 0 640 330" width="100%" style="max-width:640px" font-family="sans-serif">
-  <defs><marker id="a6f1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6f1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
   <g font-size="15" text-anchor="middle">
     <rect x="170" y="8" width="120" height="34" rx="17" fill="var(--warn)"/><text x="230" y="30" fill="#fff" font-weight="bold">시작</text>
     <polygon points="230,70 360,115 230,160 100,115" fill="var(--ok)" opacity=".9"/><text x="230" y="112" fill="#fff" font-weight="bold">range() 에</text><text x="230" y="131" fill="#fff" font-weight="bold">남은 값이 있나?</text>
@@ -197,7 +197,7 @@ for i in range(1, 11, 1) :
 
 print("1에서 10까지의 합계 : %d" % hap)`, expect: `1에서 10까지의 합계 : 55`, desc: '<code>1행</code>에서 hap 을 0 으로 초기화했습니다. <code>6행</code>은 들여쓰지 않았으므로 반복이 <b>모두 끝난 뒤 한 번만</b> 실행됩니다.' },
       { type: 'figure', caption: '그림 6-1 i 와 hap 변수값의 변화 — 이전 hap 에 i 를 더한 값이 새 hap 이 된다', html: `<svg viewBox="0 0 620 470" width="100%" style="max-width:620px" font-family="sans-serif">
-  <defs><marker id="a6h1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6h1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <g font-size="17" text-anchor="middle" font-weight="bold">
     <rect x="160" y="8" width="70" height="32" fill="var(--card)" stroke="var(--line)" stroke-width="2"/><text x="195" y="30" fill="var(--fg)">i</text>
     <rect x="460" y="8" width="80" height="32" fill="var(--card)" stroke="var(--line)" stroke-width="2"/><text x="500" y="30" fill="var(--fg)">hap</text>
@@ -301,7 +301,7 @@ print("안녕하세요? for 문을 공부 중입니다. ^^")` },
 print("반복이 끝난 뒤 한 번만")`, points: ['<code>for 변수 in range(시작값, 끝값+1, 증가값) :</code>', 'range() 가 값 목록을 만들고, 하나씩 <b>변수</b>에 넣어 반복', '<b>콜론</b>과 <b>들여쓰기 4칸</b>은 필수', '들여쓰기가 끝나면 반복 블록도 끝'],
         notes: '<p>(4분) 실행 후 "반복되는 문장" 3번, "이것도 반복" 3번이 번갈아 나오고, 마지막 줄은 1번만 나오는 것을 확인합니다.</p><p>마지막 줄을 들여쓰기해서 다시 실행 → 3번 출력. 들여쓰기가 곧 "블록의 범위" 입니다.</p>' },
       { layout: 'diagram', title: 'for 문의 동작 순서', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
-  <defs><marker id="a6f1s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6f1s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
   <g font-size="28" text-anchor="middle" font-weight="bold">
     <rect x="330" y="10" width="220" height="60" rx="30" fill="var(--warn)"/><text x="440" y="50" fill="#fff">시작</text>
     <polygon points="440,110 640,190 440,270 240,190" fill="var(--ok)"/><text x="440" y="182" fill="#fff">range() 에</text><text x="440" y="216" fill="#fff">남은 값?</text>
@@ -356,7 +356,7 @@ for i in range(1, 11, 1) :
 print("1에서 10까지의 합계 : %d" % hap)`, points: ['① 반복 전: <code>hap = 0</code>', '② 반복 안: <code>hap = hap + i</code>', '③ 반복 후: 출력 (들여쓰기 X)', '<code>11</code> → <code>101</code> 로 바꾸면 1~100 합계'],
         notes: '<p>(3분) 실행 → 55. 이어서 11 → 101 로 바꿔 5050 확인.</p><p>발문: "print 를 들여쓰기하면?" → 합계가 10번(1, 3, 6, …, 55) 출력. 직접 해 보게 하세요.</p>' },
       { layout: 'diagram', title: '그림 6-1 i 와 hap 변수값의 변화', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
-  <defs><marker id="a6h1s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6h1s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <g font-size="26" text-anchor="middle" font-weight="bold" fill="var(--fg)">
     <text x="130" y="40">회차</text><text x="330" y="40">i</text><text x="620" y="40">이전 hap + i</text><text x="930" y="40">새 hap</text>
     ${[[1, 0, 1], [2, 1, 3], [3, 3, 6], [4, 6, 10], [9, 36, 45], [10, 45, 55]].map(([i, p, h], n) => {
@@ -694,8 +694,8 @@ for i in range(9, 0, -1) :
       { type: 'p', html: '시계를 떠올려 보세요. 시침이 한 칸 움직이는 동안 분침은 한 바퀴(60번)를 돕니다. 시침이 바깥 for 문, 분침이 안쪽 for 문입니다. 바깥이 3번, 안쪽이 2번 반복하면 안쪽 블록은 모두 <b>3 × 2 = 6번</b> 실행됩니다.' },
       { type: 'figure', caption: '그림 6-2 중첩 for 문의 작동 개념', html: `<svg viewBox="0 0 620 300" width="100%" style="max-width:620px" font-family="sans-serif">
   <defs>
-    <marker id="a6n1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
-    <marker id="a6n2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6n1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6n2" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
   </defs>
   <g fill="none" stroke-dasharray="6 5" stroke-width="2">
     <ellipse cx="310" cy="160" rx="290" ry="130" stroke="var(--danger)"/>
@@ -732,8 +732,8 @@ for i in range(9, 0, -1) :
       ] },
       { type: 'figure', caption: '그림 6-3 중첩 for 문에서 i 와 k 값 변화', html: `<svg viewBox="0 0 560 330" width="100%" style="max-width:560px" font-family="sans-serif">
   <defs>
-    <marker id="a6k1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
-    <marker id="a6k2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6k1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6k2" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
   </defs>
   <g font-size="16" text-anchor="middle" font-weight="bold">
     <rect x="160" y="6" width="60" height="28" fill="var(--card)" stroke="var(--line)"/><text x="190" y="26" fill="var(--fg)">i값</text>
@@ -769,8 +769,8 @@ for i in range(9, 0, -1) :
       { type: 'p', html: '구구단에서 바뀌는 것은 두 가지입니다. <b>단</b>(2~9)과 <b>곱하는 수</b>(1~9). 단이 하나 바뀔 때마다 곱하는 수는 1~9 를 다시 반복하므로, 단을 바깥 변수 <code>i</code>, 곱하는 수를 안쪽 변수 <code>k</code> 로 정하면 됩니다.' },
       { type: 'figure', caption: '그림 6-4 구구단에서 i 와 k 변수 추출 — 바깥 for 문: i(단), 안쪽 for 문: k(곱하는 수)', html: `<svg viewBox="0 0 660 330" width="100%" style="max-width:660px" font-family="sans-serif">
   <defs>
-    <marker id="a6g1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
-    <marker id="a6g2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6g1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6g2" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
   </defs>
   <text x="330" y="18" text-anchor="middle" font-size="14" font-weight="bold" fill="var(--danger)">2에서 9까지 증가 후 종료 (바깥 for 문 : i 변수)</text>
   <line x1="20" y1="30" x2="640" y2="30" stroke="var(--danger)" stroke-width="2" marker-end="url(#a6g1)"/>
@@ -800,7 +800,7 @@ for i in range(2, 10, 1) :
       { type: 'p', html: 'Code06-07 은 단을 <b>세로</b>로 출력합니다. 이제 처음에 본 [프로그램 1]처럼 2단~9단을 <b>가로로 나란히</b> 출력해 봅시다. 여기서 중요한 사실이 있습니다. 화면(콘솔)은 <b>위에서 아래로, 왼쪽에서 오른쪽으로만</b> 출력됩니다. 일단 줄을 바꿔 아래로 내려가면 <b>다시 위로 올라가서 출력할 수 없습니다.</b>' },
       { type: 'p', html: '그러므로 "2단 전체를 쓰고 3단을 옆에 쓰는" 방식은 불가능합니다. 대신 <b>한 줄씩</b> 생각해야 합니다. 첫째 줄에는 <code>2×1, 3×1, …, 9×1</code>, 둘째 줄에는 <code>2×2, 3×2, …, 9×2</code> … 이렇게 <b>가로 먼저</b> 출력합니다. 즉, 이번에는 바깥 for 문이 <b>곱하는 수</b>(1~9, 9줄), 안쪽 for 문이 <b>단</b>(2~9, 한 줄 안의 8칸)입니다.' },
       { type: 'figure', caption: '그림 6-5 구구단에서 i 와 k 변수 추출 (단 가로 먼저 출력) — 바깥 for 문: i(곱하는 수, 줄), 안쪽 for 문: k(단, 칸)', html: `<svg viewBox="0 0 700 300" width="100%" style="max-width:700px" font-family="sans-serif">
-  <defs><marker id="a6g3" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6g3" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
   <g font-size="13" font-family="monospace" fill="var(--fg)">
     ${range(1, 10, 1).map((i, r) => {
       const y = 40 + r * 26;
@@ -966,8 +966,8 @@ for i in range(n, 0, -1) :
       ], notes: '<p>(3분) "k 가 1 에서 끝났는데 다음에 왜 0 이 되나요?" 라는 질문이 꼭 나옵니다. 안쪽 for 문이 <b>새로 시작</b>되면서 range(0, 2) 를 처음부터 다시 꺼내기 때문입니다.</p>' },
       { layout: 'diagram', title: '그림 6-3 i 와 k 값 변화', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
   <defs>
-    <marker id="a6k1s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
-    <marker id="a6k2s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6k1s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker>
+    <marker viewBox="0 0 10 10" id="a6k2s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
   </defs>
   <g font-size="30" text-anchor="middle" font-weight="bold">
     <text x="440" y="40" fill="var(--fg)">i값</text><text x="720" y="40" fill="var(--fg)">k값</text>
@@ -988,7 +988,7 @@ for i in range(n, 0, -1) :
 </svg>`, caption: 'i 는 한 번씩, k 는 i 가 바뀔 때마다 0 → 1 을 되풀이',
         notes: '<p>(2분) 앞의 코드 결과 6줄과 그림을 나란히 놓고 대응시켜 보세요.</p>' },
       { layout: 'diagram', title: '그림 6-4 구구단에서 i 와 k 추출', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
-  <defs><marker id="a6g1s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6g1s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <text x="640" y="30" text-anchor="middle" font-size="24" font-weight="bold" fill="var(--danger)">2에서 9까지 증가 후 종료 (바깥 for 문 : i 변수)</text>
   <line x1="40" y1="48" x2="1240" y2="48" stroke="var(--danger)" stroke-width="4" marker-end="url(#a6g1s)"/>
   <g font-size="24" font-family="monospace" fill="var(--fg)">
@@ -1010,7 +1010,7 @@ for i in range(2, 10, 1) :
     print("")`, points: ['바깥 i: 단 2~9', '안쪽 k: 곱하는 수 1~9', '<code>print("")</code> 는 4칸 → 단마다 빈 줄', '총 72개의 식'],
         notes: '<p>(4분) <code>print("")</code> 를 8칸, 0칸으로 옮겨 실행해 차이를 보여 주세요. 들여쓰기 = 실행 횟수.</p>' },
       { layout: 'diagram', title: '그림 6-5 가로 먼저 출력하기', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
-  <defs><marker id="a6g3s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6g3s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
   <g font-size="24" font-family="monospace" fill="var(--fg)">
     ${range(1, 10, 1).map((i, r) => {
       const y = 50 + r * 50;
@@ -1112,7 +1112,7 @@ for i in range(9, 0, -1) :
     const s = big ? 2 : 1;
     const fs = big ? 30 : 16;
     return `<svg viewBox="0 0 ${560 * s} ${280 * s}" width="100%" ${big ? '' : 'style="max-width:560px"'} font-family="sans-serif">
-  <defs><marker id="${id}" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="${id}" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <g transform="scale(${s})">
   <text x="240" y="18" text-anchor="middle" font-size="${fs / s + 1}" fill="var(--fg)">시작</text>
   <line x1="240" y1="24" x2="240" y2="52" stroke="var(--danger)" stroke-width="2" marker-end="url(#${id})"/>
@@ -1494,7 +1494,7 @@ while i < 9 :
       { type: 'h', text: '반복문을 탈출시키는 break 문' },
       { type: 'p', html: '<b>break 문</b>은 반복문(for, while) 안에서 실행되는 순간, 남은 반복과 상관없이 <b>무조건 반복문 밖으로 탈출</b>합니다. 로켓이 발사대를 떠나듯, 반복문 다음 문장으로 곧장 이동합니다. 계속되는 반복을 <b>논리적으로 빠져나가는</b> 방법입니다.' },
       { type: 'figure', caption: '그림 6-8 break 문의 작동 — 반복문 안의 break 는 무조건 반복문 밖으로 탈출', html: `<svg viewBox="0 0 560 250" width="100%" style="max-width:560px" font-family="sans-serif">
-  <defs><marker id="a6b1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6b1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <rect x="40" y="10" width="300" height="170" rx="10" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 4"/>
   <text x="190" y="34" text-anchor="middle" font-size="16" font-weight="bold" fill="var(--fg)">반복문 for, while</text>
   <text x="190" y="62" text-anchor="middle" font-size="18" fill="var(--warn)">· · ·</text>
@@ -1529,7 +1529,7 @@ print("0을 입력해 반복문을 탈출했습니다.")`, stdin: '55\n22\n77\n1
 더할 첫 번째 수를 입력하세요 : 0
 0을 입력해 반복문을 탈출했습니다.`, desc: '예시 입력: <code>55 22 77 128 0</code>. <code>6~7행</code>: a 가 0 이면 두 번째 수를 묻지도 않고 while 문을 빠져나가 <code>12행</code>을 실행합니다. 이처럼 "이 값이 들어오면 끝" 이라고 정해 둔 특별한 입력값을 <b>센티널(sentinel, 보초) 값</b>이라고 합니다.' },
       { type: 'figure', caption: 'Code06-12 의 흐름 — break 는 while 문 전체를 끝낸다', html: `<svg viewBox="0 0 600 330" width="100%" style="max-width:600px" font-family="sans-serif">
-  <defs><marker id="a6b2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6b2" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
   <g font-size="14" text-anchor="middle">
     <rect x="200" y="10" width="160" height="34" rx="6" fill="var(--card)" stroke="var(--danger)" stroke-width="2"/><text x="280" y="32" fill="var(--fg)">while True :</text>
     <rect x="180" y="64" width="200" height="34" rx="6" fill="var(--accent2)" opacity=".9"/><text x="280" y="86" fill="#fff">a 입력</text>
@@ -1570,7 +1570,7 @@ print("1~100의 합계를 최초로 1000이 넘게 하는 숫자 : %d" % i)`, ex
       { type: 'h', text: '반복문으로 다시 돌아가게 하는 continue 문' },
       { type: 'p', html: '<b>continue 문</b>은 반복문 안에서 실행되면 블록의 <b>나머지 부분을 건너뛰고</b> 반복문의 처음(for 문은 다음 값, while 문은 조건식 검사)으로 돌아갑니다. break 가 "반복 그만!" 이라면 continue 는 "이번 회차만 패스!" 입니다.' },
       { type: 'figure', caption: '그림 6-9 continue 문의 작동 — 아래 문장을 무조건 건너뛴 뒤 다시 반복문으로 돌아간다', html: `<svg viewBox="0 0 560 240" width="100%" style="max-width:560px" font-family="sans-serif">
-  <defs><marker id="a6c1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6c1" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <text x="300" y="30" font-size="16" font-weight="bold" fill="var(--fg)">반복문 for, while</text>
   <text x="330" y="70" text-anchor="middle" font-size="18" fill="var(--warn)">· · ·</text>
   <rect x="260" y="85" width="140" height="40" rx="8" fill="var(--ok)"/><text x="330" y="112" text-anchor="middle" font-size="18" font-weight="bold" fill="#fff">continue</text>
@@ -1753,7 +1753,7 @@ else :
       { layout: 'title', title: 'break · continue 와 [프로그램 2]', subtitle: 'Chapter 06 · Section 05', badge: '6-5',
         notes: '<p>(1분) 복습 발문: "Code06-10 계산기를 끝내려면 어떻게 했나요?" — ■ 중지(Ctrl+C). 프로그램이 스스로 끝낼 수 있게 만드는 것이 오늘의 첫 주제입니다.</p>' },
       { layout: 'diagram', title: '그림 6-8 break 문의 작동', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
-  <defs><marker id="a6b1s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6b1s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <rect x="160" y="30" width="600" height="360" rx="20" fill="none" stroke="var(--line)" stroke-width="4" stroke-dasharray="14 10"/>
   <text x="460" y="80" text-anchor="middle" font-size="34" font-weight="bold" fill="var(--fg)">반복문 for, while</text>
   <text x="460" y="140" text-anchor="middle" font-size="36" fill="var(--warn)">· · ·</text>
@@ -1793,7 +1793,7 @@ for i in range(1, 101) :
 print("1~100의 합계를 최초로 1000이 넘게 하는 숫자 : %d" % i)`, points: ['조건을 처음 만족하는 곳에서 멈춤', 'break 후에도 i 는 45 로 남아 있다', '1~44 합 990, 1~45 합 1035'],
         notes: '<p>(3분) 반복문이 끝난 뒤에도 반복 변수 값을 쓸 수 있다는 점이 포인트입니다. break 없이 실행하면 i 는 100.</p>' },
       { layout: 'diagram', title: '그림 6-9 continue 문의 작동', html: `<svg viewBox="0 0 1280 560" width="100%" font-family="sans-serif">
-  <defs><marker id="a6c1s" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
+  <defs><marker viewBox="0 0 10 10" id="a6c1s" markerWidth="4.5" markerHeight="4.5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--danger)"/></marker></defs>
   <text x="620" y="70" font-size="34" font-weight="bold" fill="var(--fg)">반복문 for, while</text>
   <text x="720" y="150" text-anchor="middle" font-size="36" fill="var(--warn)">· · ·</text>
   <rect x="580" y="180" width="280" height="80" rx="16" fill="var(--ok)"/><text x="720" y="234" text-anchor="middle" font-size="38" font-weight="bold" fill="#fff">continue</text>

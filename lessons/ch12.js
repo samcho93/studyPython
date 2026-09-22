@@ -29,11 +29,11 @@ PY_COURSE.addChapter((function () {
   };
   // 화살표 (hollow: 상속을 나타내는 속이 빈 삼각형)
   const A = (x1, y1, x2, y2, o = {}) => {
-    const c = o.c || 'var(--muted)', ang = Math.atan2(y2 - y1, x2 - x1), Ln = o.hollow ? 26 : 18, W = o.hollow ? 15 : 10;
+    const c = o.c || 'var(--muted)', ang = Math.atan2(y2 - y1, x2 - x1), Ln = o.hollow ? 20 : 13, W = o.hollow ? 11 : 6.5;
     const bx = x2 - Ln * Math.cos(ang), by = y2 - Ln * Math.sin(ang), px = -Math.sin(ang) * W, py = Math.cos(ang) * W;
     const f = (n) => n.toFixed(1);
     return `<line x1="${x1}" y1="${y1}" x2="${f(bx)}" y2="${f(by)}" stroke="${c}" stroke-width="${o.sw || 3}"${o.d ? ' stroke-dasharray="10 7"' : ''}/>` +
-      `<polygon points="${x2},${y2} ${f(bx + px)},${f(by + py)} ${f(bx - px)},${f(by - py)}" fill="${o.hollow ? 'var(--card)' : c}" stroke="${c}" stroke-width="3"/>`;
+      `<polygon points="${x2},${y2} ${f(bx + px)},${f(by + py)} ${f(bx - px)},${f(by - py)}" fill="${o.hollow ? 'var(--card)' : c}" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`;
   };
   // 자동차 그림 (폭 약 210, 높이 약 85 × s)
   const CAR = (x, y, s, c, label, o = {}) => `<g transform="translate(${x},${y}) scale(${s})">` +

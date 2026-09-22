@@ -480,3 +480,10 @@ kbd { font-size: .82em; padding: 1px 6px; border: 1px solid var(--line); border-
 .code-block.repl pre .ln.repl::before { content: attr(data-p); width: 42px; color: var(--accent); opacity: .9; font-weight: 700; }
 .code-block.repl .code-head .tag { font-family: var(--mono); }
 .console .loc { color: #79c0ff; cursor: pointer; text-decoration: underline dotted; }
+
+/* 코드 글꼴(JetBrains Mono)의 합자 끄기: != >= <= == -> 가 ≠ ≥ ≤ 같은 기호로 바뀌지 않고
+   키보드로 입력하는 그대로 보이게 한다 (편집기 · 슬라이드 · 콘솔 · 문서 전체) */
+*, *::before, *::after {
+  font-variant-ligatures: none !important;
+  font-feature-settings: "liga" 0, "calt" 0, "clig" 0 !important;
+}

@@ -1613,7 +1613,7 @@ print("1~100의 합계(3의 배수 제외) : %d" % hap)`, expect: `1~100의 합�
       { type: 'table', caption: '마름모의 줄별 공백과 별의 개수', head: ['줄 i', '공백(2칸) 개수', '별 개수', '규칙'], rows: [
         ['0', '4', '1', '<b>윗부분</b> (i &lt; 5)<br>공백 = <code>4 - i</code><br>별 = <code>i * 2 + 1</code>'],
         ['1', '3', '3', ''], ['2', '2', '5', ''], ['3', '1', '7', ''], ['4', '0', '9', ''],
-        ['5', '1', '7', '<b>아랫부분</b> (i ≥ 5)<br>공백 = <code>i - 4</code><br>별 = <code>(9 - i) * 2 - 1</code>'],
+        ['5', '1', '7', '<b>아랫부분</b> (i >= 5)<br>공백 = <code>i - 4</code><br>별 = <code>(9 - i) * 2 - 1</code>'],
         ['6', '2', '5', ''], ['7', '3', '3', ''], ['8', '4', '1', '']
       ] },
       { type: 'code', title: 'Code06-15. [프로그램 2] 완성: while 문으로 마름모 출력', code: DIAMOND_CODE, expect: DIAMOND_OUT, desc: '<code>6행</code>: 바깥 while 문이 줄 i 를 0~8 로 바꿉니다. <code>7행</code>: 위쪽 5줄(i &lt; 5)과 아래쪽 4줄을 if~else 로 나눕니다. <code>9~11행 / 18~20행</code>: 안쪽 while 문이 공백을, <code>13~15행 / 22~24행</code>: 별을 찍습니다. 안쪽 while 문마다 <code>k = 0</code> 으로 <b>새로 초기화</b>하는 것을 잊지 마세요. <code>25행</code>의 <code>print()</code> 가 한 줄을 끝냅니다.' },

@@ -154,7 +154,7 @@
   const FIG_GRADE = cascade({
     label: 'Code05-07 실행 과정 (학점 계산 순서도)', x0: 150, dx: 235, dy: 85, bw: 180, dw: 200,
     start: 'score 값 입력', startW: 220,
-    conds: ['score ≥ 90', 'score ≥ 80', 'score ≥ 70', 'score ≥ 60'],
+    conds: ['score >= 90', 'score >= 80', 'score >= 70', 'score >= 60'],
     outs: ['"A" 출력', '"B" 출력', '"C" 출력', '"D" 출력', '"F" 출력'],
     end: '"학점입니다. ^^" 출력'
   });
@@ -948,7 +948,7 @@ print(res)`, expect: '불합격',
 res = '합격' if jumsu >= 60 else '불합격'
 print(res)`, expect: '불합격' },
           { type: 'figure', html: FIG_TERNARY, caption: '조건부 표현식의 구조 — 가운데 조건식을 먼저 계산하고, 결과에 따라 왼쪽 또는 오른쪽 값을 고른다' },
-          { type: 'callout', kind: 'warn', title: '다른 언어와 순서가 다르다', html: 'C · 자바의 삼항 연산자는 <code>조건 ? 참값 : 거짓값</code> 순서이지만, 파이썬은 <code>참값 if 조건 else 거짓값</code> 순서입니다. 영어 문장 “<i>pass</i> if score ≥ 60, else <i>fail</i>” 처럼 읽으면 기억하기 쉽습니다. 또 조건부 표현식에서는 <b>else 를 생략할 수 없습니다</b>.' },
+          { type: 'callout', kind: 'warn', title: '다른 언어와 순서가 다르다', html: 'C · 자바의 삼항 연산자는 <code>조건 ? 참값 : 거짓값</code> 순서이지만, 파이썬은 <code>참값 if 조건 else 거짓값</code> 순서입니다. 영어 문장 “<i>pass</i> if score >= 60, else <i>fail</i>” 처럼 읽으면 기억하기 쉽습니다. 또 조건부 표현식에서는 <b>else 를 생략할 수 없습니다</b>.' },
           { type: 'code', title: '추가 예제. 조건부 표현식 활용', code: `a = int(input("첫 번째 수 : "))
 b = int(input("두 번째 수 : "))
 

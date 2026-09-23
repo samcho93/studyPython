@@ -1,7 +1,11 @@
 [
+ "config.json",
+ "cp949.txt",
  "data1.txt",
  "normal.txt",
+ "scores.csv",
  "security.txt",
+ "server.log",
  "win.ini",
  "GIF/cat.gif",
  "GIF/cat2.gif",
@@ -40,6 +44,9 @@
  "RAW/face_128.raw",
  "RAW/pattern.raw",
  "RAW/tree.raw",
+ "ch14/sales.csv",
+ "ch14/typing.txt",
+ "game/boom.wav",
  "game/missile.png",
  "game/monster01.png",
  "game/monster02.png",
@@ -51,5 +58,6 @@
  "game/monster08.png",
  "game/monster09.png",
  "game/monster10.png",
- "game/ship02.png"
+ "game/ship02.png",
+ "game/shoot.wav"
 ]

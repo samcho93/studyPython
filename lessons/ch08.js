@@ -312,6 +312,8 @@ for ch in inStr :
       '문자열의 +, *, len(), in 연산과 for 문을 이용해 문자열을 한 글자씩 처리할 수 있다',
       '문자열은 바꿀 수 없는(immutable) 자료형임을 설명하고, 새 문자열을 만들어 원하는 결과를 얻을 수 있다',
       'upper · find · strip · replace · split · join · center · isdigit 등 문자열 함수를 상황에 맞게 사용할 수 있다',
+      'f-string 서식(정렬 · 자릿수 · 천 단위)으로 보기 좋은 출력을 만들고, 조각이 많을 때 join() 을 선택할 수 있다',
+      '입력값을 정규화 · 검증하고, 정규식(re) · textwrap · string 같은 표준 도구가 있다는 것을 안다',
       '문자열 함수를 활용하여 문자열 거꾸로 출력 프로그램과 거북이 글자쓰기 프로그램을 완성할 수 있다'
     ],
     sections: [
@@ -324,9 +326,11 @@ for ch in inStr :
           '이 장에서 만들 두 프로그램의 동작을 설명할 수 있다',
           '문자열과 리스트가 인덱스 · 슬라이싱을 똑같이 사용한다는 점을 비교할 수 있다',
           '양수 · 음수 인덱스와 슬라이싱 [시작:끝:간격] 으로 문자열의 일부를 꺼낼 수 있다',
-          '문자열의 +, *, len(), in 을 사용할 수 있다'
+          '문자열의 +, *, len(), in 을 사용할 수 있다',
+          '이스케이프 문자와 raw 문자열(r"…")을 구분해 쓸 수 있다',
+          'ord() · chr() 로 글자와 코드 번호를 오가고, 글자 수와 바이트 수가 다른 이유를 설명할 수 있다'
         ],
-        flow: [['도입: 이 장에서 만들 프로그램', 5], ['문자열의 개념 · 리스트와 비교', 10], ['인덱스 · 음수 인덱스 · 슬라이싱', 15], ['+, *, len(), in', 10], ['퀴즈 · 실습', 10]],
+        flow: [['도입: 이 장에서 만들 프로그램', 5], ['문자열의 개념 · 리스트와 비교', 8], ['인덱스 · 음수 인덱스 · 슬라이싱', 13], ['+, *, len(), in', 8], ['📘 이스케이프 · raw 문자열 · 유니코드', 8], ['퀴즈 · 실습 · 프로젝트', 8]],
         content: [
           { type: 'h', text: '이 장에서 만들 프로그램' },
           { type: 'p', html: '이번 장에서는 우리가 매일 쓰는 <b>글자 데이터</b>, 즉 <b>문자열(string)</b>을 자유자재로 다루는 방법을 배웁니다. 장을 마치면 다음 두 프로그램을 직접 완성할 수 있습니다.' },
@@ -428,7 +432,34 @@ print(ss[::-1])`, expect: `이썬
 파이썬최고
 파썬고
 고최썬이파` },
-          { type: 'callout', kind: 'tip', title: '슬라이싱은 범위를 벗어나도 오류가 없다', html: `인덱스 <code>ss[5]</code> 는 오류지만, 슬라이싱 <code>ss[3:100]</code> 은 오류 없이 있는 데까지만 잘라 <code>'최고'</code> 를 돌려줍니다. 범위가 아예 비면 빈 문자열 <code>''</code> 이 됩니다.` },
+          { type: 'callout', kind: 'tip', title: '슬라이싱은 범위를 벗어나도 오류가 없다', html: `인덱스 <code>ss[5]</code> 는 오류지만, 슬라이싱 <code>ss[3:100]</code> 은 오류 없이 있는 데까지만 잘라 <code>'최고'</code> 를 돌려줍니다. 범위가 아예 비면 빈 문자열 <code>''</code> 이 됩니다. 사용자가 입력한 값처럼 <b>길이를 알 수 없는 문자열</b>을 다룰 때 이 성질이 아주 편리합니다.` },
+          { type: 'table', head: ['하고 싶은 일', '슬라이싱', `ss = "파이썬최고" 일 때`], rows: [
+            ['앞에서 2글자', '<code>ss[:2]</code>', `'파이'`],
+            ['뒤에서 2글자', '<code>ss[-2:]</code>', `'최고'`],
+            ['앞 2글자를 뺀 나머지', '<code>ss[2:]</code>', `'썬최고'`],
+            ['마지막 글자만 빼기', '<code>ss[:-1]</code>', `'파이썬최'`],
+            ['가운데 글자', '<code>ss[len(ss) // 2]</code>', `'썬'`],
+            ['한 칸씩 건너뛰기', '<code>ss[::2]</code>', `'파썬고'`],
+            ['거꾸로 뒤집기', '<code>ss[::-1]</code>', `'고최썬이파'`]
+          ], caption: '📘 자주 쓰는 슬라이싱 패턴 — 외우기보다 “경계선 번호” 그림으로 떠올리세요' },
+          { type: 'code', title: '추가 예제. 슬라이싱으로 자르기 · 뒤집기', code: `ss = "IT Cookbook 파이썬"
+
+print("전체 길이 :", len(ss))
+print("앞 3글자 :", ss[:3])
+print("뒤 3글자 :", ss[-3:])
+print("가운데 글자 :", ss[len(ss) // 2])
+print("2칸씩 건너뛰기 :", ss[::2])
+print("거꾸로 :", ss[::-1])
+print("범위를 넘어도 안전 :", ss[12:100])
+print("결과가 없으면 빈 문자열 :", "[" + ss[10:3] + "]")`, expect: `전체 길이 : 15
+앞 3글자 : IT
+뒤 3글자 : 파이썬
+가운데 글자 : b
+2칸씩 건너뛰기 : I okok파썬
+거꾸로 : 썬이파 koobkooC TI
+범위를 넘어도 안전 : 파이썬
+결과가 없으면 빈 문자열 : []`,
+            desc: `<code>ss[len(ss) // 2]</code> 처럼 <b>길이를 계산해서 위치를 정하면</b> 어떤 문자열에도 쓸 수 있는 코드가 됩니다. 시작이 끝보다 큰 <code>ss[10:3]</code> 은 오류가 아니라 빈 문자열 <code>''</code> 입니다.` },
           { type: 'h', text: '문자열 더하기(+)와 곱하기(*)' },
           { type: 'p', html: `문자열끼리 <code>+</code> 를 하면 두 문자열이 <b>이어 붙은(연결, concatenation)</b> 새 문자열이 되고, 문자열에 정수를 <code>*</code> 하면 그 횟수만큼 <b>반복</b>한 문자열이 됩니다.` },
           { type: 'code', repl: true, title: '문자열 연결(+)과 반복(*)', code: `ss = '파이썬' + '최고'
@@ -491,7 +522,71 @@ print(len("a\\nb"))`, expect: `하나
 홍길동	20
 It's OK
 C:\\CookPython
-3` }
+3` },
+          { type: 'h', text: '📘 raw 문자열: 역슬래시를 글자 그대로 쓰기' },
+          { type: 'p', html: `윈도의 파일 경로처럼 역슬래시가 많은 문자열은 <code>\\\\</code> 를 계속 쓰기가 번거롭고 실수하기도 쉽습니다. 문자열 앞에 <code>r</code> 을 붙이면(raw string, 날 문자열) 역슬래시를 <b>특별한 기호가 아닌 보통 글자</b>로 취급합니다. 파일 경로와 정규식(8-3 교시)에서 특히 많이 씁니다.` },
+          { type: 'code', title: '추가 예제. raw 문자열 r"…"', code: `path1 = "C:\\\\Temp\\\\new.txt"
+path2 = r"C:\\Temp\\new.txt"
+
+print(path1)
+print(path2)
+print(path1 == path2)
+print(len("\\n"), len(r"\\n"))
+print(r"줄바꿈 기호는 \\n 이라고 씁니다")`, expect: `C:\\Temp\\new.txt
+C:\\Temp\\new.txt
+True
+1 2
+줄바꿈 기호는 \\n 이라고 씁니다`,
+            desc: `두 방법의 결과는 <b>완전히 같은 문자열</b>입니다(3행 True). <code>len("\\n")</code> 은 줄바꿈 한 글자라서 1, <code>len(r"\\n")</code> 은 역슬래시와 n 두 글자라서 2 입니다.` },
+          { type: 'h', text: '📘 글자에 붙은 번호: 유니코드 · ord() · chr()' },
+          { type: 'p', html: `컴퓨터는 글자를 그림이 아니라 <b>번호</b>로 저장합니다. 이 번호 체계가 <b>유니코드(Unicode)</b> 이고, 번호 하나를 코드 포인트(code point)라고 부릅니다. <code>ord(글자)</code> 는 글자의 번호를, <code>chr(번호)</code> 는 번호에 해당하는 글자를 돌려줍니다. 알파벳은 <code>'A'</code>(65)부터, 한글 음절은 <code>'가'</code>(44032)부터 <b>차례대로</b> 번호가 붙어 있어서, 번호를 더하고 빼는 것만으로 글자를 옮길 수 있습니다(암호 만들기 · 알파벳 순서 만들기).` },
+          { type: 'code', title: '추가 예제. ord() 와 chr() — 글자와 번호 사이', code: `print("'A' 의 코드 번호 :", ord('A'))
+print("'a' 의 코드 번호 :", ord('a'))
+print("'0' 의 코드 번호 :", ord('0'))
+print("'가' 의 코드 번호 :", ord('가'))
+
+print("65번 글자 :", chr(65))
+print("44032번 글자 :", chr(44032))
+
+for i in range(0, 5) :
+    print(chr(ord('A') + i), end = ' ')
+print()
+
+ss = "Python 파이썬 2026!"
+hangul = 0
+for ch in ss :
+    if '가' <= ch <= '힣' :
+        hangul += 1
+print("한글 글자 수 :", hangul)`, expect: `'A' 의 코드 번호 : 65
+'a' 의 코드 번호 : 97
+'0' 의 코드 번호 : 48
+'가' 의 코드 번호 : 44032
+65번 글자 : A
+44032번 글자 : 가
+A B C D E
+한글 글자 수 : 3`,
+            desc: `글자끼리 <code>&lt;</code>, <code>&gt;</code> 로 비교하면 <b>코드 번호</b>를 비교합니다. 그래서 <code>'가' &lt;= ch &lt;= '힣'</code> 한 줄로 “이 글자가 한글인가?”를 판별할 수 있습니다.` },
+          { type: 'callout', kind: 'more', title: '📘 str 과 bytes — 글자 수와 바이트 수는 다르다', html: `파이썬 3 의 문자열(<code>str</code>)은 <b>글자의 모음</b>이라 한글도 영문도 <code>len()</code> 이 똑같이 1씩 셉니다. 하지만 파일에 저장하거나 인터넷으로 보낼 때는 <b>바이트(byte)의 모음</b>인 <code>bytes</code> 로 바꿔야 하고, 이때 규칙을 <b>인코딩(encoding)</b> 이라고 합니다. 가장 널리 쓰는 UTF-8 에서 영문 1글자는 1바이트, 한글 1글자는 <b>3바이트</b>입니다. <code>문자열.encode('utf-8')</code> 로 바이트로, <code>바이트.decode('utf-8')</code> 로 다시 문자열로 바꿉니다. 한글이 <code>���</code> 처럼 깨져 보이는 문제는 거의 대부분 <b>저장할 때와 읽을 때의 인코딩이 다르기 때문</b>입니다.` },
+          { type: 'code', title: '추가 예제. encode() · decode() 로 바이트와 오가기', code: `ss = "파이썬 Python"
+
+print("글자 수(len) :", len(ss))
+
+data = ss.encode('utf-8')
+print("자료형 :", type(data))
+print("바이트 수 :", len(data))
+print("한 글자를 바이트로 :", "가".encode('utf-8'))
+print("영문 한 글자 :", len("a".encode('utf-8')), "바이트")
+print("한글 한 글자 :", len("가".encode('utf-8')), "바이트")
+
+back = data.decode('utf-8')
+print("다시 문자열로 :", back, "/ 원래와 같은가?", back == ss)`, expect: `글자 수(len) : 10
+자료형 : <class 'bytes'>
+바이트 수 : 16
+한 글자를 바이트로 : b'\\xea\\xb0\\x80'
+영문 한 글자 : 1 바이트
+한글 한 글자 : 3 바이트
+다시 문자열로 : 파이썬 Python / 원래와 같은가? True`,
+            desc: `<code>b'…'</code> 처럼 앞에 <code>b</code> 가 붙은 것이 바이트입니다. <code>\\xea</code> 는 16진수 바이트 하나를 뜻합니다. 글자 수는 10 이지만 UTF-8 바이트 수는 16(한글 3글자×3 + 영문·공백 7)입니다. 13장 파일 입출력에서 <code>open(…, encoding='utf-8')</code> 로 다시 만납니다.` }
         ],
         practice: [
           {
@@ -531,7 +626,41 @@ print(year + "-" + month + "-" + day)
 2026-09-18`
           },
           {
-            title: '실습 8-2. 문자열 곱하기로 상자 그리기',
+            title: '실습 8-2. 문자열 정보 카드',
+            level: 1,
+            desc: `<p>문자열을 입력받아 글자 수 · 첫 글자 · 마지막 글자 · 앞 3글자 · 거꾸로 된 문자열을 출력하세요. 인덱스와 슬라이싱만으로 만들 수 있습니다.</p><pre>문자열 : 파이썬 최고
+글자 수 : 6
+첫 글자 : 파
+마지막 글자 : 고
+앞 3글자 : 파이썬
+거꾸로 : 고최 썬이파</pre>`,
+            hint: '첫 글자는 <code>ss[0]</code>, 마지막 글자는 <code>ss[-1]</code>, 앞 3글자는 <code>ss[:3]</code>, 거꾸로는 <code>ss[::-1]</code> 입니다.',
+            starter: `ss = input("문자열 : ")
+
+print("글자 수 :", 0)      # TODO: len() 사용
+print("첫 글자 :", "")      # TODO
+print("마지막 글자 :", "")  # TODO
+print("앞 3글자 :", "")     # TODO
+print("거꾸로 :", "")       # TODO
+`,
+            solution: `ss = input("문자열 : ")
+
+print("글자 수 :", len(ss))
+print("첫 글자 :", ss[0])
+print("마지막 글자 :", ss[-1])
+print("앞 3글자 :", ss[:3])
+print("거꾸로 :", ss[::-1])
+`,
+            stdin: '파이썬 최고\n',
+            expect: `문자열 : 파이썬 최고
+글자 수 : 6
+첫 글자 : 파
+마지막 글자 : 고
+앞 3글자 : 파이썬
+거꾸로 : 고최 썬이파`
+          },
+          {
+            title: '실습 8-3. 문자열 곱하기로 상자 그리기',
             level: 2,
             desc: `<p>단어를 입력받아, 단어 길이에 맞는 상자 안에 넣어 출력하세요. 상자의 가로선은 <code>'*'</code> 를 <b>(단어 길이 + 4)</b> 번 반복한 것입니다. (영문 입력 기준)</p><pre>단어 : Python
 **********
@@ -560,6 +689,108 @@ print(line)
 **********
 * Python *
 **********`
+          },
+          {
+            title: '실습 8-4. 이름 가운데 가리기',
+            level: 2,
+            desc: `<p>개인정보를 보호하기 위해 이름의 <b>가운데 글자를 <code>*</code> 로 가리는</b> 프로그램을 만드세요. 규칙은 다음과 같습니다.</p><ul><li>1글자 이름 → 그대로 (예: <code>이</code>)</li><li>2글자 이름 → 뒤 한 글자를 가림 (예: <code>이순</code> → <code>이*</code>)</li><li>3글자 이상 → 첫 글자와 마지막 글자만 남기고 가운데를 모두 가림 (예: <code>남궁민수</code> → <code>남**수</code>)</li></ul><pre>이름 : 홍길동
+가린 이름 : 홍*동
+글자 수는 그대로 : 3 → 3</pre>`,
+            hint: '<code>len(name)</code> 으로 길이를 나눠 if · elif · else 로 처리합니다. 가운데는 <code>"*" * (len(name) - 2)</code> 개입니다. 입력의 앞뒤 공백은 <code>strip()</code> 으로 지워 두면 안전합니다(8-3 교시).',
+            starter: `name = input("이름 : ")
+name = name.strip()
+
+masked = name
+# TODO: 길이에 따라 masked 를 만드세요 (1글자 / 2글자 / 3글자 이상)
+
+print("가린 이름 :", masked)
+print("글자 수는 그대로 :", len(name), "→", len(masked))
+`,
+            solution: `name = input("이름 : ")
+name = name.strip()
+
+if len(name) <= 1 :
+    masked = name
+elif len(name) == 2 :
+    masked = name[0] + "*"
+else :
+    masked = name[0] + "*" * (len(name) - 2) + name[-1]
+
+print("가린 이름 :", masked)
+print("글자 수는 그대로 :", len(name), "→", len(masked))
+`,
+            stdin: '홍길동\n',
+            expect: `이름 : 홍길동
+가린 이름 : 홍*동
+글자 수는 그대로 : 3 → 3`
+          },
+          {
+            title: '🚀 프로젝트 8-1. 시저 암호(Caesar cipher) 만들기',
+            level: 3,
+            desc: `<p>로마의 카이사르가 썼다고 전해지는 <b>시저 암호</b>는 알파벳을 정해진 칸 수만큼 뒤로 밀어 쓰는 암호입니다. (<code>a</code> 를 3칸 밀면 <code>d</code>)</p>
+<p><b>요구 사항</b></p>
+<ul>
+  <li><b>입력</b> — 암호로 바꿀 문장, 이동 칸 수(정수)</li>
+  <li><b>규칙 1</b> — 영문 소문자는 소문자끼리, 대문자는 대문자끼리 밀기 (<code>ord()</code> · <code>chr()</code> 사용)</li>
+  <li><b>규칙 2</b> — <code>z</code> 다음은 다시 <code>a</code> 로 돌아오기 (26으로 나눈 나머지 <code>% 26</code> 이용)</li>
+  <li><b>규칙 3</b> — 한글 · 숫자 · 공백 · 기호는 <b>바꾸지 않고 그대로</b> 둡니다</li>
+  <li><b>출력</b> — 암호문, 같은 칸 수만큼 되돌린 복호문, 그리고 복호문이 원문과 같은지(<code>True</code>)</li>
+</ul>
+<pre>문장 : Python 최고 3!
+이동 칸 수 : 3
+암호문 : Sbwkrq 최고 3!
+복호문 : Python 최고 3!
+원문과 같은가? : True</pre>
+<p><b>확장 아이디어</b> — ① 이동 칸 수를 1~25 로 모두 시도해 암호문을 풀어 보는 “무차별 대입” 기능 ② 한글도 <code>'가'</code>~<code>'힣'</code> 범위 안에서 밀어 보기 ③ 8-3 교시의 <code>replace()</code> 를 써서 특정 단어만 암호화하기</p>`,
+            hint: `소문자 한 글자를 밀 때의 공식은 <code>chr((ord(ch) - ord('a') + shift) % 26 + ord('a'))</code> 입니다. <code>ord(ch) - ord('a')</code> 로 0~25 번호를 만들고, 밀고, <code>% 26</code> 으로 한 바퀴 돌린 뒤 다시 <code>ord('a')</code> 를 더해 글자로 되돌립니다. 되돌릴 때는 <code>+ shift</code> 대신 <code>- shift</code> 를 씁니다.`,
+            starter: `msg = input("문장 : ")
+shift = int(input("이동 칸 수 : "))
+
+secret = ""
+for ch in msg :
+    # TODO: 소문자면 밀기, 대문자면 밀기, 나머지는 그대로
+    secret += ch
+
+plain = ""
+for ch in secret :
+    # TODO: 반대 방향으로 밀어 원래 문장으로 되돌리기
+    plain += ch
+
+print("암호문 :", secret)
+print("복호문 :", plain)
+print("원문과 같은가? :", plain == msg)
+`,
+            solution: `msg = input("문장 : ")
+shift = int(input("이동 칸 수 : "))
+
+secret = ""
+for ch in msg :
+    if 'a' <= ch <= 'z' :
+        secret += chr((ord(ch) - ord('a') + shift) % 26 + ord('a'))
+    elif 'A' <= ch <= 'Z' :
+        secret += chr((ord(ch) - ord('A') + shift) % 26 + ord('A'))
+    else :
+        secret += ch
+
+plain = ""
+for ch in secret :
+    if 'a' <= ch <= 'z' :
+        plain += chr((ord(ch) - ord('a') - shift) % 26 + ord('a'))
+    elif 'A' <= ch <= 'Z' :
+        plain += chr((ord(ch) - ord('A') - shift) % 26 + ord('A'))
+    else :
+        plain += ch
+
+print("암호문 :", secret)
+print("복호문 :", plain)
+print("원문과 같은가? :", plain == msg)
+`,
+            stdin: 'Python 최고 3!\n3\n',
+            expect: `문장 : Python 최고 3!
+이동 칸 수 : 3
+암호문 : Sbwkrq 최고 3!
+복호문 : Python 최고 3!
+원문과 같은가? : True`
           }
         ],
         quiz: [
@@ -568,8 +799,9 @@ print(ss[1:3])</code></pre>`, options: ['파이', '이썬', '이썬최', '파이
           { q: `<code>ss = "Python"</code> 일 때 <code>ss[-1]</code> 의 값은?`, options: [`'P'`, `'n'`, `'o'`, 'IndexError 오류'], answer: 1, explain: '음수 인덱스 -1 은 맨 마지막 글자입니다.' },
           { q: `다음 코드의 실행 결과는?<pre><code>ss = 'ab' * 3 + 'c'
 print(len(ss))</code></pre>`, options: ['3', '6', '7', '9'], answer: 2, explain: `<code>'ab' * 3</code> 은 'ababab'(6글자), 여기에 'c' 를 붙이면 7글자입니다.` },
-          { q: `<code>'10' + '20'</code> 의 결과는?`, options: ['30', `'30'`, `'1020'`, 'TypeError 오류'], answer: 2, explain: '따옴표로 감싼 값은 숫자가 아니라 문자열이므로 + 는 이어 붙이기입니다.' },
-          { q: `<code>ss = "파이썬최고"</code> 일 때 <b>오류가 나는</b> 코드는?`, options: ['ss[4]', 'ss[-5]', 'ss[5]', 'ss[3:100]'], answer: 2, explain: '인덱스는 0~4(-5~-1)까지만 있으므로 ss[5] 는 IndexError 입니다. 슬라이싱은 범위를 벗어나도 오류가 나지 않습니다.' }
+          { q: `<code>ss = "파이썬최고"</code> 일 때 <b>오류가 나는</b> 코드는?`, options: ['ss[4]', 'ss[-5]', 'ss[5]', 'ss[3:100]'], answer: 2, explain: '인덱스는 0~4(-5~-1)까지만 있으므로 ss[5] 는 IndexError 입니다. 슬라이싱은 범위를 벗어나도 오류가 나지 않습니다.' },
+          { q: `<code>len(r"a\\nb")</code> 의 값은? (앞에 <code>r</code> 이 붙은 raw 문자열)`, options: ['2', '3', '4', '오류'], answer: 2, explain: `raw 문자열에서는 역슬래시가 보통 글자이므로 <code>a</code>, <code>\\</code>, <code>n</code>, <code>b</code> 네 글자입니다. <code>r</code> 이 없는 <code>"a\\nb"</code> 는 줄바꿈이 한 글자여서 3 입니다.` },
+          { q: `<code>print(chr(ord('A') + 2))</code> 의 출력은?`, options: ['A2', 'B', 'C', '67'], answer: 2, explain: `<code>ord('A')</code> 는 65, 65 + 2 = 67, <code>chr(67)</code> 은 'C' 입니다. 알파벳의 코드 번호가 차례대로 붙어 있어 가능한 계산입니다.` }
         ],
         slides: [
           { layout: 'title', title: '문자열 기본: 인덱스와 슬라이싱', subtitle: 'Chapter 08 문자열 · Section 01~02', badge: '08-1',
@@ -615,6 +847,46 @@ print(len("파이썬 최고"))
 print('파이썬' in ss)
 print('자바' in ss)`, points: ['한글 · 영문 · 공백 모두 1글자', '<code>in</code> : 포함되면 True', '<code>not in</code> : 반대'],
             notes: '<p><b>[3분]</b> 공백도 한 글자로 세어지는 것을 강조합니다. in 은 강의자료에 없는 보충 내용이지만 뒤의 실습에서 편리하게 씁니다.</p>' },
+          { layout: 'two', title: '📘 이스케이프 문자 vs raw 문자열', left: { title: '\\n 은 특별한 뜻', code: `print("하나\\n둘")
+print("이름\\t나이")
+print("C:\\\\Temp\\\\new.txt")
+print(len("a\\nb"))` }, right: { title: 'r"…" 는 글자 그대로', code: `print(r"C:\\Temp\\new.txt")
+print(len(r"\\n"))
+print(r"정규식 \\d+ 는 숫자 여러 개")` },
+            notes: '<p><b>[3분]</b> 왼쪽에서 <code>\\\\</code> 두 번 쓰는 것이 번거롭다는 불편을 먼저 느끼게 한 뒤 오른쪽 <code>r</code> 을 보여 주세요.</p><p>발문: “<code>len("a\\nb")</code> 와 <code>len(r"a\\nb")</code> 는?” → 3 과 4. 8-3 교시의 정규식에서 다시 만난다고 예고합니다.</p>' },
+          { layout: 'code', title: '📘 글자에 붙은 번호: ord() · chr()', code: `print(ord('A'), ord('a'), ord('가'))
+print(chr(65), chr(97), chr(44032))
+
+for i in range(0, 5) :
+    print(chr(ord('A') + i), end = ' ')
+print()
+
+print(len("파이썬"), len("파이썬".encode('utf-8')))`, points: ['<code>ord</code> : 글자 → 번호', '<code>chr</code> : 번호 → 글자', `한글 판별: <code>'가' &lt;= ch &lt;= '힣'</code>`, '글자 수 3, UTF-8 바이트 수 9'],
+            notes: '<p><b>[4분]</b> “컴퓨터는 글자를 번호로 저장한다”를 먼저 말하고 실행합니다. 마지막 줄에서 <b>글자 수와 바이트 수가 다르다</b>는 점을 강조하세요 — 한글이 깨지는 문제(인코딩)의 뿌리입니다.</p><p>발문: “<code>chr(ord(\'가\') + 1)</code> 은?” → \'각\'. 다음 프로젝트(시저 암호)의 준비 운동입니다.</p>' },
+          { layout: 'practice', title: '🚀 프로젝트 8-1. 시저 암호', desc: `문장과 이동 칸 수를 입력받아 알파벳만 밀어 암호문을 만들고, 되돌려 원문과 같은지 확인하기 (한글 · 기호는 그대로)`, stdin: 'Python 최고 3!\n3\n', starter: `msg = input("문장 : ")
+shift = int(input("이동 칸 수 : "))
+
+secret = ""
+for ch in msg :
+    # TODO: 소문자 · 대문자만 밀기
+    secret += ch
+
+print("암호문 :", secret)
+`, solution: `msg = input("문장 : ")
+shift = int(input("이동 칸 수 : "))
+
+secret = ""
+for ch in msg :
+    if 'a' <= ch <= 'z' :
+        secret += chr((ord(ch) - ord('a') + shift) % 26 + ord('a'))
+    elif 'A' <= ch <= 'Z' :
+        secret += chr((ord(ch) - ord('A') + shift) % 26 + ord('A'))
+    else :
+        secret += ch
+
+print("암호문 :", secret)
+`,
+            notes: '<p><b>[8분]</b> 칠판에 <code>a b c … z</code> 를 원으로 그려 “3칸 밀기”를 보여 준 뒤 <code>% 26</code> 이 왜 필요한지 질문합니다(z 다음은 a).</p><p>단계로 나눠 주세요: ① 소문자만 ② 대문자 추가 ③ 되돌리기(복호화). 빨리 끝낸 학생은 이동 칸 수 1~25 를 모두 시도하는 해독기를 만들게 합니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: `<code>ss = "Python"</code> 일 때 <code>ss[1:4]</code> 는?`, options: [`'Pyt'`, `'yth'`, `'ytho'`, `'Pyth'`], answer: 1,
             explain: '인덱스 1(y)부터 4 바로 앞인 3(h)까지 → \'yth\'',
             notes: '<p><b>[2분]</b> 틀린 학생은 대부분 끝 번호를 포함(ytho)하거나 1부터 셉니다(Pyt). 경계선 그림으로 다시 설명하세요.</p>' },
@@ -644,9 +916,10 @@ print(year + "-" + month + "-" + day)
           'for 문과 range(), len() 으로 문자열을 한 글자씩 처리할 수 있다',
           '문자열이 바꿀 수 없는 자료형임을 알고, += 로 새 문자열을 만들어 갈 수 있다',
           '[프로그램 1] 문자열 거꾸로 출력을 완성하고 다른 방법(슬라이싱)과 비교할 수 있다',
-          '% 서식과 f-string 으로 문자열 안에 값을 넣어 출력할 수 있다'
+          '% 서식과 f-string 으로 문자열 안에 값을 넣고, 정렬 · 자릿수 · 천 단위 서식을 지정할 수 있다',
+          '+= 로 문자열을 쌓는 방법의 비용을 설명하고, 조각이 많을 때 join() 을 선택할 수 있다'
         ],
-        flow: [['복습: 인덱스 · len()', 5], ['Code08-01 · SELF STUDY 8-1', 15], ['문자열의 불변성 · 빈 문자열 += ', 8], ['[프로그램 1] 완성 · 다른 방법', 12], ['문자열 서식(f-string) · 퀴즈', 10]],
+        flow: [['복습: 인덱스 · len()', 4], ['Code08-01 · SELF STUDY 8-1', 12], ['문자열의 불변성 · 빈 문자열 += ', 7], ['[프로그램 1] 완성 · 다른 방법', 10], ['📘 += 의 비용과 join', 5], ['f-string 서식 총정리 · 퀴즈 · 실습', 12]],
         content: [
           { type: 'h', text: '모든 글자 뒤에 $ 붙이기' },
           { type: 'p', html: `문자열의 글자 수는 <code>len()</code> 으로, 각 글자는 <code>ss[i]</code> 로 꺼낼 수 있었습니다. 이 둘을 <code>for i in range(0, len(ss))</code> 와 함께 쓰면 i 가 0, 1, 2, … 로 바뀌면서 <b>모든 글자를 차례로</b> 처리할 수 있습니다.` },
@@ -721,6 +994,31 @@ print("방법 3 -->", outStr)`, stdin: '파이썬 만세\n', expect: `문자열�
 방법 1 --> 세만 썬이파
 방법 2 --> 세만 썬이파
 방법 3 --> 세만 썬이파`, desc: `방법 3은 새 글자를 <b>앞쪽</b>에 붙입니다. '파' → '이파' → '썬이파' … 처럼 자연스럽게 뒤집힙니다.` },
+          { type: 'h', text: '📘 += 로 쌓는 방법의 숨은 비용과 join()' },
+          { type: 'p', html: `문자열이 불변이라는 성질에는 <b>비용</b>이 따라옵니다. <code>outStr += ch</code> 는 “뒤에 한 글자 덧붙이기”가 아니라 <b>기존 내용을 모두 복사해 새 문자열을 만드는</b> 일입니다. 글자 몇십 개라면 눈 깜짝할 사이지만, 수만 번 반복하면 복사한 양이 쌓여 느려집니다.` },
+          { type: 'p', html: `그래서 조각이 많을 때는 <b>리스트에 모았다가 <code>''.join(리스트)</code> 로 한 번에 합칩니다</b>. join 은 전체 길이를 먼저 계산한 뒤 문자열을 <b>딱 한 번만</b> 만들기 때문에 훨씬 빠릅니다. (<code>join</code> 은 8-4 교시에서 자세히 배웁니다)` },
+          { type: 'code', title: '추가 예제. += 방식과 join 방식의 속도 비교', code: `import time
+
+n = 50000
+
+start = time.perf_counter()
+s1 = ""
+for i in range(0, n) :
+    s1 += "*"
+t1 = time.perf_counter() - start
+
+start = time.perf_counter()
+parts = []
+for i in range(0, n) :
+    parts.append("*")
+s2 = "".join(parts)
+t2 = time.perf_counter() - start
+
+print(f"+=   방식 : {t1:.4f}초, 길이 {len(s1)}")
+print(f"join 방식 : {t2:.4f}초, 길이 {len(s2)}")
+print("결과는 같은가? :", s1 == s2)`, nondeterministic: true,
+            desc: `컴퓨터마다 시간은 다르지만 <b>join 쪽이 훨씬 빠릅니다</b>(보통 수십 배). <code>time.perf_counter()</code> 는 시간을 재는 함수로, 실행 전후의 값을 빼면 걸린 시간(초)이 됩니다. 결과 문자열은 완전히 같습니다.` },
+          { type: 'callout', kind: 'tip', title: '그럼 += 는 쓰면 안 되나요?', html: `아닙니다. <b>조각이 수백 개 이하면 <code>+=</code> 가 읽기 쉽고 충분히 빠릅니다.</b> 판단 기준은 이렇습니다. ① 값 몇 개를 끼워 넣어 한 줄 만들기 → <b>f-string</b> ② 반복문에서 조각을 계속 모으기, 특히 수천 개 이상 → <b>리스트에 모아 <code>join</code></b>. 성능보다 먼저 “읽기 쉬운가”를 보고, 느려서 문제가 될 때 바꾸면 됩니다.` },
           { type: 'h', text: '📘 문자열 안에 값 넣기: % 서식과 f-string' },
           { type: 'p', html: `Code08-02 의 마지막 줄 <code>"… %s" % outStr</code> 는 문자열 안의 <code>%s</code> 자리에 값을 끼워 넣는 <b>% 서식</b>입니다. 파이썬 3.6부터는 더 읽기 쉬운 <b>f-string</b>(포맷 문자열)을 많이 씁니다. 문자열 앞에 <code>f</code> 를 붙이고, 넣을 값을 중괄호 <code>{ }</code> 안에 바로 적습니다.` },
           { type: 'table', head: ['방법', '예', '결과'], rows: [
@@ -745,8 +1043,41 @@ print(f"내년에는 {age + 1}살")`, expect: `홍길동님은 20살, 키는 175
             ['<code>{x:&gt;8}</code>', '8칸, 오른쪽 정렬', `<code>f"{'abc':&gt;8}"</code> → '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abc'`],
             ['<code>{x:&lt;8}</code>', '8칸, 왼쪽 정렬', `<code>f"{'abc':&lt;8}"</code> → 'abc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'`],
             ['<code>{x:^8}</code>', '8칸, 가운데 정렬', `<code>f"{'abc':^8}"</code> → '&nbsp;&nbsp;abc&nbsp;&nbsp;&nbsp;'`],
-            ['<code>{x:05d}</code>', '5칸, 빈 곳은 0', '<code>f"{42:05d}"</code> → 00042']
-          ], caption: '📘 자주 쓰는 f-string 서식 지정' },
+            ['<code>{x:05d}</code>', '5칸, 빈 곳은 0', '<code>f"{42:05d}"</code> → 00042'],
+            ['<code>{x:*^9}</code>', '9칸 가운데 정렬, 빈 곳은 *', `<code>f"{'홍길동':*^9}"</code> → ***홍길동***`],
+            ['<code>{x:.1%}</code>', '퍼센트로 (100을 곱해 % 붙임)', '<code>f"{0.3456:.1%}"</code> → 34.6%'],
+            ['<code>{x:x}</code> · <code>{x:b}</code>', '16진수 · 2진수', '<code>f"{255:x}"</code> → ff'],
+            ['<code>{x!r}</code>', '따옴표까지 그대로 (repr)', `<code>f"{'홍':!r}"</code> 이 아니라 <code>f"{'홍'!r}"</code> → '홍'`],
+            ['<code>{x = }</code>', '변수 이름과 값을 함께 (디버깅용)', '<code>f"{price = }"</code> → price = 1234567'],
+            ['<code>{{</code> · <code>}}</code>', '중괄호 글자 자체를 출력', '<code>f"{{ }}"</code> → { }']
+          ], caption: '📘 자주 쓰는 f-string 서식 지정 — 순서는 [채울 글자][정렬 &lt; &gt; ^][폭][,][.자릿수][종류]' },
+          { type: 'code', title: '추가 예제. f-string 서식 총정리', code: `name = "홍길동"
+price = 1234567
+ratio = 0.3456
+pi = 3.14159
+
+print(f"[{name:<8}] 왼쪽 정렬")
+print(f"[{name:>8}] 오른쪽 정렬")
+print(f"[{name:^8}] 가운데 정렬")
+print(f"[{name:*^9}] 빈칸을 * 로")
+print(f"{price:,}원")
+print(f"{pi:.2f} / {pi:8.3f} / {pi:e}")
+print(f"{ratio:.1%}")
+print(f"{7:03d}번 / {255:x} / {255:b}")
+print(f"{name!r} 처럼 !r 을 붙이면 따옴표까지")
+print(f"{price = }")
+print(f"중괄호 자체는 {{ }} 로")`, expect: `[홍길동     ] 왼쪽 정렬
+[     홍길동] 오른쪽 정렬
+[  홍길동   ] 가운데 정렬
+[***홍길동***] 빈칸을 * 로
+1,234,567원
+3.14 /    3.142 / 3.141590e+00
+34.6%
+007번 / ff / 11111111
+'홍길동' 처럼 !r 을 붙이면 따옴표까지
+price = 1234567
+중괄호 자체는 { } 로`,
+            desc: `중괄호 안은 <code>{값:서식}</code> 구조입니다. <code>&lt;</code> 왼쪽 · <code>&gt;</code> 오른쪽 · <code>^</code> 가운데 정렬이고, 그 앞에 글자를 두면 빈칸을 그 글자로 채웁니다(<code>*^9</code>). <code>f"{price = }"</code> 는 <b>변수 이름과 값을 한 번에</b> 찍어 주어 디버깅할 때 <code>print("price =", price)</code> 대신 쓰면 편합니다.` },
           { type: 'code', title: '추가 예제. f-string 서식 지정으로 표 만들기', code: `items = ["사과", "바나나", "딸기"]
 prices = [1500, 12000, 8900]
 
@@ -780,7 +1111,57 @@ for i in range(0, sslen) :
             expect: '파#썬#완#재#있#요'
           },
           {
-            title: '실습 8-3. 회문(팰린드롬) 판별기',
+            title: '실습 8-5. f-string 서식으로 판매 표 만들기',
+            level: 1,
+            desc: `<p>세 상품의 이름 · 수량 · 단가가 리스트로 주어집니다. f-string 서식으로 <b>이름은 왼쪽 정렬, 숫자는 오른쪽 정렬 · 천 단위 쉼표</b>를 붙여 표를 출력하고 합계도 구하세요.</p><pre>상품       수량        단가          금액
+----------------------------------
+사과        3     1,500       4,500
+바나나      12       850      10,200
+수박        1    23,000      23,000
+----------------------------------
+합계                         37,700</pre>`,
+            hint: `이름은 <code>{names[i]:&lt;7}</code>, 수량은 <code>{counts[i]:&gt;4}</code>, 금액은 <code>{amount:&gt;12,}</code> 처럼 씁니다. 머리글도 <code>f"{'상품':&lt;7}"</code> 처럼 서식을 줄 수 있습니다.`,
+            starter: `names = ["사과", "바나나", "수박"]
+counts = [3, 12, 1]
+prices = [1500, 850, 23000]
+
+print(f"{'상품':<7}{'수량':>4}{'단가':>10}{'금액':>12}")
+print("-" * 34)
+
+total = 0
+for i in range(0, len(names)) :
+    amount = counts[i] * prices[i]
+    # TODO: total 에 더하고, 한 줄을 서식에 맞춰 출력
+
+print("-" * 34)
+# TODO: 합계 줄 출력
+`,
+            solution: `names = ["사과", "바나나", "수박"]
+counts = [3, 12, 1]
+prices = [1500, 850, 23000]
+
+print(f"{'상품':<7}{'수량':>4}{'단가':>10}{'금액':>12}")
+print("-" * 34)
+
+total = 0
+for i in range(0, len(names)) :
+    amount = counts[i] * prices[i]
+    total += amount
+    print(f"{names[i]:<7}{counts[i]:>4}{prices[i]:>10,}{amount:>12,}")
+
+print("-" * 34)
+print(f"{'합계':<7}{'':>4}{'':>10}{total:>12,}")
+`,
+            expect: `상품       수량        단가          금액
+----------------------------------
+사과        3     1,500       4,500
+바나나      12       850      10,200
+수박        1    23,000      23,000
+----------------------------------
+합계                         37,700`
+          },
+          {
+            title: '실습 8-6. 회문(팰린드롬) 판별기',
             level: 2,
             desc: `<p>앞으로 읽어도 뒤로 읽어도 같은 말을 <b>회문</b>이라고 합니다(예: <code>기러기</code>, <code>토마토</code>, <code>level</code>). 단어를 입력받아 회문이면 <code>회문입니다.</code>, 아니면 <code>회문이 아닙니다.</code> 를 출력하세요.</p><pre>단어 입력 : 기러기
 기러기 → 기러기
@@ -813,7 +1194,7 @@ else :
 회문입니다.`
           },
           {
-            title: '실습 8-4. 모음 개수 세기',
+            title: '실습 8-7. 모음 개수 세기',
             level: 2,
             desc: `<p>영어 문장을 입력받아 모음(<code>a, e, i, o, u</code>)이 몇 개인지 세어 f-string 으로 출력하세요. 대문자는 입력하지 않는다고 가정합니다.</p><pre>영어 문장 : i love python programming
 모음은 모두 7개입니다.</pre>`,
@@ -837,6 +1218,90 @@ print(f"모음은 모두 {count}개입니다.")
             stdin: 'i love python programming\n',
             expect: `영어 문장 : i love python programming
 모음은 모두 7개입니다.`
+          },
+          {
+            title: '🚀 프로젝트 8-2. 문장 통계 프로그램',
+            level: 3,
+            desc: `<p>글을 쓰면 자동으로 “글자 수 · 단어 수 · 자주 쓴 단어”를 알려 주는 도구가 있죠? 그 축소판을 만들어 봅시다.</p>
+<p><b>요구 사항</b></p>
+<ul>
+  <li><b>입력</b> — 영어 문장 한 줄 (마침표 · 쉼표가 섞여 있어도 됩니다)</li>
+  <li><b>출력 1</b> — 글자 수(공백 포함), 글자 수(공백 제외), 단어 수</li>
+  <li><b>출력 2</b> — 평균 단어 길이(소수 둘째 자리까지), 가장 긴 단어와 그 길이</li>
+  <li><b>출력 3</b> — 단어별 등장 횟수를 <code>*</code> 막대그래프와 함께 (같은 단어는 <b>한 번만</b> 표시)</li>
+  <li><b>규칙</b> — 대소문자는 구분하지 않습니다(<code>Python</code> 과 <code>python</code> 은 같은 단어). 마침표와 쉼표는 단어에서 떼어 냅니다.</li>
+</ul>
+<pre>문장 : Python is easy, python is fun. I love python.
+==================================
+글자 수(공백 포함) : 45
+글자 수(공백 제외) : 37
+단어 수           : 9
+평균 단어 길이     : 3.78
+가장 긴 단어       : python (6글자)
+==================================
+python      3회  ***
+is          2회  **
+easy        1회  *
+…</pre>
+<p><b>확장 아이디어</b> — ① 많이 나온 순서대로 정렬해 보여 주기 ② <code>a</code>, <code>the</code>, <code>is</code> 같은 흔한 단어는 빼고 세기 ③ 한글 문장도 처리하기 ④ 13장을 배운 뒤 <b>파일</b>을 읽어 통계 내기</p>`,
+            hint: `<code>text.lower().replace(',', ' ').replace('.', ' ').split()</code> 한 줄로 “소문자 → 기호 제거 → 단어 나누기”를 할 수 있습니다. 중복 없이 한 번만 출력하려면 이미 보여 준 단어를 <code>seen</code> 리스트에 모아 두고 <code>if w not in seen :</code> 으로 검사하세요. 횟수는 <code>words.count(w)</code> 입니다.`,
+            starter: `text = input("문장 : ").strip()
+
+words = text.lower().replace(',', ' ').replace('.', ' ').split()
+
+print("=" * 34)
+print(f"글자 수(공백 포함) : {len(text)}")
+# TODO: 공백 제외 글자 수, 단어 수 출력
+
+# TODO: 총 글자 길이와 가장 긴 단어 구하기 (for 문)
+
+# TODO: 평균 단어 길이, 가장 긴 단어 출력
+print("=" * 34)
+
+# TODO: 단어별 등장 횟수를 중복 없이 출력
+`,
+            solution: `text = input("문장 : ").strip()
+
+words = text.lower().replace(',', ' ').replace('.', ' ').split()
+
+print("=" * 34)
+print(f"글자 수(공백 포함) : {len(text)}")
+print(f"글자 수(공백 제외) : {len(text.replace(' ', ''))}")
+print(f"단어 수           : {len(words)}")
+
+totalLen = 0
+longest = ""
+for w in words :
+    totalLen += len(w)
+    if len(w) > len(longest) :
+        longest = w
+
+print(f"평균 단어 길이     : {totalLen / len(words):.2f}")
+print(f"가장 긴 단어       : {longest} ({len(longest)}글자)")
+print("=" * 34)
+
+seen = []
+for w in words :
+    if w not in seen :
+        seen.append(w)
+        cnt = words.count(w)
+        print(f"{w:<10}{cnt:>3}회  {'*' * cnt}")
+`,
+            stdin: 'Python is easy, python is fun. I love python.\n',
+            expect: `문장 : Python is easy, python is fun. I love python.
+==================================
+글자 수(공백 포함) : 45
+글자 수(공백 제외) : 37
+단어 수           : 9
+평균 단어 길이     : 3.78
+가장 긴 단어       : python (6글자)
+==================================
+python      3회  ***
+is          2회  **
+easy        1회  *
+fun         1회  *
+i           1회  *
+love        1회  *`
           }
         ],
         quiz: [
@@ -847,8 +1312,9 @@ for i in range(0, len(ss)) :
 ss[0] = 'P'
 print(ss)</code></pre>`, options: ['Python', 'python', 'Pthon', 'TypeError 오류'], answer: 3, explain: `문자열은 불변(immutable)이라 글자 하나를 바꿀 수 없습니다. <code>ss = 'P' + ss[1:]</code> 처럼 새 문자열을 만들어야 합니다.` },
           { q: `Code08-02 에서 <code>count</code> 가 6 이고 <code>i</code> 가 0 일 때 <code>inStr[count - (i + 1)]</code> 가 가리키는 글자는?`, options: ['첫 번째 글자', '두 번째 글자', '마지막 글자', 'IndexError 오류'], answer: 2, explain: '<code>inStr[6 - 1] = inStr[5]</code>, 즉 6글자 문자열의 마지막 글자입니다.' },
-          { q: `<code>"ABCDE"[::-1]</code> 의 결과는?`, options: [`'ABCDE'`, `'EDCBA'`, `'E'`, `'ACE'`], answer: 1, explain: '간격이 -1 이면 뒤에서부터 거꾸로 잘라 냅니다.' },
-          { q: `<code>name = "철수"</code>, <code>age = 15</code> 일 때 <code>f"{name}는 {age + 1}살"</code> 의 결과는?`, options: ['{name}는 {age + 1}살', '철수는 15살', '철수는 16살', '오류'], answer: 2, explain: 'f-string 의 중괄호 안의 식이 계산되어 들어갑니다.' }
+          { q: `<code>name = "철수"</code>, <code>age = 15</code> 일 때 <code>f"{name}는 {age + 1}살"</code> 의 결과는?`, options: ['{name}는 {age + 1}살', '철수는 15살', '철수는 16살', '오류'], answer: 2, explain: 'f-string 의 중괄호 안의 식이 계산되어 들어갑니다.' },
+          { q: `<code>print(f"{1234567:,}원")</code> 의 출력은?`, options: ['1234567원', '1,234,567원', '1.234.567원', '1 234 567원'], answer: 1, explain: `서식의 <code>,</code> 는 천 단위마다 쉼표를 넣으라는 뜻입니다. 금액을 보여 줄 때 가장 많이 쓰는 서식입니다.` },
+          { q: `글자 조각 10만 개를 이어 붙일 때 <b>권장하는</b> 방법은?`, options: [`반복문에서 <code>s += 조각</code>`, `리스트에 모은 뒤 <code>''.join(리스트)</code>`, `<code>s = s + 조각</code> 을 두 번씩`, '방법에 따른 차이는 없다'], answer: 1, explain: `문자열은 불변이라 <code>+=</code> 는 매번 전체를 복사해 새 문자열을 만듭니다. 조각이 아주 많으면 리스트에 모아 <code>join</code> 으로 한 번에 합치는 쪽이 훨씬 빠릅니다.` }
         ],
         slides: [
           { layout: 'title', title: '문자열 한 글자씩 처리하기', subtitle: 'for 문 · 불변성 · [프로그램 1] 문자열 거꾸로 출력', badge: '08-2',
@@ -909,6 +1375,51 @@ print("%s님은 %d살" % (name, age))
 print(f"{name}님은 {age}살, 키는 {height:.1f}cm")
 print(f"내년에는 {age + 1}살")`, points: ['앞에 <code>f</code>, 값은 <code>{ }</code> 안에', '<code>:.1f</code> 소수점 1자리', '중괄호 안에 식도 가능'],
             notes: '<p><b>[3분]</b> 흔한 실수: 앞에 f 를 빼먹으면 <code>{name}</code> 이 그대로 출력됩니다. 직접 f 를 지우고 실행해 보여 주세요.</p>' },
+          { layout: 'table', title: '📘 f-string 서식 한 장 정리', lead: `<code>{값:[채울 글자][정렬 &lt; &gt; ^][폭][,][.자릿수][종류]}</code>`,
+            head: ['서식', '뜻', '결과'], rows: [
+              ['<code>{s:&lt;8}</code> <code>{s:&gt;8}</code> <code>{s:^8}</code>', '왼쪽 · 오른쪽 · 가운데 정렬', '[홍길동&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]'],
+              ['<code>{s:*^9}</code>', '가운데 정렬 + 빈칸을 *', '***홍길동***'],
+              ['<code>{n:,}</code>', '천 단위 쉼표', '1,234,567'],
+              ['<code>{x:.2f}</code>', '소수점 2자리', '3.14'],
+              ['<code>{r:.1%}</code>', '퍼센트', '34.6%'],
+              ['<code>{n:03d}</code>', '0 으로 채운 3칸', '007'],
+              ['<code>{s!r}</code> · <code>{n = }</code>', '따옴표까지 · 이름과 값 (디버깅)', `'홍길동' · price = 1234567`]
+            ],
+            notes: '<p><b>[4분]</b> 다 외울 필요는 없고 “필요하면 이 표를 찾는다”로 충분합니다. 실무에서 가장 많이 쓰는 셋: <code>,</code>(금액), <code>.2f</code>(소수), 정렬(표 만들기).</p><p><code>{n = }</code> 는 디버깅용으로 아주 편합니다 — <code>print("n =", n)</code> 대신 <code>print(f"{n = }")</code>.</p>' },
+          { layout: 'two', title: '📘 += 로 쌓기 vs join 으로 합치기', left: { title: '+= : 매번 새 문자열을 복사', code: `s = ""
+for i in range(0, 5) :
+    s += "*"
+print(s)` }, right: { title: 'join : 한 번에 합치기', code: `parts = []
+for i in range(0, 5) :
+    parts.append("*")
+print("".join(parts))` },
+            notes: '<p><b>[4분]</b> 결과는 같지만 과정이 다릅니다. 왼쪽은 <code>""</code> → <code>"*"</code> → <code>"**"</code> … 처럼 <b>매번 새 문자열</b>을 만듭니다(불변이니까요).</p><p>본문의 5만 번 속도 비교 예제를 실행해 차이를 보여 주세요. 정리: 조각 몇 개면 <code>+=</code>·f-string, 수천 개 이상이면 리스트 + <code>join</code>.</p>' },
+          { layout: 'practice', title: '🚀 프로젝트 8-2. 문장 통계', desc: `문장을 입력받아 글자 수 · 단어 수 · 평균 단어 길이 · 가장 긴 단어 · 단어별 횟수를 출력하기 (대소문자 구분 없음)`, stdin: 'Python is easy, python is fun. I love python.\n', starter: `text = input("문장 : ").strip()
+words = text.lower().replace(',', ' ').replace('.', ' ').split()
+
+print(f"단어 수 : {len(words)}")
+# TODO: 가장 긴 단어, 평균 길이, 단어별 횟수
+`, solution: `text = input("문장 : ").strip()
+words = text.lower().replace(',', ' ').replace('.', ' ').split()
+
+totalLen = 0
+longest = ""
+for w in words :
+    totalLen += len(w)
+    if len(w) > len(longest) :
+        longest = w
+
+print(f"단어 수 : {len(words)}")
+print(f"평균 길이 : {totalLen / len(words):.2f}")
+print(f"가장 긴 단어 : {longest}")
+
+seen = []
+for w in words :
+    if w not in seen :
+        seen.append(w)
+        print(f"{w:<10}{words.count(w):>3}회")
+`,
+            notes: '<p><b>[10분]</b> 단계로 쪼개 주세요: ① 단어로 나누기 ② 단어 수 ③ 가장 긴 단어(최댓값 찾기 패턴) ④ 중복 없이 세기.</p><p>④ 가 어렵습니다 — “이미 출력한 단어인가?”를 <code>seen</code> 리스트와 <code>not in</code> 으로 확인한다는 아이디어를 함께 찾아보세요. 11장에서 딕셔너리를 배우면 훨씬 간단해진다고 예고합니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: `다음 코드의 결과는?<pre><code>out = ""
 for ch in "abc" :
     out = ch + out
@@ -928,9 +1439,11 @@ print(out)</code></pre>`, options: ['abc', 'cba', 'aabbcc', 'c'], answer: 1, exp
           '함수와 메서드의 호출 형식 차이를 설명할 수 있다',
           'upper · lower · swapcase · title 로 대소문자를 바꿀 수 있다',
           'count · find · rfind · index · rindex · startswith · endswith 로 문자열을 찾고 검사할 수 있다',
-          'strip · lstrip · rstrip 으로 앞뒤 글자를 지우고, replace 로 문자열을 바꿀 수 있다'
+          'strip · lstrip · rstrip 으로 앞뒤 글자를 지우고, replace 로 문자열을 바꿀 수 있다',
+          '입력값을 정규화(strip · lower · 공백 정리)한 뒤 비교하는 습관을 설명할 수 있다',
+          '정규식(re)으로 패턴을 찾고 바꿀 수 있으며, 언제 정규식을 쓸지 판단할 수 있다'
         ],
-        flow: [['함수와 메서드', 5], ['대소문자 변환', 7], ['문자열 찾기 · Code08-03', 15], ['공백 삭제 · Code08-04 · SELF STUDY 8-2', 13], ['replace · Code08-05 · 퀴즈', 10]],
+        flow: [['함수와 메서드', 4], ['대소문자 변환 · 📘 정규화', 10], ['문자열 찾기 · Code08-03', 12], ['공백 삭제 · Code08-04 · SELF STUDY 8-2', 10], ['replace · Code08-05', 6], ['📘 정규식 맛보기 · 퀴즈 · 실습', 8]],
         content: [
           { type: 'h', text: '문자열 함수의 사용' },
           { type: 'p', html: `파이썬의 문자열에는 자주 쓰는 기능이 <b>함수</b> 형태로 잔뜩 들어 있습니다. 대문자로 바꾸기, 특정 단어 찾기, 공백 지우기, 단어 바꾸기, 쪼개기 등을 직접 반복문으로 만들 필요 없이 한 줄로 처리할 수 있습니다.` },
@@ -976,6 +1489,47 @@ if answer.lower() == "python" :
 else :
     print("오답!")`, stdin: 'PyThOn\n', expect: `파이썬의 영어 이름은? PyThOn
 정답!`, desc: '사용자가 대문자 · 소문자를 섞어 입력해도 <code>lower()</code> 로 모두 소문자로 바꾼 뒤 비교하면 정답으로 처리됩니다.' },
+          { type: 'h', text: '📘 정규화(normalize): 비교하기 전에 모양을 맞추자' },
+          { type: 'p', html: `사람이 입력한 글자는 모양이 제각각입니다. <code>"  Python "</code>, <code>"python"</code>, <code>"PYTHON"</code> 은 사람에게는 같은 말이지만 컴퓨터에게는 <b>모두 다른 문자열</b>입니다. 그래서 비교하거나 저장하기 전에 <b>모양을 한 가지로 맞추는 작업</b>을 합니다. 이것을 정규화(normalization)라고 하며, 실무에서 문자열을 다룰 때 거의 항상 하는 준비 운동입니다.` },
+          { type: 'list', ordered: true, items: [
+            '<code>strip()</code> — 앞뒤에 붙은 공백을 지운다 (복사 · 붙여넣기의 단골 실수)',
+            '<code>lower()</code> — 대소문자를 한쪽으로 통일한다',
+            `<code>' '.join(문자열.split())</code> — 가운데의 연속된 공백 · 탭을 <b>한 칸</b>으로 정리한다`,
+            '필요하면 <code>replace()</code> 로 기호(<code>-</code>, <code>.</code> 등)를 없앤다'
+          ] },
+          { type: 'code', title: '추가 예제. 한 단계씩 정규화하기', code: `raw = "   Hello   PYTHON   World  "
+
+print("원본       : [" + raw + "]")
+print("strip()    : [" + raw.strip() + "]")
+print("lower()    : [" + raw.strip().lower() + "]")
+print("공백 정규화 : [" + " ".join(raw.lower().split()) + "]")
+
+a = "  Python "
+b = "python"
+print("그냥 비교 :", a == b)
+print("정규화 후 :", a.strip().lower() == b)`, expect: `원본       : [   Hello   PYTHON   World  ]
+strip()    : [Hello   PYTHON   World]
+lower()    : [hello   python   world]
+공백 정규화 : [hello python world]
+그냥 비교 : False
+정규화 후 : True`,
+            desc: `<code>raw.strip().lower()</code> 처럼 <b>함수를 점으로 이어서</b> 쓸 수 있습니다. 왼쪽부터 차례로 적용되어 “공백 제거한 뒤 소문자로” 가 됩니다. <code>" ".join(ss.split())</code> 은 공백으로 쪼갠 뒤 한 칸으로 다시 붙이는 유명한 관용구입니다.` },
+          { type: 'code', title: '추가 예제. 설문 응답 정리하기 (정규화 + startswith)', code: `answers = ["  Yes ", "y", "NO", "n ", "글쎄요"]
+
+for a in answers :
+    v = a.strip().lower()
+    if v.startswith('y') :
+        print(f"[{a}] → 동의")
+    elif v.startswith('n') :
+        print(f"[{a}] → 거부")
+    else :
+        print(f"[{a}] → 알 수 없음")`, expect: `[  Yes ] → 동의
+[y] → 동의
+[NO] → 거부
+[n ] → 거부
+[글쎄요] → 알 수 없음`,
+            desc: `사용자가 <code>Yes</code>, <code>y</code>, <code>YES</code> 무엇을 입력해도 같게 처리됩니다. 먼저 <b>정규화</b>하고, 그 다음 <b>판단</b>하는 것이 좋은 순서입니다.` },
+          { type: 'callout', kind: 'more', title: '📘 lower() 보다 엄격한 casefold()', html: `<code>casefold()</code> 는 <code>lower()</code> 의 강화판으로, 독일어 <code>ß</code> 를 <code>ss</code> 로 바꾸는 것처럼 <b>언어별 특수한 대소문자 규칙</b>까지 처리합니다. 영어 · 한글만 다룬다면 <code>lower()</code> 로 충분하고, 여러 나라 글자를 비교해야 하면 <code>casefold()</code> 를 쓰세요.` },
           { type: 'h', text: '문자열 찾기: count(), find(), rfind(), index(), rindex(), startswith(), endswith()' },
           { type: 'figure', html: SVG_FIND, caption: 'find 는 앞에서, rfind 는 뒤에서 찾는다 — 없으면 find 는 -1, index 는 오류' },
           { type: 'code', repl: true, title: '문자열 찾기 함수', code: `ss = '파이썬 공부는 즐겁습니다. 물론 모든 공부가 다 재미있지는 않죠. ^^'
@@ -1110,7 +1664,53 @@ for i in range(0, len(ss)) :
 print("출력 문자열 ==> ", end = '')
 print(ss.replace('o', '$'))`, stdin: 'IT CookBook for Python\n', expect: `입력 문자열 ==> IT CookBook for Python
 출력 문자열 ==> IT C$$kB$$k f$r Pyth$n` },
-          { type: 'callout', kind: 'more', title: '📘 문자열 함수는 대소문자를 구분한다', html: `<code>'IT CookBook'.replace('o', '$')</code> 는 소문자 o 만 바꾸고 대문자 <code>O</code> 는 그대로 둡니다. <code>find()</code>, <code>count()</code>, <code>startswith()</code>, <code>in</code> 도 모두 대소문자를 구분합니다. 구분 없이 처리하려면 먼저 <code>lower()</code> 로 바꾼 뒤 사용하세요.` }
+          { type: 'callout', kind: 'more', title: '📘 문자열 함수는 대소문자를 구분한다', html: `<code>'IT CookBook'.replace('o', '$')</code> 는 소문자 o 만 바꾸고 대문자 <code>O</code> 는 그대로 둡니다. <code>find()</code>, <code>count()</code>, <code>startswith()</code>, <code>in</code> 도 모두 대소문자를 구분합니다. 구분 없이 처리하려면 먼저 <code>lower()</code> 로 바꾼 뒤 사용하세요.` },
+          { type: 'h', text: '📘 실무에서 자주 쓰는 조합' },
+          { type: 'p', html: `문자열 함수는 하나씩 외우기보다 <b>“이런 일을 하려면 이 조합”</b> 으로 익히는 편이 오래갑니다. 다음은 거의 모든 프로그램에 등장하는 조합입니다. (<code>split</code> · <code>join</code> · <code>zfill</code> · <code>center</code> 는 다음 교시에서 배웁니다)` },
+          { type: 'table', head: ['하고 싶은 일', '조합', '예'], rows: [
+            ['입력값 정리하기', '<code>input().strip()</code>', `<code>"  홍길동 "</code> → <code>"홍길동"</code>`],
+            ['대소문자 구분 없이 비교', '<code>a.strip().lower() == b</code>', `<code>" PyThon "</code> == <code>"python"</code> → True`],
+            ['공백을 한 칸으로 정리', `<code>' '.join(ss.split())</code>`, `<code>"a   b"</code> → <code>"a b"</code>`],
+            ['모든 공백 · 기호 없애기', `<code>ss.replace(' ', '').replace('-', '')</code>`, `<code>"010-1234"</code> → <code>"0101234"</code>`],
+            ['단어가 들어 있나?', `<code>'파이썬' in ss</code>`, 'True / False'],
+            ['몇 번 나왔나?', `<code>ss.count('파이썬')</code>`, '2'],
+            ['어디에 있나? (없으면 -1)', `<code>pos = ss.find('@')</code>`, `<code>ss[:pos]</code>, <code>ss[pos+1:]</code> 로 자르기`],
+            ['특정 글자로 시작 · 끝나나?', `<code>ss.startswith('http')</code>, <code>ss.endswith('.kr')</code>`, 'True / False'],
+            ['번호를 네 자리로', `<code>str(7).zfill(4)</code>`, `<code>'0007'</code>`],
+            ['제목을 가운데로', `<code>'영수증'.center(20, '=')</code>`, `<code>'========영수증========='</code>`]
+          ], caption: '📘 문자열 함수 조합 치트시트' },
+          { type: 'h', text: '📘 정규식(re) 맛보기: 패턴으로 찾고 바꾸기' },
+          { type: 'p', html: `<code>find()</code> 와 <code>replace()</code> 는 <b>정확히 같은 글자</b>만 찾습니다. 그런데 “네 자리 숫자-두 자리 숫자-두 자리 숫자 모양의 날짜”처럼 <b>모양(패턴)</b>으로 찾아야 할 때가 있습니다. 이때 쓰는 것이 <b>정규식(정규 표현식, regular expression)</b> 이고, 파이썬에서는 표준 모듈 <code>re</code> 를 <code>import</code> 해서 씁니다.` },
+          { type: 'table', head: ['패턴', '뜻', '예'], rows: [
+            ['<code>\\d</code>', '숫자 한 글자', `<code>\\d\\d</code> → '42'`],
+            ['<code>\\d+</code>', '숫자 한 글자 이상', `'2026', '7'`],
+            ['<code>\\d{4}</code>', '숫자 정확히 4글자', `'2026'`],
+            ['<code>[가-힣]+</code>', '한글 한 글자 이상', `'로그인'`],
+            ['<code>.</code>', '아무 글자 하나', `'a', '7', ' '`],
+            ['<code>^</code> · <code>$</code>', '문자열의 시작 · 끝', `<code>^010</code> → 010 으로 시작`]
+          ], caption: '정규식 기본 기호 (패턴 문자열은 역슬래시가 많으므로 <code>r"…"</code> 로 씁니다)' },
+          { type: 'code', title: '추가 예제. re 모듈로 검색 · 추출 · 치환', code: `import re
+
+log = "2026-09-18 ERROR 로그인 3회 실패 (user=hong, ip=10.0.0.7)"
+
+print(re.search(r"\\d{4}-\\d{2}-\\d{2}", log).group())
+print(re.findall(r"\\d+", log))
+print(re.sub(r"\\d", "*", log))
+print(re.sub(r"ip=[\\d.]+", "ip=***", log))
+print(re.findall(r"[가-힣]+", log))
+
+tel = "010-1234-5678"
+if re.fullmatch(r"010-\\d{4}-\\d{4}", tel) :
+    print(tel, "→ 올바른 휴대폰 번호 형식")
+else :
+    print(tel, "→ 형식이 올바르지 않음")`, expect: `2026-09-18
+['2026', '09', '18', '3', '10', '0', '0', '7']
+****-**-** ERROR 로그인 *회 실패 (user=hong, ip=**.*.*.*)
+2026-09-18 ERROR 로그인 3회 실패 (user=hong, ip=***)
+['로그인', '회', '실패']
+010-1234-5678 → 올바른 휴대폰 번호 형식`,
+            desc: `<code>search()</code> 는 패턴과 맞는 <b>첫 부분</b>을 찾아 주고 <code>.group()</code> 으로 그 글자를 꺼냅니다. <code>findall()</code> 은 <b>맞는 것 모두</b>를 리스트로, <code>sub()</code> 는 <b>바꾸기</b>(replace 의 패턴 버전), <code>fullmatch()</code> 는 <b>전체가 패턴과 딱 맞는지</b> 검사합니다(형식 검증에 사용).` },
+          { type: 'callout', kind: 'warn', title: '정규식은 만능이 아니다', html: `정규식은 강력하지만 <b>읽기 어렵습니다</b>. <code>'@' in email</code> 로 충분한 일을 복잡한 정규식으로 쓰면 나중에 자신도 못 읽습니다. 기준은 이렇습니다. <b>고정된 글자를 찾는다 → <code>find</code> · <code>replace</code> · <code>in</code></b>, <b>모양(패턴)으로 찾는다 → <code>re</code></b>. 정규식은 이 강좌의 필수 내용은 아니니, “이런 도구가 있다”만 기억해 두고 필요할 때 찾아 쓰세요.` }
         ],
         practice: [
           {
@@ -1143,7 +1743,36 @@ print("꺾쇠 삭제 문자열 ==> " + '[' + outStr + ']')
 꺾쇠 삭제 문자열 ==> [파이썬]`
           },
           {
-            title: '실습 8-5. 이메일 주소 분석기',
+            title: '실습 8-8. 입력값 정규화 퀴즈 채점기',
+            level: 1,
+            desc: `<p>“파이썬의 영어 이름은?” 이라는 문제의 답을 입력받아 채점하세요. 사용자가 <b>앞뒤 공백 · 대문자 · 중간 공백</b>을 섞어 입력해도 <code>python</code> 이면 정답으로 처리해야 합니다.</p><pre>파이썬의 영어 이름은?   Py Thon
+정리한 답 : [python]
+정답!</pre>`,
+            hint: `<code>strip()</code> → <code>lower()</code> → <code>replace(' ', '')</code> 를 점으로 이어서 한 줄로 쓸 수 있습니다.`,
+            starter: `answer = input("파이썬의 영어 이름은? ")
+
+clean = answer        # TODO: 앞뒤 공백 제거 · 소문자 · 중간 공백 제거
+print("정리한 답 : [" + clean + "]")
+
+# TODO: clean 이 "python" 이면 정답!, 아니면 오답!
+`,
+            solution: `answer = input("파이썬의 영어 이름은? ")
+
+clean = answer.strip().lower().replace(' ', '')
+print("정리한 답 : [" + clean + "]")
+
+if clean == "python" :
+    print("정답!")
+else :
+    print("오답!")
+`,
+            stdin: '  Py Thon \n',
+            expect: `파이썬의 영어 이름은?   Py Thon
+정리한 답 : [python]
+정답!`
+          },
+          {
+            title: '실습 8-9. 이메일 주소 분석기',
             level: 2,
             desc: `<p>이메일 주소를 입력받아 앞뒤 공백을 지운 뒤, <code>@</code> 가 있으면 아이디와 도메인을 나누어 출력하고, 없으면 <code>잘못된 이메일입니다.</code> 를 출력하세요. 도메인이 <code>.kr</code> 로 끝나면 <code>한국 도메인</code> 이라고도 알려 줍니다.</p><pre>이메일 : &nbsp;&nbsp;python@hanbit.co.kr
 아이디 : python
@@ -1176,7 +1805,7 @@ else :
 한국 도메인입니다.`
           },
           {
-            title: '실습 8-6. 금지어 필터',
+            title: '실습 8-10. 금지어 필터',
             level: 2,
             desc: `<p>채팅 문장을 입력받아 금지어 <code>바보</code>, <code>멍청이</code> 를 글자 수만큼의 <code>*</code> 로 바꾸어 출력하고, 금지어가 모두 몇 번 나왔는지도 출력하세요.</p><pre>채팅 입력 : 너 바보야? 바보 멍청이!
 필터 결과 : 너 **야? ** ***!
@@ -1210,17 +1839,85 @@ print(f"금지어 {total}회 발견")
             expect: `채팅 입력 : 너 바보야? 바보 멍청이!
 필터 결과 : 너 **야? ** ***!
 금지어 3회 발견`
+          },
+          {
+            title: '🚀 프로젝트 8-3. 개인정보 마스킹기',
+            level: 3,
+            desc: `<p>화면이나 로그에 개인정보를 그대로 남기면 안 됩니다. 전화번호 · 주민등록번호 · 이메일을 입력받아 <b>일부만 가려서</b> 출력하는 도구를 만드세요.</p>
+<p><b>요구 사항</b></p>
+<ul>
+  <li><b>입력</b> — 전화번호(<code>010-1234-5678</code>), 주민번호(<code>990101-1234567</code>), 이메일(<code>hongkildong@hanbit.co.kr</code>). 입력의 앞뒤 공백은 지웁니다.</li>
+  <li><b>전화번호</b> — 가운데 자리를 모두 <code>*</code> 로 (<code>010-****-5678</code>). 가운데가 3자리면 <code>***</code> 이어야 합니다.</li>
+  <li><b>주민번호</b> — 뒷자리는 <b>첫 글자만</b> 남기고 <code>*</code> 로 (<code>990101-1******</code>)</li>
+  <li><b>이메일</b> — <code>@</code> 앞 아이디의 <b>앞 3글자만</b> 남기고 <code>*</code> 로. 아이디가 3글자 이하면 첫 글자만 남깁니다. 도메인은 그대로 둡니다.</li>
+  <li><b>규칙</b> — 별표의 개수는 가린 글자 수와 <b>같아야</b> 합니다.</li>
+</ul>
+<pre>전화번호 : 010-1234-5678
+주민번호 : 990101-1234567
+이메일 : hongkildong@hanbit.co.kr
+------------------------------------
+전화번호 : 010-****-5678
+주민번호 : 990101-1******
+이메일   : hon********@hanbit.co.kr</pre>
+<p><b>확장 아이디어</b> — ① 전화번호에 <code>-</code> 가 없어도(<code>01012345678</code>) 동작하게 만들기 ② 이름 가리기(실습 8-4)까지 합쳐 “개인정보 보호기” 완성 ③ 본문의 <code>re.sub()</code> 로 <b>문장 속</b> 전화번호를 찾아 자동으로 가리기</p>`,
+            hint: `전화번호는 <code>split('-')</code> 로 세 조각으로 나눈 뒤 가운데만 <code>'*' * len(조각)</code> 으로 바꿔 다시 <code>-</code> 로 이어 붙입니다. 주민번호도 <code>front, back = jumin.split('-')</code> 로 두 조각으로 나누면 됩니다. 이메일은 <code>find('@')</code> 위치로 아이디와 도메인을 슬라이싱하세요. (<code>split</code> 은 다음 교시 내용이지만 여기서 미리 써 봅니다)`,
+            starter: `tel = input("전화번호 : ").strip()
+jumin = input("주민번호 : ").strip()
+email = input("이메일 : ").strip()
+
+telMasked = tel        # TODO: 가운데 자리를 * 로
+juminMasked = jumin    # TODO: 뒷자리 첫 글자만 남기기
+emailMasked = email    # TODO: 아이디 앞 3글자만 남기기
+
+print("-" * 36)
+print("전화번호 :", telMasked)
+print("주민번호 :", juminMasked)
+print("이메일   :", emailMasked)
+`,
+            solution: `tel = input("전화번호 : ").strip()
+jumin = input("주민번호 : ").strip()
+email = input("이메일 : ").strip()
+
+telList = tel.split('-')
+telMasked = telList[0] + "-" + "*" * len(telList[1]) + "-" + telList[2]
+
+front, back = jumin.split('-')
+juminMasked = front + "-" + back[0] + "*" * (len(back) - 1)
+
+pos = email.find('@')
+user = email[:pos]
+domain = email[pos:]
+if len(user) <= 3 :
+    userMasked = user[0] + "*" * (len(user) - 1)
+else :
+    userMasked = user[:3] + "*" * (len(user) - 3)
+emailMasked = userMasked + domain
+
+print("-" * 36)
+print("전화번호 :", telMasked)
+print("주민번호 :", juminMasked)
+print("이메일   :", emailMasked)
+`,
+            stdin: '010-1234-5678\n990101-1234567\nhongkildong@hanbit.co.kr\n',
+            expect: `전화번호 : 010-1234-5678
+주민번호 : 990101-1234567
+이메일 : hongkildong@hanbit.co.kr
+------------------------------------
+전화번호 : 010-****-5678
+주민번호 : 990101-1******
+이메일   : hon********@hanbit.co.kr`
           }
         ],
         quiz: [
-          { q: `<code>'Hello World'.swapcase()</code> 의 결과는?`, options: [`'HELLO WORLD'`, `'hello world'`, `'hELLO wORLD'`, `'Hello World'`], answer: 2, explain: 'swapcase() 는 대문자는 소문자로, 소문자는 대문자로 서로 바꿉니다.' },
           { q: `다음 코드의 실행 결과는?<pre><code>ss = 'banana'
 print(ss.find('an'), ss.rfind('an'), ss.find('x'))</code></pre>`, options: ['1 3 -1', '1 3 0', '1 4 -1', '2 4 오류'], answer: 0, explain: `'an' 은 인덱스 1 과 3 에 있습니다. find 는 처음 위치(1), rfind 는 마지막 위치(3), 없으면 -1 입니다.` },
           { q: `<code>'  a b c  '.strip()</code> 의 결과는?`, options: [`'abc'`, `'a b c'`, `'a b c  '`, `'  a b c'`], answer: 1, explain: 'strip() 은 앞뒤의 공백만 지우고 가운데 공백은 남겨 둡니다.' },
           { q: `다음 코드의 실행 결과는?<pre><code>ss = 'python'
 ss.upper()
 print(ss)</code></pre>`, options: ['PYTHON', 'python', 'Python', '오류'], answer: 1, explain: 'upper() 는 새 문자열을 돌려줄 뿐 ss 를 바꾸지 않습니다. <code>ss = ss.upper()</code> 로 다시 대입해야 합니다.' },
-          { q: `찾는 글자가 없을 때 <b>오류가 발생하는</b> 함수는?`, options: ['find()', 'rfind()', 'index()', 'count()'], answer: 2, explain: 'index() 와 rindex() 는 없으면 ValueError 가 발생합니다. find() 는 -1, count() 는 0 을 돌려줍니다.' }
+          { q: `찾는 글자가 없을 때 <b>오류가 발생하는</b> 함수는?`, options: ['find()', 'rfind()', 'index()', 'count()'], answer: 2, explain: 'index() 와 rindex() 는 없으면 ValueError 가 발생합니다. find() 는 -1, count() 는 0 을 돌려줍니다.' },
+          { q: `사용자가 <code>"  PyThon "</code> 이라고 입력했을 때 <code>"python"</code> 과 같다고 판정하려면?`, options: [`<code>answer == "python"</code>`, `<code>answer.upper() == "python"</code>`, `<code>answer.strip().lower() == "python"</code>`, `<code>answer.replace("p", "P") == "python"</code>`], answer: 2, explain: '앞뒤 공백을 지우고(strip) 소문자로 통일한(lower) 뒤 비교하는 것이 정규화의 기본입니다.' },
+          { q: `<code>import re</code> 후 <code>re.sub(r"\\d", "*", "a1b22")</code> 의 결과는?`, options: [`'a*b*'`, `'a*b**'`, `'*1*22'`, `'a1b22'`], answer: 1, explain: `<code>\\d</code> 는 숫자 한 글자이고 <code>sub()</code> 는 맞는 것을 <b>모두</b> 바꿉니다. 숫자 세 개가 각각 * 가 되어 'a*b**' 입니다.` }
         ],
         slides: [
           { layout: 'title', title: '문자열 함수 ①', subtitle: '대소문자 변환 · 찾기 · 공백 삭제 · 변경', badge: '08-3',
@@ -1292,6 +1989,63 @@ ss = input("입력 문자열 ==> ")
 print("출력 문자열 ==> ", end = '')
 print(ss.replace('o', '$'))`, stdin: 'IT CookBook for Python\n', points: ['<code>replace(기존, 새것)</code> 모두 바꿈', 'Code08-05 의 4~8행을 한 줄로', '새것을 <code>\'\'</code> 로 → 삭제'],
             notes: '<p><b>[4분]</b> 강의자료 Code08-05 는 반복문 버전입니다(본문 참고). 두 버전의 결과가 같음을 확인하고, 대문자 O 는 바뀌지 않는다는 점(대소문자 구분)도 짚어 주세요.</p>' },
+          { layout: 'two', title: '📘 정규화 — 비교하기 전에 모양 맞추기',
+            left: { title: '단계별로 다듬기', code: `raw = "   Hello   PYTHON   World  "
+
+print("[" + raw.strip() + "]")
+print("[" + raw.strip().lower() + "]")
+print("[" + " ".join(raw.lower().split()) + "]")
+print("  Python ".strip().lower() == "python")` },
+            right: { title: '자주 쓰는 조합', bullets: [
+              `입력 정리 <code>input().strip()</code>`,
+              `대소문자 무시 비교 <code>a.strip().lower() == b</code>`,
+              `공백 한 칸으로 <code>' '.join(ss.split())</code>`,
+              `기호 없애기 <code>ss.replace('-', '')</code>`,
+              `위치 찾아 자르기 <code>pos = ss.find('@')</code>`
+            ] },
+            notes: '<p><b>[5분]</b> “사람이 입력한 글자는 제각각”이라는 점에서 출발합니다. 발문: “회원가입에서 <code>  Hong@Mail.com </code> 을 그대로 저장하면 어떤 문제가 생길까?”</p><p>함수를 점으로 이어 쓰는(체이닝) 읽는 법도 함께 설명하세요 — 왼쪽부터 차례로 적용.</p>' },
+          { layout: 'code', title: '📘 정규식(re) 맛보기', code: `import re
+
+log = "2026-09-18 ERROR 로그인 3회 실패 (ip=10.0.0.7)"
+
+print(re.search(r"\\d{4}-\\d{2}-\\d{2}", log).group())
+print(re.findall(r"\\d+", log))
+print(re.sub(r"ip=[\\d.]+", "ip=***", log))
+print(re.fullmatch(r"010-\\d{4}-\\d{4}", "010-1234-5678"))`,
+            points: [`<code>\\d</code> 숫자, <code>+</code> 한 글자 이상`, '<code>findall</code> 모두 찾기 · <code>sub</code> 바꾸기', '<code>fullmatch</code> 형식 검증', `패턴은 <code>r"…"</code> 로`],
+            notes: '<p><b>[5분]</b> 맛보기입니다 — 외우게 하지 말고 “글자가 아니라 <b>모양</b>으로 찾는 도구가 있다”만 남기세요.</p><p>발문: “전화번호 형식이 맞는지 <code>find</code> 로 검사하려면 몇 줄이 필요할까?” → 정규식 한 줄과 비교. 반대로 <code>\'@\' in email</code> 로 충분한 일에 정규식을 쓰지 말라는 주의도 함께.</p>' },
+          { layout: 'practice', title: '🚀 프로젝트 8-3. 개인정보 마스킹기', desc: `전화번호 · 주민번호 · 이메일을 입력받아 일부만 가려서 출력하기 (별표 개수 = 가린 글자 수)`, stdin: '010-1234-5678\n990101-1234567\nhongkildong@hanbit.co.kr\n', starter: `tel = input("전화번호 : ").strip()
+jumin = input("주민번호 : ").strip()
+email = input("이메일 : ").strip()
+
+# TODO: 세 가지를 각각 가려서 출력
+print(tel, jumin, email)
+`, solution: `tel = input("전화번호 : ").strip()
+jumin = input("주민번호 : ").strip()
+email = input("이메일 : ").strip()
+
+t = tel.split('-')
+print("전화번호 :", t[0] + "-" + "*" * len(t[1]) + "-" + t[2])
+
+front, back = jumin.split('-')
+print("주민번호 :", front + "-" + back[0] + "*" * (len(back) - 1))
+
+pos = email.find('@')
+user = email[:pos]
+print("이메일   :", user[:3] + "*" * (len(user) - 3) + email[pos:])
+`,
+            notes: '<p><b>[10분]</b> 실습 전에 “왜 가려야 할까?”(로그 · 화면 유출)를 1분 이야기하면 동기가 생깁니다.</p><p>포인트는 <b>별표 개수를 가린 글자 수와 맞추는 것</b> — <code>"*" * len(조각)</code>. 아이디가 3글자 이하인 경우(<code>ab@…</code>)를 어떻게 처리할지 질문해 예외 상황을 생각하게 하세요.</p>' },
+          { layout: 'table', title: '📘 문자열 함수 조합 치트시트', lead: '함수를 하나씩 외우지 말고 “이런 일에는 이 조합” 으로 기억하기',
+            head: ['하고 싶은 일', '조합'], rows: [
+              ['입력값 정리', '<code>input().strip()</code>'],
+              ['대소문자 무시 비교', '<code>a.strip().lower() == b</code>'],
+              ['공백 한 칸으로 정리', `<code>' '.join(ss.split())</code>`],
+              ['기호 없애기', `<code>ss.replace('-', '')</code>`],
+              ['들어 있나? / 몇 번?', `<code>'파이썬' in ss</code> · <code>ss.count('파이썬')</code>`],
+              ['위치 찾아 자르기', `<code>pos = ss.find('@')</code> → <code>ss[:pos]</code>, <code>ss[pos+1:]</code>`],
+              ['시작 · 끝 검사', `<code>ss.startswith('http')</code> · <code>ss.endswith('.kr')</code>`]
+            ],
+            notes: '<p><b>[3분]</b> 학생들에게 “지금까지 만든 실습에서 이 조합이 어디에 나왔는지” 찾게 하면 복습이 됩니다(이메일 분석 = find + 슬라이싱 + endswith).</p><p>이 표는 다음 교시 · 다음 장에서도 계속 쓰이므로 캡처해 두라고 안내하세요.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: `<code>'banana'.replace('a', 'o', 2)</code> 의 결과는?`, options: [`'bonono'`, `'bonona'`, `'banono'`, `'bnn'`], answer: 1, explain: '세 번째 값 2 는 앞에서부터 2번만 바꾸라는 뜻입니다.',
             notes: '<p><b>[2분]</b> 세 번째 값을 모르는 학생이 많으므로 본문 추가 예제와 연결해 설명합니다.</p>' },
           { layout: 'summary', title: '정리', bullets: ['변환: <code>upper · lower · swapcase · title</code>', '찾기: <code>count · find(-1) · rfind · index(오류) · startswith · endswith</code>', '삭제: <code>strip · lstrip · rstrip</code> (앞뒤만)', '변경: <code>replace(기존, 새것[, 횟수])</code>', '모든 함수는 <b>새 문자열</b>을 돌려준다 (원본 불변)'],
@@ -1308,10 +2062,11 @@ print(ss.replace('o', '$'))`, stdin: 'IT CookBook for Python\n', points: ['<code
           'split · splitlines · join 으로 문자열을 나누고 합칠 수 있다',
           'map() 으로 리스트의 모든 항목에 함수를 적용할 수 있다',
           'center · ljust · rjust · zfill 로 문자열을 정렬하고 채울 수 있다',
-          'isdigit · isalpha · isalnum 등으로 문자열의 구성을 판단할 수 있다',
+          'isdigit · isalpha · isalnum 등으로 문자열의 구성을 판단하고, 입력 검증 패턴을 적용할 수 있다',
+          'split · rsplit · partition · splitlines 를 상황에 맞게 골라 CSV · 로그 · 날짜 한 줄을 파싱할 수 있다',
           '[프로그램 2] 임의의 위치에 글자를 쓰는 거북이를 완성할 수 있다'
         ],
-        flow: [['split · join · Code08-06', 12], ['map() 함수', 5], ['정렬 · 채우기', 5], ['구성 파악 · SELF STUDY 8-3', 10], ['[프로그램 2] 완성', 13], ['정리 · 퀴즈', 5]],
+        flow: [['split · join · 📘 partition 비교', 12], ['Code08-06 · 📘 텍스트 파싱 · map()', 10], ['정렬 · 채우기', 4], ['구성 파악 · 📘 입력 검증 · SELF STUDY 8-3', 9], ['[프로그램 2] 완성', 11], ['정리 · 퀴즈', 4]],
         content: [
           { type: 'h', text: '문자열 분리 · 결합하기: split(), splitlines(), join()' },
           { type: 'p', html: `<code>split()</code> 은 문자열을 <b>잘게 쪼개서 리스트</b>로 만듭니다. 괄호가 비어 있으면 공백을 기준으로, 괄호 안에 글자를 넣으면 그 글자를 기준(구분자)으로 나눕니다. <code>splitlines()</code> 는 줄바꿈 기준으로 나눕니다. 반대로 <code>join()</code> 은 <b>리스트나 문자열의 항목들 사이사이에 글자를 끼워 넣어 하나의 문자열</b>로 합칩니다.` },
@@ -1349,6 +2104,42 @@ print('-'.join(['2026', '09', '18']))`, expect: `['사과', '바나나', '딸기
 사과바나나딸기
 2026-09-18` },
           { type: 'callout', kind: 'warn', title: 'join 에는 문자열만', html: `<code>'-'.join([2026, 9, 18])</code> 처럼 숫자가 든 리스트를 합치면 <code>TypeError</code> 가 납니다. 숫자는 먼저 문자열로 바꿔야 합니다: <code>'-'.join(map(str, [2026, 9, 18]))</code> (map 은 아래에서 배웁니다).` },
+          { type: 'h', text: '📘 split · rsplit · partition · splitlines 골라 쓰기' },
+          { type: 'p', html: `나누는 함수는 하나가 아닙니다. <b>몇 조각으로 나눌지</b>, <b>어느 쪽부터 나눌지</b>, <b>구분자를 남길지</b>에 따라 골라 씁니다. 특히 <code>"key=값=값"</code> 처럼 구분자가 여러 번 나오는 문자열은 <code>split('=')</code> 로 나누면 조각 수가 달라져 오류가 나기 쉽습니다. 이럴 때 <code>split('=', 1)</code> 이나 <code>partition('=')</code> 을 쓰면 <b>항상 정해진 개수</b>로 나뉩니다.` },
+          { type: 'table', head: ['함수', '하는 일', `"name=홍길동=학생" 에 적용하면`], rows: [
+            [`<code>split('=')</code>`, '구분자마다 모두 나눔', `['name', '홍길동', '학생']`],
+            [`<code>split('=', 1)</code>`, '<b>앞에서</b> 1번만 나눔 (조각 2개)', `['name', '홍길동=학생']`],
+            [`<code>rsplit('=', 1)</code>`, '<b>뒤에서</b> 1번만 나눔 (조각 2개)', `['name=홍길동', '학생']`],
+            [`<code>partition('=')</code>`, '앞·구분자·뒤 <b>세 조각</b>으로 (항상 3개)', `('name', '=', '홍길동=학생')`],
+            [`<code>rpartition('=')</code>`, '뒤에서부터 세 조각으로', `('name=홍길동', '=', '학생')`],
+            [`<code>splitlines()</code>`, '줄바꿈마다 나눔 (마지막 빈 줄 없음)', `여러 줄 문자열 → 줄 리스트`],
+            [`<code>split()</code>`, '공백(스페이스 · 탭 · 줄바꿈) 기준, <b>빈 조각 없음</b>', `<code>"  a  b  ".split()</code> → ['a', 'b']`]
+          ], caption: '구분자가 없을 때: split 은 통째로 한 조각, partition 은 앞 조각 + 빈 문자열 두 개' },
+          { type: 'code', title: '추가 예제. 나누는 방법 비교하기', code: `line = "name=홍길동=학생"
+
+print(line.split('='))
+print(line.split('=', 1))
+print(line.rsplit('=', 1))
+print(line.partition('='))
+print(line.rpartition('='))
+print("구분자가 없으면".partition('='))
+
+text = "첫째 줄\\n둘째 줄\\n셋째 줄\\n"
+print(text.splitlines())
+print(text.split('\\n'))
+
+print("  a  b  ".split())
+print("  a  b  ".split(' '))`, expect: `['name', '홍길동', '학생']
+['name', '홍길동=학생']
+['name=홍길동', '학생']
+('name', '=', '홍길동=학생')
+('name=홍길동', '=', '학생')
+('구분자가 없으면', '', '')
+['첫째 줄', '둘째 줄', '셋째 줄']
+['첫째 줄', '둘째 줄', '셋째 줄', '']
+['a', 'b']
+['', '', 'a', '', 'b', '', '']`,
+            desc: `마지막 두 줄을 꼭 비교하세요. <code>split()</code>(괄호 비움)은 연속된 공백을 <b>하나로</b> 보고 빈 조각을 만들지 않지만, <code>split(' ')</code>(공백 한 칸 지정)은 공백마다 꼬박꼬박 나누어 <b>빈 문자열</b>이 잔뜩 생깁니다. 사람이 입력한 문장을 단어로 나눌 때는 반드시 괄호를 비운 <code>split()</code> 을 쓰세요.` },
           { type: 'h', text: '날짜를 입력받아 10년 후 날짜 출력하기' },
           { type: 'p', html: `<code>2019/12/31</code> 처럼 연/월/일 형식으로 입력받은 문자열을 <code>split('/')</code> 로 나누면 <code>['2019', '12', '31']</code> 리스트가 됩니다. 연도는 <b>문자열</b>이므로 <code>int()</code> 로 숫자로 바꾼 뒤 10을 더하고, 다시 <code>str()</code> 로 바꿔 문자열과 연결합니다.` },
           { type: 'code', title: 'Code08-06. 10년 후 날짜 출력하기', code: `ss = input("날짜(연/월/일) 입력 ==> ")
@@ -1365,6 +2156,27 @@ print(ssList[2] + "일")`, stdin: '2019/12/31\n', expect: `날짜(연/월/일) �
 year, month, day = ss.split('/')
 print(f"입력한 날짜의 10년 후 ==> {int(year) + 10}년 {month}월 {day}일")`, stdin: '2019/12/31\n', expect: `날짜(연/월/일) 입력 ==> 2019/12/31
 입력한 날짜의 10년 후 ==> 2029년 12월 31일`, desc: '나눈 결과가 3개인 것을 알면 변수 세 개에 한 번에 나눠 담을 수 있습니다. f-string 안에서는 숫자를 <code>str()</code> 로 바꿀 필요도 없습니다.' },
+          { type: 'h', text: '📘 텍스트 한 줄 파싱하기 (CSV · 로그 · 날짜)' },
+          { type: 'p', html: `프로그램이 다루는 데이터는 대부분 <b>줄 단위 텍스트</b>입니다. 엑셀에서 내보낸 CSV 파일의 한 줄, 서버가 남긴 로그 한 줄, 사용자가 입력한 날짜 한 줄 — 모두 “<b>나누고(split) → 꺼내고(인덱스) → 바꾸고(int)</b>” 의 세 단계로 처리합니다. 이 패턴을 익혀 두면 13장의 파일 입출력과 바로 이어집니다.` },
+          { type: 'code', title: '추가 예제. CSV 한 줄과 날짜 문자열 파싱하기', code: `row = "2026-09-18,홍길동,국어:90,수학:85"
+
+fields = row.split(',')
+date = fields[0]
+name = fields[1]
+
+year, month, day = date.split('-')
+print(f"{int(year)}년 {int(month)}월 {int(day)}일 · {name}")
+
+total = 0
+for f in fields[2:] :
+    subject, sep, score = f.partition(':')
+    total += int(score)
+    print(f"  {subject:<4}{int(score):>4}점")
+print(f"  {'합계':<4}{total:>4}점")`, expect: `2026년 9월 18일 · 홍길동
+  국어    90점
+  수학    85점
+  합계   175점`,
+            desc: `<code>fields[2:]</code> 처럼 <b>리스트도 슬라이싱</b>할 수 있어서 “앞의 두 칸을 뺀 나머지 과목들”을 한 번에 얻습니다. <code>int(month)</code> 를 거치면 <code>'09'</code> 의 앞 0 이 사라져 <code>9</code> 가 됩니다. 점수처럼 계산할 값은 반드시 <code>int()</code> 로 바꿔야 합니다.` },
           { type: 'h', text: '함수명에 대입하기: map() 함수' },
           { type: 'p', html: `<code>split()</code> 으로 나눈 결과는 모두 <b>문자열</b>입니다. 이것을 한꺼번에 정수로 바꾸고 싶을 때 <code>map(함수명, 리스트)</code> 를 씁니다. 리스트의 <b>모든 항목에 함수를 하나씩 적용</b>해 주며, 결과를 리스트로 보려면 <code>list()</code> 로 감쌉니다. 이때 함수명 뒤에 괄호를 붙이지 않는다는 점에 주의하세요(<code>int</code> O, <code>int()</code> X).` },
           { type: 'code', repl: true, title: 'map() 으로 모든 항목을 정수로', code: `before = ['2019', '12', '31']
@@ -1447,6 +2259,31 @@ if ss.isdigit() :
 else :
     print("숫자만 입력하세요!")`, stdin: '스무살\n', expect: `나이를 입력하세요 : 스무살
 숫자만 입력하세요!`, desc: '<code>isdigit()</code> 으로 먼저 검사하지 않고 <code>int(\'스무살\')</code> 을 하면 <code>ValueError</code> 오류로 프로그램이 멈춥니다.' },
+          { type: 'h', text: '📘 입력 검증 패턴: 믿지 말고 확인하자' },
+          { type: 'p', html: `사용자는 우리가 기대한 대로 입력하지 않습니다. 빈 값, 공백, 한글, <code>-5</code>, <code>3.14</code> … 그래서 <b>입력을 받은 즉시 정리하고 검사하는</b> 습관이 중요합니다. 순서는 항상 같습니다. <b>① <code>strip()</code> 으로 정리 → ② 형식 검사 → ③ 변환(<code>int</code> · <code>float</code>) → ④ 사용</b>.` },
+          { type: 'code', title: '추가 예제. isdigit · isdecimal · isalnum 의 미묘한 차이', code: `values = ["100", "-5", "3.14", "²", "", " 7 "]
+
+for v in values :
+    print(f"{v!r:<8} isdigit={str(v.isdigit()):<5} isdecimal={str(v.isdecimal()):<5} isalnum={v.isalnum()}")`, expect: `'100'    isdigit=True  isdecimal=True  isalnum=True
+'-5'     isdigit=False isdecimal=False isalnum=False
+'3.14'   isdigit=False isdecimal=False isalnum=False
+'²'      isdigit=True  isdecimal=False isalnum=True
+''       isdigit=False isdecimal=False isalnum=False
+' 7 '    isdigit=False isdecimal=False isalnum=False`,
+            desc: `<code>'²'</code>(위 첨자 2)처럼 “숫자처럼 생겼지만 계산에 못 쓰는 글자”가 있어서 <code>isdigit()</code> 은 True 를 돌려줍니다. <b>계산에 쓸 값인지 확인할 때는 <code>isdecimal()</code> 이 더 안전합니다.</b> 그리고 <code>' 7 '</code> 처럼 공백이 붙어 있으면 모두 False 이므로 <b>검사 전에 <code>strip()</code></b> 이 필요합니다.` },
+          { type: 'code', title: '추가 예제. 음수 · 소수까지 검사하는 입력 검증', code: `ss = input("숫자를 입력하세요 : ")
+
+t = ss.strip()
+body = t[1:] if t.startswith('-') else t
+
+if body.isdigit() :
+    print("정수입니다 →", int(t) * 2)
+elif body.count('.') == 1 and body.replace('.', '', 1).isdigit() :
+    print("실수입니다 →", float(t) * 2)
+else :
+    print("숫자가 아닙니다. 다시 입력하세요.")`, stdin: ' -12.5 \n', expect: `숫자를 입력하세요 :  -12.5
+실수입니다 → -25.0`,
+            desc: `<code>t[1:] if t.startswith('-') else t</code> 는 <b>조건부 식</b>으로, “<code>-</code> 로 시작하면 부호를 뗀 나머지, 아니면 그대로”라는 뜻입니다. 소수는 점이 <b>정확히 한 개</b>이고 점을 지운 나머지가 모두 숫자인지 확인합니다. 10장에서 배울 <code>try ~ except</code> 를 쓰면 “일단 <code>float()</code> 로 바꿔 보고 실패하면 오류 처리”라는 더 짧은 방법도 있습니다.` },
           { type: 'h', text: 'SELF STUDY 8-3' },
           { type: 'p', html: `입력한 값이 영어나 한글이면 <code>글자입니다.</code>, 숫자이면 <code>숫자입니다.</code>, 섞여 있으면 <code>글자+숫자입니다.</code>, 특수문자 등이면 <code>모르겠습니다.</code> 가 출력되는 프로그램을 작성해 봅시다. <b>검사 순서</b>가 중요합니다 — <code>isalnum()</code> 은 숫자만 있거나 글자만 있어도 True 이므로 가장 나중에 검사해야 합니다. (아래 실습 과제)` },
           { type: 'callout', kind: 'more', title: '📘 한글 처리: 문자 코드 ord() 와 chr()', html: `컴퓨터는 글자를 <b>번호(유니코드 코드 포인트)</b>로 저장합니다. <code>ord('가')</code> 는 글자의 번호 44032 를, <code>chr(44032)</code> 는 번호에 해당하는 글자 '가' 를 돌려줍니다. 한글 음절은 <code>'가'</code>(44032) ~ <code>'힣'</code>(55203) 사이에 모여 있으므로 <code>'가' &lt;= ch &lt;= '힣'</code> 로 한글인지 판별할 수 있습니다. 파이썬 3 의 문자열은 유니코드라서 한글도 영어와 똑같이 <b>1글자</b>로 다뤄집니다. 파일이나 네트워크로 보낼 때 바이트로 바꾸면 UTF-8 에서 한글 1글자는 3바이트가 됩니다.` },
@@ -1509,6 +2346,28 @@ for ch in inStr :
 print(f"'{inStr}' 에서 공백을 뺀 {len(inStr.replace(' ', ''))}글자를 썼습니다.")
 turtle.done()`, dialogs: ['파이썬 만세'], expect: `'파이썬 만세' 에서 공백을 뺀 5글자를 썼습니다.`,
             desc: '공백은 써도 보이지 않으므로 <code>continue</code> 로 건너뜁니다. 위치와 색은 매번 다르지만 콘솔에 출력되는 글자 수는 항상 같습니다.' },
+          { type: 'callout', kind: 'more', title: '📘 textwrap 과 string — 문자열을 돕는 표준 모듈', html: `<b><code>textwrap</code></b> 은 긴 글을 보기 좋게 다듬습니다. <code>fill(글, width=30)</code> 은 30칸마다 줄을 바꿔 주고, <code>shorten(글, width=40, placeholder=' ...')</code> 는 정해진 길이로 줄이며 뒤에 <code>...</code> 를 붙입니다(목록 미리보기에 유용). <b><code>string</code></b> 모듈에는 <code>ascii_lowercase</code>(a~z), <code>ascii_uppercase</code>, <code>digits</code>(0~9), <code>punctuation</code>(기호 모음) 같은 <b>미리 만들어진 문자열</b>이 들어 있어, 알파벳이나 기호 목록을 직접 타이핑할 필요가 없습니다.` },
+          { type: 'code', title: '추가 예제. textwrap · string 맛보기', code: `import textwrap
+import string
+
+text = "파이썬의 문자열은 글자들이 순서대로 늘어선 시퀀스입니다. 인덱스와 슬라이싱, 그리고 여러 메서드로 자유롭게 다룰 수 있습니다."
+
+print(textwrap.fill(text, width = 30))
+print("-" * 30)
+print(textwrap.shorten(text, width = 40, placeholder = " ..."))
+print("-" * 30)
+print(string.ascii_lowercase)
+print(string.digits)
+print(string.punctuation)`, expect: `파이썬의 문자열은 글자들이 순서대로 늘어선
+시퀀스입니다. 인덱스와 슬라이싱, 그리고 여러 메서드로
+자유롭게 다룰 수 있습니다.
+------------------------------
+파이썬의 문자열은 글자들이 순서대로 늘어선 시퀀스입니다. 인덱스와 ...
+------------------------------
+abcdefghijklmnopqrstuvwxyz
+0123456789
+!"#$%&'()*+,-./:;<=>?@[\\]^_\`{|}~`,
+            desc: `<code>fill()</code> 은 <b>글자 수</b>로 줄을 나누기 때문에 한글은 화면상 폭이 넓어 보일 수 있습니다. <code>string.ascii_lowercase</code> 는 시저 암호(프로젝트 8-1)나 알파벳 검사에 바로 쓸 수 있습니다.` },
           { type: 'h', text: '📘 한눈에 보는 문자열 함수' },
           { type: 'table', head: ['분류', '함수', '예 → 결과'], rows: [
             ['변환', '<code>upper() lower() swapcase() title()</code>', `<code>'ab'.upper()</code> → 'AB'`],
@@ -1516,11 +2375,14 @@ turtle.done()`, dialogs: ['파이썬 만세'], expect: `'파이썬 만세' 에�
             ['검사', '<code>startswith() endswith()</code>', `<code>'abc'.endswith('c')</code> → True`],
             ['삭제', '<code>strip() lstrip() rstrip()</code>', `<code>' a '.strip()</code> → 'a'`],
             ['변경', '<code>replace()</code>', `<code>'aa'.replace('a', 'b')</code> → 'bb'`],
-            ['분리', '<code>split() splitlines()</code>', `<code>'a b'.split()</code> → ['a', 'b']`],
+            ['분리', '<code>split() rsplit() partition() splitlines()</code>', `<code>'a b'.split()</code> → ['a', 'b']`],
             ['결합', '<code>join()</code>', `<code>'-'.join('ab')</code> → 'a-b'`],
             ['정렬 · 채우기', '<code>center() ljust() rjust() zfill()</code>', `<code>'7'.zfill(3)</code> → '007'`],
-            ['구성 파악', '<code>isdigit() isalpha() isalnum() islower() isupper() isspace()</code>', `<code>'12'.isdigit()</code> → True`],
-            ['함수', '<code>len() str() int() map() ord() chr()</code>', `<code>len('파이썬')</code> → 3`]
+            ['구성 파악', '<code>isdigit() isdecimal() isalpha() isalnum() islower() isupper() isspace()</code>', `<code>'12'.isdigit()</code> → True`],
+            ['서식', '<code>f"{값:서식}"</code> · <code>format()</code> · <code>%</code>', `<code>f"{1234:,}"</code> → 1,234`],
+            ['부호화', '<code>encode() decode()</code>', `<code>len('가'.encode())</code> → 3`],
+            ['함수', '<code>len() str() int() map() ord() chr()</code>', `<code>len('파이썬')</code> → 3`],
+            ['표준 모듈', '<code>re</code> · <code>textwrap</code> · <code>string</code>', `<code>re.sub(r"\\d", "*", "a1")</code> → 'a*'`]
           ], caption: '모든 문자열 함수는 원래 문자열을 바꾸지 않고 결과를 새로 돌려준다' }
         ],
         practice: [
@@ -1550,7 +2412,41 @@ else :
 글자+숫자입니다.`
           },
           {
-            title: '실습 8-7. 성적 문자열 분석',
+            title: '실습 8-11. 파일 경로 분해하기',
+            level: 1,
+            desc: `<p>파일 경로 <code>"photos/2026/여행 사진.JPG"</code> 에서 폴더 · 파일 이름 · 확장자를 꺼내고, 이름 뒤에 <code>_복사본</code> 을 붙인 새 이름을 만드세요. 확장자는 <b>소문자</b>로 바꿔 출력합니다.</p><pre>폴더      : photos/2026
+파일 이름 : 여행 사진
+확장자    : jpg
+새 이름   : 여행 사진_복사본.jpg
+번호 붙이기 : IMG_0007.jpg</pre>`,
+            hint: `폴더와 파일 이름은 <b>마지막</b> <code>/</code> 에서 나눠야 하므로 <code>rpartition('/')</code>, 확장자도 <b>마지막</b> 점에서 나눠야 하므로 <code>rpartition('.')</code> 을 씁니다. 번호는 <code>"7".zfill(4)</code> 로 네 자리를 맞춥니다.`,
+            starter: `path = "photos/2026/여행 사진.JPG"
+
+folder, sep, filename = path.rpartition('/')
+# TODO: filename 을 이름과 확장자로 나누기 (rpartition 사용)
+
+print("폴더      :", folder)
+# TODO: 파일 이름 · 확장자(소문자) · 새 이름 · 번호 붙인 이름 출력
+`,
+            solution: `path = "photos/2026/여행 사진.JPG"
+
+folder, sep, filename = path.rpartition('/')
+name, dot, ext = filename.rpartition('.')
+
+print("폴더      :", folder)
+print("파일 이름 :", name)
+print("확장자    :", ext.lower())
+print("새 이름   :", name + "_복사본." + ext.lower())
+print("번호 붙이기 :", "IMG_" + "7".zfill(4) + "." + ext.lower())
+`,
+            expect: `폴더      : photos/2026
+파일 이름 : 여행 사진
+확장자    : jpg
+새 이름   : 여행 사진_복사본.jpg
+번호 붙이기 : IMG_0007.jpg`
+          },
+          {
+            title: '실습 8-12. 성적 문자열 분석',
             level: 2,
             desc: `<p><code>이름:점수</code> 가 쉼표로 이어진 문자열을 나누어, 각 학생을 정렬된 표로 출력하고 평균을 구하세요.</p><pre>이름           점수
 홍길동          90
@@ -1585,7 +2481,48 @@ print("평균 :", total / len(students))
 평균 : 84.0`
           },
           {
-            title: '실습 8-8. 거북이로 내 이름 쓰기',
+            title: '실습 8-13. 로그에서 ERROR 만 골라내기',
+            level: 2,
+            desc: `<p>서버가 남긴 로그 네 줄이 여러 줄 문자열로 주어집니다. 줄마다 <code>날짜 시각 등급 메시지</code> 순서로 되어 있습니다. <b>등급이 ERROR 인 줄만</b> 시각과 메시지를 뽑아 출력하고, 마지막에 전체 줄 수와 ERROR 건수를 알려 주세요.</p><pre>[10:02:11] DB 연결 실패
+[10:03:00] 로그인 5회 실패
+전체 4줄 중 ERROR 2건</pre>`,
+            hint: `여러 줄 문자열은 <code>splitlines()</code> 로 줄 리스트를 만듭니다. 메시지에도 공백이 있으므로 <code>line.split(' ', 3)</code> 처럼 <b>나누는 횟수를 3으로 제한</b>해야 메시지가 통째로 남습니다.`,
+            starter: `log = """2026-09-18 10:00:01 INFO 서버 시작
+2026-09-18 10:02:11 ERROR DB 연결 실패
+2026-09-18 10:02:30 WARN 디스크 사용량 91%
+2026-09-18 10:03:00 ERROR 로그인 5회 실패"""
+
+lines = log.splitlines()
+errorCount = 0
+
+for line in lines :
+    # TODO: 날짜 · 시각 · 등급 · 메시지로 나누고, ERROR 면 출력하고 세기
+    pass
+
+# TODO: 전체 줄 수와 ERROR 건수 출력
+`,
+            solution: `log = """2026-09-18 10:00:01 INFO 서버 시작
+2026-09-18 10:02:11 ERROR DB 연결 실패
+2026-09-18 10:02:30 WARN 디스크 사용량 91%
+2026-09-18 10:03:00 ERROR 로그인 5회 실패"""
+
+lines = log.splitlines()
+errorCount = 0
+
+for line in lines :
+    date, clock, level, msg = line.split(' ', 3)
+    if level == "ERROR" :
+        errorCount += 1
+        print(f"[{clock}] {msg}")
+
+print(f"전체 {len(lines)}줄 중 ERROR {errorCount}건")
+`,
+            expect: `[10:02:11] DB 연결 실패
+[10:03:00] 로그인 5회 실패
+전체 4줄 중 ERROR 2건`
+          },
+          {
+            title: '실습 8-14. 거북이로 내 이름 쓰기',
             level: 3,
             desc: `<p><code>turtle.textinput()</code> 으로 이름을 입력받아, 화면 가운데 가로 한 줄로 한 글자씩 이어서 쓰세요. 글자마다 색은 무작위, 글자 크기는 40, 글자 간격은 60 입니다. 다 쓴 뒤 콘솔에 <code>이름의 글자 수 : N</code> 을 출력합니다.</p>`,
             hint: '시작 x 좌표는 <code>-60 * len(name) // 2</code> 정도로 잡고, 글자마다 x 를 60씩 늘립니다. 입력을 취소하면 <code>None</code> 이 오므로 빈 문자열로 바꿔 두세요.',
@@ -1626,14 +2563,104 @@ turtle.done()
 `,
             dialogs: ['홍길동'],
             expect: '이름의 글자 수 : 3'
+          },
+          {
+            title: '🚀 프로젝트 8-4. 명함 출력기',
+            level: 3,
+            desc: `<p>이름 · 직함 · 전화 · 이메일을 입력받아 <b>테두리가 딱 맞는 명함</b>을 콘솔에 그리는 프로그램을 만드세요. 이 프로젝트의 진짜 과제는 <b>한글의 표시 폭</b>입니다.</p>
+<p><b>요구 사항</b></p>
+<ul>
+  <li><b>입력</b> — 이름, 직함, 전화번호(<code>010-1234-5678</code>), 이메일. 앞뒤 공백은 지웁니다.</li>
+  <li><b>전화번호</b> — 가운데 자리는 <code>****</code> 로 가려서 표시합니다.</li>
+  <li><b>테두리</b> — <code>+</code> 와 <code>-</code> 로 상자를 그리고, 가장 긴 줄에 맞춰 폭을 정합니다(양옆 여백 2칸씩).</li>
+  <li><b>정렬</b> — 첫 줄(이름)은 <b>가운데</b>, 나머지 줄은 <b>왼쪽</b> 정렬. 오른쪽 세로줄이 모두 한 줄로 맞아야 합니다.</li>
+  <li><b>핵심 규칙</b> — 한글은 화면에서 <b>2칸</b>을 차지하므로 <code>len()</code> 이 아니라 <b>표시 폭</b>을 따로 계산해야 합니다.</li>
+</ul>
+<pre>이름 : 홍길동
+직함 : 파이썬 개발자
+전화 : 010-1234-5678
+이메일 : hong@hanbit.co.kr
++------------------------+
+|         홍길동         |
+|  파이썬 개발자         |
+|  T. 010-****-5678      |
+|  E. hong@hanbit.co.kr  |
++------------------------+</pre>
+<p><b>확장 아이디어</b> — ① 테두리를 <code>┌ ─ ┐ │ └ ┘</code> 로 바꾸기 ② 회사 · 주소 줄 추가하기 ③ 여러 사람의 명함을 리스트로 만들어 한꺼번에 출력하기 ④ 이메일이 너무 길면 <code>textwrap.shorten()</code> 으로 줄이기</p>`,
+            hint: `표시 폭은 <code>import unicodedata</code> 후 <code>unicodedata.east_asian_width(ch)</code> 가 <code>'W'</code> 또는 <code>'F'</code> 이면 2칸, 아니면 1칸으로 세어 구합니다. 각 줄의 폭을 리스트에 모아 <code>max()</code> 로 가장 긴 폭을 찾고, 줄마다 <b>(전체 폭 − 그 줄의 폭)</b> 만큼 공백을 채우면 오른쪽 세로줄이 맞습니다.`,
+            starter: `import unicodedata
+
+name = input("이름 : ").strip()
+title = input("직함 : ").strip()
+tel = input("전화 : ").strip()
+email = input("이메일 : ").strip()
+
+telList = tel.split('-')
+tel = telList[0] + "-****-" + telList[2]
+
+lines = [name, title, "T. " + tel, "E. " + email]
+
+# TODO: 줄마다 표시 폭(한글 2칸)을 계산해 widths 리스트 만들기
+widths = []
+
+# TODO: 가장 긴 폭 + 여백으로 상자 그리기 (첫 줄은 가운데 정렬)
+for line in lines :
+    print(line)
+`,
+            solution: `import unicodedata
+
+name = input("이름 : ").strip()
+title = input("직함 : ").strip()
+tel = input("전화 : ").strip()
+email = input("이메일 : ").strip()
+
+telList = tel.split('-')
+tel = telList[0] + "-****-" + telList[2]
+
+lines = [name, title, "T. " + tel, "E. " + email]
+
+widths = []
+for line in lines :
+    w = 0
+    for ch in line :
+        if unicodedata.east_asian_width(ch) in ('W', 'F') :
+            w += 2
+        else :
+            w += 1
+    widths.append(w)
+
+inner = max(widths) + 4
+
+print("+" + "-" * inner + "+")
+for i in range(0, len(lines)) :
+    pad = inner - widths[i]
+    if i == 0 :
+        left = pad // 2
+        print("|" + " " * left + lines[i] + " " * (pad - left) + "|")
+    else :
+        print("|  " + lines[i] + " " * (pad - 2) + "|")
+print("+" + "-" * inner + "+")
+`,
+            stdin: '홍길동\n파이썬 개발자\n010-1234-5678\nhong@hanbit.co.kr\n',
+            expect: `이름 : 홍길동
+직함 : 파이썬 개발자
+전화 : 010-1234-5678
+이메일 : hong@hanbit.co.kr
++------------------------+
+|         홍길동         |
+|  파이썬 개발자         |
+|  T. 010-****-5678      |
+|  E. hong@hanbit.co.kr  |
++------------------------+`
           }
         ],
         quiz: [
           { q: `다음 코드의 실행 결과는?<pre><code>ss = '2026-09-18'
 print(ss.split('-'))</code></pre>`, options: [`['2026', '09', '18']`, `[2026, 9, 18]`, `'2026 09 18'`, `['2026-09-18']`], answer: 0, explain: 'split 의 결과는 문자열들의 리스트입니다. 숫자로 바꾸려면 map(int, …) 를 사용합니다.' },
           { q: `<code>'*'.join('abc')</code> 의 결과는?`, options: [`'*abc*'`, `'a*b*c'`, `'a*b*c*'`, `'abc*'`], answer: 1, explain: 'join 은 항목들 <b>사이사이</b>에만 끼워 넣습니다. 앞과 끝에는 붙지 않습니다.' },
-          { q: `<code>'42'.zfill(5)</code> 의 결과는?`, options: [`'42000'`, `'00042'`, `'   42'`, `'42   '`], answer: 1, explain: 'zfill 은 왼쪽 빈칸을 0 으로 채워 전체 폭을 5 로 맞춥니다.' },
           { q: `다음 중 결과가 <b>False</b> 인 것은?`, options: [`'2026'.isdigit()`, `'파이썬'.isalpha()`, `'abc123'.isalnum()`, `'-5'.isdigit()`], answer: 3, explain: '부호 - 는 숫자가 아니므로 \'-5\'.isdigit() 은 False 입니다. 한글도 isalpha() 가 True 입니다.' },
+          { q: `<code>'a=b=c'.partition('=')</code> 의 결과는?`, options: [`['a', 'b', 'c']`, `('a', '=', 'b=c')`, `('a=b', '=', 'c')`, `('a', 'b=c')`], answer: 1, explain: `<code>partition()</code> 은 <b>처음 만난</b> 구분자를 기준으로 (앞, 구분자, 뒤) <b>세 조각</b>을 돌려줍니다. 구분자가 여러 번 나와도 조각 수가 항상 3개라 안전합니다.` },
+          { q: `<code>'-'.join([2026, 9, 18])</code> 을 실행하면?`, options: [`<code>'2026-9-18'</code> 이 만들어진다`, 'TypeError 오류가 난다', `<code>'[2026, 9, 18]'</code> 이 만들어진다`, '빈 문자열이 된다'], answer: 1, explain: `join 은 <b>문자열만</b> 합칠 수 있습니다. <code>'-'.join(map(str, [2026, 9, 18]))</code> 처럼 먼저 문자열로 바꿔야 합니다.` },
           { q: `[프로그램 2] 에서 강의자료의 <code>random.randrange(-swidth / 2, swidth / 2)</code> 를 <code>//</code> 로 바꾼 이유는?`, options: ['더 넓은 범위를 얻으려고', '파이썬 3.12 부터 randrange() 에 실수를 넣으면 오류이므로', '음수를 없애려고', '속도를 빠르게 하려고'], answer: 1, explain: '/ 의 결과는 실수(-150.0)입니다. 최신 파이썬의 randrange() 는 정수만 받으므로 // 로 정수 몫을 구합니다.' }
         ],
         slides: [
@@ -1650,6 +2677,17 @@ ss.join('파이썬')`, repl: true, points: ['<code>split()</code> 공백 기준 
             notes: '<p><b>[4분]</b> join 은 끼워 넣을 글자가 점 앞에 온다는 점이 가장 헷갈립니다. “풀(%)을 가지고 조각들을 붙인다” 로 비유하세요.</p>' },
           { layout: 'diagram', title: 'split ↔ join', html: SVG_SPLIT, caption: '문자열 → 리스트 → 문자열',
             notes: '<p><b>[2분]</b> <code>\'-\'.join(\'하나:둘:셋\'.split(\':\'))</code> 처럼 두 함수를 이어 구분자를 바꾸는 패턴을 보여 줍니다.</p>' },
+          { layout: 'code', title: '📘 나누는 방법 고르기: split · rsplit · partition', code: `line = "name=홍길동=학생"
+
+print(line.split('='))
+print(line.split('=', 1))
+print(line.rsplit('=', 1))
+print(line.partition('='))
+
+print("  a  b  ".split())
+print("  a  b  ".split(' '))`,
+            points: ['두 번째 값 = <b>나누는 횟수</b>', '<code>partition</code> 은 항상 3조각', '<code>split()</code> 은 빈 조각을 만들지 않음', `<code>split(' ')</code> 는 빈 조각이 생김`],
+            notes: '<p><b>[5분]</b> 발문: “<code>key=a=b</code> 를 <code>key</code> 와 <code>a=b</code> 로 나누려면?” → <code>split(\'=\', 1)</code> 또는 <code>partition</code>.</p><p>마지막 두 줄이 핵심입니다 — 괄호를 비운 <code>split()</code> 과 <code>split(\' \')</code> 의 결과 차이를 꼭 실행해 보여 주세요. 사람이 입력한 문장을 단어로 나눌 때 생기는 흔한 버그입니다.</p>' },
           { layout: 'code', title: 'Code08-06. 10년 후 날짜', code: `ss = input("날짜(연/월/일) 입력 ==> ")
 
 ssList = ss.split('/')
@@ -1664,6 +2702,23 @@ after = list(map(int , before))
 after
 sum(after)`, repl: true, points: ['모든 항목에 함수 적용', '함수명만: <code>int</code> (괄호 X)', '<code>list()</code> 로 감싸 확인', '활용: <code>map(int, input().split())</code>'],
             notes: '<p><b>[4분]</b> 강의자료 제목 “함수명에 대입하기” — 함수를 호출하지 않고 이름 자체를 넘긴다는 의미입니다. <code>map(int(), before)</code> 로 쓰면 오류가 남을 보여 주세요.</p>' },
+          { layout: 'code', title: '📘 텍스트 한 줄 파싱: CSV · 날짜', code: `row = "2026-09-18,홍길동,국어:90,수학:85"
+
+fields = row.split(',')
+year, month, day = fields[0].split('-')
+print(f"{int(year)}년 {int(month)}월 {int(day)}일 · {fields[1]}")
+
+for f in fields[2:] :
+    subject, sep, score = f.partition(':')
+    print(f"  {subject:<4}{int(score):>4}점")`,
+            points: ['나누고 → 꺼내고 → <code>int()</code> 로 바꾸기', '리스트도 슬라이싱 <code>fields[2:]</code>', '13장 파일 읽기와 그대로 이어짐'],
+            notes: '<p><b>[5분]</b> 엑셀에서 “CSV 로 저장”한 파일의 한 줄이 바로 이 모양이라고 보여 주면 실감이 납니다.</p><p>발문: “이름에 쉼표가 들어 있으면 어떻게 될까?” → 조각 수가 달라져 깨집니다. 그래서 실무에서는 <code>csv</code> 모듈을 쓴다고 한 줄 소개하세요.</p>' },
+          { layout: 'code', title: '📘 입력 검증 패턴', code: `values = ["100", "-5", "3.14", "²", "", " 7 "]
+
+for v in values :
+    print(v.isdigit(), v.isdecimal(), v.strip().isdigit())`,
+            points: ['검사 전에 <code>strip()</code>', `<code>'²'</code> 는 isdigit True, isdecimal False`, '계산할 값은 <code>isdecimal()</code> 이 안전', '순서: 정리 → 검사 → 변환 → 사용'],
+            notes: '<p><b>[4분]</b> “사용자는 우리가 기대한 대로 입력하지 않는다”가 메시지입니다. <code>int(input())</code> 을 그냥 쓰면 언제 죽는지(ValueError) 시연해 보세요.</p><p>음수 · 소수까지 검사하는 본문 예제를 보여 주고, 10장의 <code>try ~ except</code> 로 더 간단해진다고 예고합니다.</p>' },
           { layout: 'diagram', title: '정렬하기, 채우기', html: SVG_ALIGN, caption: 'center · ljust · rjust · zfill',
             notes: '<p><b>[3분]</b> 셸에서 <code>ss.center(10)</code> 등을 직접 실행해 따옴표 안의 공백 개수를 세어 보게 합니다. center 는 남는 칸이 홀수면 오른쪽에 하나 더 둡니다.</p>' },
           { layout: 'code', title: '문자열 구성 파악', code: `'1234'.isdigit()
@@ -1692,9 +2747,51 @@ else :
             notes: '<p><b>[3분]</b> 필요한 도구 복습: askstring(6장 askinteger 의 문자열 버전), randrange, random, write.</p><p>randrange(-150, 150) 은 -150 ~ 149 라는 점도 짚어 줍니다.</p>' },
           { layout: 'code', title: '[프로그램 2] Code08-07. 거북이 글자쓰기', code: CODE_0807_SLIDE, dialogs: DLG, points: ['<code>askstring()</code> 문자열 입력', '<code>for ch in inStr</code> 한 글자씩', '<code>//</code> : 3.12+ randrange 는 정수만', '<code>write(ch, font=(…))</code>'],
             notes: '<p><b>[8분]</b> 실행 후 대화상자에 자기 이름이나 좋아하는 문장을 입력하게 합니다. 실행할 때마다 결과가 다른 이유(random)를 질문합니다.</p><p>강의자료의 <code>swidth / 2</code> 는 최신 파이썬에서 TypeError — <code>//</code> 로 고친 이유를 꼭 설명하세요. 슬라이드는 공간 때문에 빈 줄 · 주석과 마지막 <code>turtle.done()</code> 을 생략했습니다(본문 코드는 완전판).</p>' },
+          { layout: 'practice', title: '🚀 프로젝트 8-4. 명함 출력기', desc: `이름 · 직함 · 전화 · 이메일을 입력받아 테두리가 딱 맞는 명함 출력하기 — <b>한글은 화면에서 2칸</b>이라는 점이 핵심`, stdin: '홍길동\n파이썬 개발자\n010-1234-5678\nhong@hanbit.co.kr\n', starter: `import unicodedata
+
+name = input("이름 : ").strip()
+title = input("직함 : ").strip()
+tel = input("전화 : ").strip()
+email = input("이메일 : ").strip()
+
+lines = [name, title, "T. " + tel, "E. " + email]
+# TODO: 표시 폭 계산 후 상자 그리기
+for line in lines :
+    print(line)
+`, solution: `import unicodedata
+
+name = input("이름 : ").strip()
+title = input("직함 : ").strip()
+tel = input("전화 : ").strip()
+email = input("이메일 : ").strip()
+
+t = tel.split('-')
+lines = [name, title, "T. " + t[0] + "-****-" + t[2], "E. " + email]
+
+widths = []
+for line in lines :
+    w = 0
+    for ch in line :
+        if unicodedata.east_asian_width(ch) in ('W', 'F') :
+            w += 2
+        else :
+            w += 1
+    widths.append(w)
+
+inner = max(widths) + 4
+print("+" + "-" * inner + "+")
+for i in range(0, len(lines)) :
+    pad = inner - widths[i]
+    if i == 0 :
+        print("|" + " " * (pad // 2) + lines[i] + " " * (pad - pad // 2) + "|")
+    else :
+        print("|  " + lines[i] + " " * (pad - 2) + "|")
+print("+" + "-" * inner + "+")
+`,
+            notes: '<p><b>[12분]</b> 먼저 <code>len("홍길동")</code> 으로 상자를 만들어 보게 하면 <b>오른쪽 세로줄이 어긋납니다</b> — 이 실패를 겪게 한 뒤 원인(글자 수 ≠ 화면 폭)을 설명하세요.</p><p><code>unicodedata.east_asian_width()</code> 는 몰라도 되는 함수지만, “표준 라이브러리에 이미 답이 있다”는 경험을 주는 예입니다. 터미널 · 엑셀 · 웹에서 표가 어긋나는 실제 문제와 같습니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: `<code>list(map(int, '1 2 3'.split()))</code> 의 결과는?`, options: [`['1', '2', '3']`, '[1, 2, 3]', '6', `'123'`], answer: 1, explain: 'split 으로 [\'1\', \'2\', \'3\'] → map(int, …) 로 각각 정수 → list 로 [1, 2, 3].',
             notes: '<p><b>[2분]</b> 한 줄에 여러 숫자를 입력받는 가장 흔한 패턴이므로 꼭 이해시키세요.</p>' },
-          { layout: 'summary', title: '8장 정리', bullets: ['문자열 = 글자의 시퀀스 · <b>불변</b> · 인덱스/슬라이싱', '분리 · 결합: <code>split</code> → 리스트, <code>join</code> → 문자열, <code>map(int, …)</code>', '정렬: <code>center · ljust · rjust · zfill</code>', '구성 파악: <code>isdigit · isalpha · isalnum · …</code>', '[프로그램 1] 거꾸로 출력 · [프로그램 2] 거북이 글자쓰기 완성'],
+          { layout: 'summary', title: '8장 정리', bullets: ['문자열 = 글자의 시퀀스 · <b>불변</b> · 인덱스/슬라이싱', '분리 · 결합: <code>split · rsplit · partition</code> → 리스트, <code>join</code> → 문자열', '서식: f-string(정렬 · <code>,</code> · <code>.2f</code>) / 정렬 함수 <code>center · zfill</code>', '입력은 <b>정리(strip · lower) → 검사(is…) → 변환(int)</b> 순서로', '📘 더 알아본 것: 유니코드 · bytes · raw 문자열 · 정규식 · textwrap', '[프로그램 1] 거꾸로 출력 · [프로그램 2] 거북이 글자쓰기 완성'],
             notes: '<p><b>[2분]</b> 과제: 본문의 “한눈에 보는 문자열 함수” 표를 보며 각 함수를 셸에서 한 번씩 직접 실행해 보기. 다음 장 예고: 함수 만들기.</p>' }
         ]
       }

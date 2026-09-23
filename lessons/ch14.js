@@ -873,19 +873,913 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
     displayImage(photo2, photo2.width, photo2.height)
 `;
 
+  /* ================================================================ 프로젝트 진행 방법 · 확장 (추가) */
+  /* 프로젝트 진행 5단계 */
+  const SVG_PROCESS = SV(1280, 470,
+    BOX(40, 60, 210, 90, '① 요구 사항', { b: true, fs: 21 }) + T(145, 175, '무엇을 만들까?', { fs: 17, c: 'var(--muted)' }) + T(145, 200, '입력 · 출력 · 규칙', { fs: 17, c: 'var(--muted)' }) +
+    Ln(255, 105, 295, 105, { arrow: true, sw: 3 }) +
+    BOX(300, 60, 210, 90, '② 기능 분해', { b: true, fs: 21 }) + T(405, 175, '큰 일 → 작은 일', { fs: 17, c: 'var(--muted)' }) + T(405, 200, '기능 하나 = 함수 하나', { fs: 17, c: 'var(--muted)' }) +
+    Ln(515, 105, 555, 105, { arrow: true, sw: 3 }) +
+    BOX(560, 60, 210, 90, '③ 단계별 개발', { b: true, fs: 21, s: 'var(--ok)' }) + T(665, 175, '작게 만들고', { fs: 17, c: 'var(--ok)' }) + T(665, 200, '계속 실행해 보기', { fs: 17, c: 'var(--ok)' }) +
+    Ln(775, 105, 815, 105, { arrow: true, sw: 3 }) +
+    BOX(820, 60, 210, 90, '④ 리팩터링', { b: true, fs: 21 }) + T(925, 175, '중복 없애기', { fs: 17, c: 'var(--muted)' }) + T(925, 200, '이름 · 구조 다듬기', { fs: 17, c: 'var(--muted)' }) +
+    Ln(1035, 105, 1075, 105, { arrow: true, sw: 3 }) +
+    BOX(1080, 60, 160, 90, '⑤ 확장', { b: true, fs: 21 }) + T(1160, 175, '기능 더하기', { fs: 17, c: 'var(--muted)' }) +
+    `<path d="M925 240 V290 H665 V165" fill="none" stroke="var(--accent2)" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arr14)"/>` +
+    T(795, 315, '다듬은 뒤 다시 ③ 으로 — 작은 바퀴를 여러 번 돈다', { fs: 19, c: 'var(--accent2)' }) +
+    R(40, 350, 1200, 90, { dash: true, s: 'var(--warn)' }) +
+    T(640, 385, '한 번에 완성하려고 하지 않는다. 20~30줄 쓸 때마다 ▶ 실행해서 “지금까지는 맞다” 를 확인한다.', { fs: 20 }) +
+    T(640, 418, '오류는 마지막에 몰아서 만나는 것보다 방금 쓴 줄에서 만나는 편이 훨씬 고치기 쉽다.', { fs: 19, c: 'var(--muted)' }));
+
+  /* 게임 루프 4단계 */
+  const SVG_LOOP4 = SV(1280, 420,
+    BOX(60, 60, 250, 80, '① 입력 (input)', { b: true, fs: 21, s: 'var(--accent2)' }) + T(185, 170, 'event.get()', { mono: true, fs: 17 }) + T(185, 196, '키 · 마우스 · 창 닫기', { fs: 16, c: 'var(--muted)' }) +
+    Ln(315, 100, 355, 100, { arrow: true, sw: 3 }) +
+    BOX(360, 60, 250, 80, '② 갱신 (update)', { b: true, fs: 21, s: 'var(--accent2)' }) + T(485, 170, '위치 · 점수 · 충돌', { fs: 17 }) + T(485, 196, '화면은 건드리지 않는다', { fs: 16, c: 'var(--muted)' }) +
+    Ln(615, 100, 655, 100, { arrow: true, sw: 3 }) +
+    BOX(660, 60, 250, 80, '③ 그리기 (draw)', { b: true, fs: 21, s: 'var(--accent2)' }) + T(785, 170, 'fill → blit → update()', { mono: true, fs: 16 }) + T(785, 196, '계산은 하지 않는다', { fs: 16, c: 'var(--muted)' }) +
+    Ln(915, 100, 955, 100, { arrow: true, sw: 3 }) +
+    BOX(960, 60, 250, 80, '④ 대기 (tick)', { b: true, fs: 21, s: 'var(--accent2)' }) + T(1085, 170, 'clock.tick(50)', { mono: true, fs: 17 }) + T(1085, 196, '초당 프레임 수를 맞춤', { fs: 16, c: 'var(--muted)' }) +
+    `<path d="M1085 230 V265 H185 V150" fill="none" stroke="var(--ok)" stroke-width="3" marker-end="url(#arr14)"/>` +
+    T(640, 300, '이 네 가지를 섞지 않는 것이 게임 코드를 읽기 쉽게 만드는 첫 번째 규칙', { fs: 20, b: true, c: 'var(--ok)' }) +
+    T(640, 345, '②를 함수로 떼어 내면 화면 없이도 시험할 수 있다 → 버그를 찾기 쉬워진다', { fs: 19 }) +
+    T(640, 385, '1 프레임 = ①②③④ 한 바퀴 · 1초에 50 프레임이면 50번 반복', { fs: 18, c: 'var(--muted)' }));
+
+  /* 타자 연습 화면 구성 */
+  const SVG_TYPING = SV(1280, 470,
+    R(120, 40, 620, 380, { s: 'var(--accent)', sw: 3 }) + T(430, 30, '타자 연습 창 (560 × 300)', { fs: 18, c: 'var(--accent)' }) +
+    T(430, 95, '따라 치고 엔터!', { fs: 18, c: 'var(--muted)' }) +
+    R(160, 120, 540, 60, { f: 'var(--card)' }) + T(430, 160, '작게 만들고 자주 실행해 보자', { fs: 24, b: true, c: 'var(--accent2)' }) +
+    T(180, 205, '① 제시 문장 (Label)', { fs: 16, a: 'start', c: 'var(--muted)' }) +
+    R(160, 225, 540, 54, { f: 'var(--card)', s: 'var(--accent)' }) + T(180, 258, '작게 만들고 자|', { fs: 22, a: 'start', mono: true }) +
+    T(180, 300, '② 입력칸 (Entry) — Return 키에 함수를 연결', { fs: 16, a: 'start', c: 'var(--muted)' }) +
+    R(160, 320, 250, 46, { f: 'var(--card)' }) + T(285, 350, '3 / 8 문장', { fs: 19 }) +
+    R(430, 320, 270, 46, { f: 'var(--card)' }) + T(565, 350, '정확도 96.5%', { fs: 19 }) +
+    T(180, 395, '③ 상태 표시 (Label) — 진행 · 통계', { fs: 16, a: 'start', c: 'var(--muted)' }) +
+    T(1010, 90, '화면에 보이는 것', { b: true, fs: 21 }) +
+    T(1010, 130, '문장 · 입력칸 · 상태 3가지', { fs: 18 }) +
+    T(1010, 190, '화면 뒤에 숨은 것(상태)', { b: true, fs: 21, c: 'var(--warn)' }) +
+    T(1010, 230, "index  지금 몇 번째 문장", { fs: 17, mono: true }) +
+    T(1010, 258, "chars  지금까지 친 글자 수", { fs: 17, mono: true }) +
+    T(1010, 286, "acc    문장별 정확도 목록", { fs: 17, mono: true }) +
+    T(1010, 314, "start  시작한 시각", { fs: 17, mono: true }) +
+    T(1010, 370, '→ 흩어진 전역 변수 대신', { fs: 18, c: 'var(--ok)' }) +
+    T(1010, 398, 'state 딕셔너리 하나에 모은다', { fs: 18, c: 'var(--ok)', b: true }));
+
+  /* 값 → 픽셀 좌표 */
+  const SVG_CHART = SV(1280, 480,
+    Ln(160, 400, 1160, 400, { sw: 3, s: 'var(--fg)' }) + Ln(160, 400, 160, 70, { sw: 3, s: 'var(--fg)' }) +
+    T(120, 405, '0', { fs: 18 }) + T(120, 245, '520', { fs: 18 }) + T(110, 85, '1040', { fs: 18 }) +
+    Ln(160, 80, 1160, 80, { dash: true }) + Ln(160, 240, 1160, 240, { dash: true }) +
+    R(220, 363, 90, 37, { f: 'var(--accent)', op: 0.85, s: 'var(--accent)', rx: 2 }) + T(265, 430, '1월', { fs: 17 }) + T(265, 350, '120', { fs: 16 }) +
+    R(380, 240, 90, 160, { f: 'var(--accent)', op: 0.85, s: 'var(--accent)', rx: 2 }) + T(425, 430, '5월', { fs: 17 }) + T(425, 227, '520', { fs: 16 }) +
+    R(540, 80, 90, 320, { f: 'var(--danger)', op: 0.85, s: 'var(--danger)', rx: 2 }) + T(585, 430, '8월', { fs: 17 }) + T(585, 67, '1040', { fs: 16 }) +
+    T(900, 130, '값을 그대로 y 로 쓰면 안 된다', { fs: 20, b: true, c: 'var(--warn)' }) +
+    T(900, 175, '화면 y 는 아래로 갈수록 커지기 때문', { fs: 18, c: 'var(--muted)' }) +
+    R(720, 210, 400, 120, { s: 'var(--ok)' }) +
+    T(920, 252, 'top = BASE - 값 / 최대값 * 높이', { fs: 21, mono: true, b: true }) +
+    T(920, 295, '(BASE = 바닥 선의 y, 높이 = 그래프 영역)', { fs: 16, c: 'var(--muted)' }) +
+    T(640, 468, '데이터의 값을 화면의 좌표로 바꾸는 이 계산을 스케일 변환(scaling)이라고 한다', { fs: 19, c: 'var(--muted)' }));
+
+  /* ---------------- 프로젝트 진행 · 디버깅 · 구조화 예제 */
+  const C_LOOP_PURE = String.raw`# 게임 루프를 pygame 없이 흉내 내 보기 (입력 → 갱신 → 그리기)
+def update(state, keys) :          # ② 갱신 : 화면은 건드리지 않고 값만 바꾼다
+    if 'LEFT' in keys :
+        state['x'] -= 5
+    if 'RIGHT' in keys :
+        state['x'] += 5
+    state['frame'] += 1
+
+def draw(state) :                  # ③ 그리기 : 값을 보여 주기만 한다
+    print('프레임 %d : 우주선 x = %d' % (state['frame'], state['x']))
+
+state = {'x' : 250, 'frame' : 0}
+inputs = [[], ['RIGHT'], ['RIGHT'], ['LEFT'], []]   # ① 입력 (실제로는 event.get())
+for keys in inputs :               # 실제 게임에서는 while True 로 계속 돈다
+    update(state, keys)
+    draw(state)`;
+
+  const C_DEBUG = String.raw`# "평균이 이상하다" 는 버그를 찾아가는 과정
+scores = ['90', '80', '70']
+
+print(scores)              # ① 눈으로 보면 숫자 같지만
+print(type(scores[0]))     # ② 자료형을 확인하면 문자열이다
+print(repr(scores[0]))     # ③ repr 은 따옴표까지 보여 준다
+
+total = 0
+for s in scores :
+    total += int(s)        # ④ 그래서 int() 로 바꿔서 더해야 한다
+print('평균 :', total / len(scores))`;
+
+  const C_ASSERT = String.raw`def accuracy(target, typed) :
+    """친 글자를 한 자씩 비교해 정확도(%)를 돌려준다"""
+    hit = 0
+    for i in range(min(len(target), len(typed))) :
+        if target[i] == typed[i] :
+            hit += 1
+    return hit / max(len(target), 1) * 100
+
+print('%.1f' % accuracy('파이썬은 재미있다', '파이썬은 재미있다'))
+print('%.1f' % accuracy('파이썬은 재미있다', '파이썬은 재미없다'))
+print('%.1f' % accuracy('파이썬은 재미있다', '파이썬'))
+print('%.1f' % accuracy('파이썬은 재미있다', ''))
+
+assert accuracy('abc', 'abc') == 100.0      # 스스로 검사하는 작은 시험
+assert accuracy('abc', 'xyz') == 0.0
+print('테스트 통과!')`;
+
+  const C_UNDO = String.raw`history = []            # 되돌리기용 이전 상태 보관 (스택)
+photo2 = '원본'
+
+def apply(name) :
+    global photo2
+    history.append(photo2)          # ① 바꾸기 전 상태를 쌓아 두고
+    photo2 = photo2 + ' → ' + name  # ② 가공한다
+    print('처리 :', photo2)
+
+def undo() :
+    global photo2
+    if len(history) == 0 :          # 되돌릴 것이 없으면
+        print('되돌릴 작업이 없습니다')
+        return
+    photo2 = history.pop()          # 가장 최근 상태를 꺼낸다
+    print('되돌림 :', photo2)
+
+apply('흑백')
+apply('블러')
+undo()
+undo()
+undo()`;
+
+  const C_BRIGHT_LOOP = String.raw`from PIL import Image, ImageEnhance
+
+def bright_loop(img, value) :          # ① 점을 하나씩 돌며 밝기를 곱한다
+    out = img.copy()
+    w, h = out.size
+    for y in range(h) :
+        for x in range(w) :
+            r, g, b = out.getpixel((x, y))
+            out.putpixel((x, y), (min(255, int(r * value)), min(255, int(g * value)), min(255, int(b * value))))
+    return out
+
+def bright_lib(img, value) :           # ② 같은 일을 라이브러리에 맡긴다
+    return ImageEnhance.Brightness(img).enhance(value)
+
+photo = Image.open('JPG/picture03.jpg').convert('RGB').resize((40, 25))
+a = bright_loop(photo, 1.5)
+b = bright_lib(photo, 1.5)
+print('원본 점    :', photo.getpixel((10, 10)))
+print('직접 계산  :', a.getpixel((10, 10)))
+print('라이브러리 :', b.getpixel((10, 10)))
+print('같은 결과인가? :', a.getpixel((10, 10)) == b.getpixel((10, 10)))
+print('점의 수 :', photo.width * photo.height)`;
+
+  const C_SPEED = String.raw`import time
+from PIL import Image, ImageOps
+
+photo = Image.open('JPG/picture01.jpg').convert('RGB')
+print('사진 크기 :', photo.size, '→ 점', photo.width * photo.height, '개')
+
+start = time.perf_counter()
+gray1 = photo.copy()
+for y in range(gray1.height) :          # 방법 A : 점을 하나씩
+    for x in range(gray1.width) :
+        r, g, b = gray1.getpixel((x, y))
+        v = int(r * 0.299 + g * 0.587 + b * 0.114)
+        gray1.putpixel((x, y), (v, v, v))
+ta = time.perf_counter() - start
+
+start = time.perf_counter()
+gray2 = ImageOps.grayscale(photo)       # 방법 B : 라이브러리에 맡기기
+tb = time.perf_counter() - start
+
+print('A 직접 반복 : %.3f 초' % ta)
+print('B 라이브러리 : %.3f 초' % tb)
+print('약 %.0f 배 차이' % (ta / max(tb, 0.000001)))`;
+
+  const C_HIGHSCORE = String.raw`def load_best(fname) :
+    try :
+        with open(fname, encoding = 'utf-8') as f :
+            return int(f.read().strip())
+    except FileNotFoundError :      # 아직 파일이 없으면 최고 점수는 0
+        return 0
+    except ValueError :             # 파일 내용이 숫자가 아니면
+        return 0
+
+def save_best(fname, score) :
+    with open(fname, 'w', encoding = 'utf-8') as f :
+        f.write(str(score))
+
+best = load_best('best.txt')
+print('처음 최고 점수 :', best)
+
+for score in [3, 7, 5] :
+    if score > best :
+        best = score
+        save_best('best.txt', best)
+        print(score, '점 → 신기록!')
+    else :
+        print(score, '점 (최고 기록은', best, '점)')
+
+print('저장된 값 :', load_best('best.txt'))`;
+
+  const C_LEVEL = String.raw`def level_of(score) :
+    return min(5, 1 + score // 5)        # 5마리마다 한 단계, 최고 5단계
+
+def monster_speed(score) :
+    return 1 + score // 3                # 3마리마다 1씩 빨라짐
+
+for score in [0, 2, 3, 8, 15, 30] :
+    print('점수 %2d → 레벨 %d · 기본 속도 + %d' % (score, level_of(score), monster_speed(score) - 1))`;
+
+  /* ---------------- 미니 포토샵 확장판 (리팩터링 · 되돌리기 · 저장 형식) */
+  const C_PS_PLUS = String.raw`from tkinter import *
+from tkinter import messagebox
+from tkinter.filedialog import *
+from PIL import Image, ImageFilter, ImageEnhance, ImageOps, ImageTk
+
+## 함수 선언 부분 ##
+def displayImage(img) :
+    global canvas, paper
+    if canvas != None :
+        canvas.destroy()
+    canvas = Canvas(window, width = img.width, height = img.height)
+    paper = ImageTk.PhotoImage(img)
+    canvas.create_image((img.width / 2, img.height / 2), image = paper, state = "normal")
+    canvas.pack()
+
+def func_open() :
+    global photo, photo2, history
+    fname = askopenfilename(parent = window, filetypes = (("그림 파일", "*.jpg *.png *.gif *.bmp"), ("모든 파일", "*.*")))
+    if fname == "" :
+        return
+    photo = Image.open(fname).convert('RGB')
+    photo2 = photo.copy()
+    history = []
+    displayImage(photo2)
+    status.configure(text = "%s  (%d x %d)" % (fname, photo2.width, photo2.height))
+
+def func_saveas() :
+    if photo2 == None :
+        messagebox.showwarning("알림", "먼저 사진을 여세요.")
+        return
+    fname = asksaveasfilename(parent = window, defaultextension = ".png",
+                              filetypes = (("PNG 파일", "*.png"), ("JPG 파일", "*.jpg"), ("모든 파일", "*.*")))
+    if fname == "" :
+        return
+    if fname.lower().endswith(".jpg") or fname.lower().endswith(".jpeg") :
+        photo2.convert('RGB').save(fname, quality = 92)   # JPG 는 투명을 저장하지 못한다
+    else :
+        photo2.save(fname)
+    status.configure(text = "저장함 : " + fname)
+
+def apply_effect(name) :
+    """메뉴 13개 대신 함수 하나 — 이름으로 효과를 찾아 쓴다"""
+    global photo2
+    if photo2 == None :
+        messagebox.showwarning("알림", "먼저 [파일] → [열기] 로 사진을 여세요.")
+        return
+    history.append(photo2.copy())        # 되돌리기용으로 지금 상태를 저장
+    if len(history) > 10 :               # 메모리를 아끼려고 10단계까지만
+        history.pop(0)
+    photo2 = EFFECT[name](photo2)        # 효과가 차곡차곡 누적된다
+    displayImage(photo2)
+    status.configure(text = "%s 적용  ·  되돌리기 %d 단계 가능" % (name, len(history)))
+
+def func_undo() :
+    global photo2
+    if len(history) == 0 :
+        messagebox.showinfo("되돌리기", "되돌릴 작업이 없습니다.")
+        return
+    photo2 = history.pop()
+    displayImage(photo2)
+    status.configure(text = "되돌림  ·  남은 단계 %d" % len(history))
+
+## 전역 변수 선언 부분 ##
+EFFECT = {
+    "좌우 반전" : lambda img : img.transpose(Image.FLIP_LEFT_RIGHT),
+    "상하 반전" : lambda img : img.transpose(Image.FLIP_TOP_BOTTOM),
+    "90도 회전" : lambda img : img.rotate(90, expand = True),
+    "밝게"      : lambda img : ImageEnhance.Brightness(img).enhance(1.3),
+    "어둡게"    : lambda img : ImageEnhance.Brightness(img).enhance(0.7),
+    "대비 세게" : lambda img : ImageEnhance.Contrast(img).enhance(1.5),
+    "블러링"    : lambda img : img.filter(ImageFilter.BLUR),
+    "엠보싱"    : lambda img : img.filter(ImageFilter.EMBOSS),
+    "흑백"      : lambda img : ImageOps.grayscale(img).convert('RGB'),
+}
+canvas, paper = None, None
+photo, photo2 = None, None
+history = []
+
+## 메인 코드 부분 ##
+window = Tk()
+window.geometry("420x360")
+window.title("미니 포토샵 플러스")
+
+mainMenu = Menu(window)
+window.config(menu = mainMenu)
+
+fileMenu = Menu(mainMenu)
+mainMenu.add_cascade(label = "파일", menu = fileMenu)
+fileMenu.add_command(label = "열기", command = func_open)
+fileMenu.add_command(label = "다른 이름으로 저장", command = func_saveas)
+fileMenu.add_separator()
+fileMenu.add_command(label = "종료", command = window.destroy)
+
+editMenu = Menu(mainMenu)
+mainMenu.add_cascade(label = "편집", menu = editMenu)
+editMenu.add_command(label = "되돌리기", command = func_undo)
+editMenu.add_separator()
+for name in EFFECT :                     # 메뉴를 반복문으로 만든다
+    editMenu.add_command(label = name, command = lambda n = name : apply_effect(n))
+
+status = Label(window, text = "[파일] → [열기] 로 사진을 여세요", bd = 1, relief = SUNKEN, anchor = W)
+status.pack(side = BOTTOM, fill = X)
+
+window.mainloop()`;
+
+  const C_LAMBDA_TRAP = String.raw`# 반복문 안에서 함수를 만들 때 흔히 걸리는 함정
+funcs1, funcs2 = [], []
+for name in ['블러', '엠보싱', '흑백'] :
+    funcs1.append(lambda : name)            # 이름만 빌려 쓴다 (나중에 읽음)
+    funcs2.append(lambda n = name : n)      # 지금 값을 기본값으로 붙잡아 둔다
+
+print('잘못된 방법 :', [f() for f in funcs1])
+print('올바른 방법 :', [f() for f in funcs2])`;
+
+  /* ---------------- 슈팅 게임 확장판 */
+  const C_GAME_PLUS = String.raw`import pygame
+import random
+import sys
+
+## 전역 변수 선언 부분 ##
+SW, SH = 500, 700                                       # 화면 크기
+BEST_FILE = 'best_score.txt'
+MONSTER_IMAGE = ['game/monster%02d.png' % i for i in range(1, 11)]
+
+## 함수 선언 부분 ##
+def load_best() :
+    try :
+        with open(BEST_FILE, encoding = 'utf-8') as f :
+            return int(f.read().strip())
+    except (FileNotFoundError, ValueError) :            # 첫 실행이면 기록이 없다
+        return 0
+
+def save_best(score) :
+    with open(BEST_FILE, 'w', encoding = 'utf-8') as f :
+        f.write(str(score))
+
+def new_monster(score) :
+    """점수가 오를수록 빨라지는 새 우주괴물 한 마리를 만든다"""
+    img = pygame.image.load(random.choice(MONSTER_IMAGE))
+    return {'img' : img, 'size' : img.get_rect().size,
+            'x' : 0, 'y' : random.randrange(0, int(SW * 0.3)),
+            'speed' : random.randrange(1, 5) + score // 5}
+
+def play_sound(snd) :
+    if snd != None :          # 소리 파일이 없으면 조용히 넘어간다
+        snd.play()
+
+def draw_text(text, x, y) :
+    monitor.blit(font.render(text, True, (255, 255, 255)), (x, y))
+
+def game_over(state) :
+    best = max(state['best'], state['score'])
+    save_best(best)
+    print('게임 오버! 점수 :', state['score'], '/ 최고 기록 :', best)
+    pygame.quit()
+    sys.exit()
+
+def play_game() :
+    ship = pygame.image.load('game/ship02.png')
+    shipSize = ship.get_rect().size
+    missile = pygame.image.load('game/missile.png')
+    clock = pygame.time.Clock()
+
+    state = {'x' : SW / 2, 'y' : SH * 0.8, 'dx' : 0, 'dy' : 0,
+             'mx' : None, 'my' : None, 'score' : 0, 'life' : 3, 'best' : load_best()}
+    monster = new_monster(0)
+
+    while True :
+        # ① 입력
+        for e in pygame.event.get() :
+            if e.type == pygame.QUIT :
+                game_over(state)
+            if e.type == pygame.KEYDOWN :
+                if e.key == pygame.K_LEFT : state['dx'] = -6
+                elif e.key == pygame.K_RIGHT : state['dx'] = +6
+                elif e.key == pygame.K_UP : state['dy'] = -6
+                elif e.key == pygame.K_DOWN : state['dy'] = +6
+                elif e.key == pygame.K_SPACE and state['mx'] == None :
+                    state['mx'] = state['x'] + shipSize[0] / 2
+                    state['my'] = state['y']
+                    play_sound(shoot)
+            if e.type == pygame.KEYUP :
+                state['dx'], state['dy'] = 0, 0
+
+        # ② 갱신
+        if 0 < state['x'] + state['dx'] <= SW - shipSize[0] :
+            state['x'] += state['dx']
+        if SH / 2 < state['y'] + state['dy'] <= SH - shipSize[1] :
+            state['y'] += state['dy']
+
+        monster['x'] += monster['speed']
+        if monster['x'] > SW :                          # 놓쳤다 → 생명 하나 감소
+            state['life'] -= 1
+            monster = new_monster(state['score'])
+
+        if state['mx'] != None :
+            state['my'] -= 12
+            if state['my'] < 0 :
+                state['mx'], state['my'] = None, None
+
+        if state['mx'] != None :
+            box = pygame.Rect(monster['x'], monster['y'], monster['size'][0], monster['size'][1])
+            if box.collidepoint(state['mx'], state['my']) :
+                state['score'] += 1
+                play_sound(boom)
+                monster = new_monster(state['score'])
+                state['mx'], state['my'] = None, None
+
+        if state['life'] <= 0 :
+            game_over(state)
+
+        # ③ 그리기
+        monitor.fill((18, 18, 40))
+        monitor.blit(ship, (int(state['x']), int(state['y'])))
+        monitor.blit(monster['img'], (int(monster['x']), int(monster['y'])))
+        if state['mx'] != None :
+            monitor.blit(missile, (int(state['mx']), int(state['my'])))
+        draw_text('점수 %d   생명 %d   최고 %d   레벨 %d'
+                  % (state['score'], state['life'], max(state['best'], state['score']), 1 + state['score'] // 5), 10, SH - 40)
+        pygame.display.update()
+
+        # ④ 대기
+        clock.tick(50)
+
+## 메인 코드 부분 ##
+pygame.init()
+monitor = pygame.display.set_mode((SW, SH))
+pygame.display.set_caption('우주괴물 무찌르기 — 확장판')
+font = pygame.font.SysFont('malgungothic', 18)
+try :
+    shoot = pygame.mixer.Sound('game/shoot.wav')
+    boom = pygame.mixer.Sound('game/boom.wav')
+except Exception :          # 소리 파일이 없어도 게임은 돌아가야 한다
+    shoot, boom = None, None
+
+play_game()`;
+
+  /* ---------------- [프로젝트 3] 타자 연습 */
+  const TY_LOAD = String.raw`def load_sentences(fname) :
+    """문장 파일을 한 줄씩 읽어 리스트로 돌려준다"""
+    lines = []
+    with open(fname, encoding = 'utf-8') as f :
+        for line in f :
+            line = line.strip()
+            if line != "" :
+                lines.append(line)
+    return lines`;
+
+  const TY1 = String.raw`from tkinter import *
+
+## 함수 선언 부분 ##
+def load_sentences(fname) :
+    lines = []
+    with open(fname, encoding = 'utf-8') as f :
+        for line in f :
+            line = line.strip()
+            if line != "" :
+                lines.append(line)
+    return lines
+
+## 전역 변수 선언 부분 ##
+sentences = load_sentences('ch14/typing.txt')
+
+## 메인 코드 부분 ##
+window = Tk()
+window.title("타자 연습 — 1단계 : 화면")
+window.geometry("560x260")
+
+lblGuide = Label(window, text = "아래 문장을 그대로 치고 엔터!", font = ('맑은고딕', 11), fg = "gray")
+lblGuide.pack(pady = 10)
+
+lblQuestion = Label(window, text = sentences[0], font = ('맑은고딕', 16, 'bold'), fg = "navy")
+lblQuestion.pack(pady = 10)
+
+entAnswer = Entry(window, width = 40, font = ('맑은고딕', 13))
+entAnswer.pack(pady = 10)
+entAnswer.focus_set()
+
+lblStatus = Label(window, text = "1 / %d 문장" % len(sentences), font = ('맑은고딕', 11))
+lblStatus.pack(pady = 15)
+
+window.mainloop()`;
+
+  const TY2 = String.raw`from tkinter import *
+import time
+
+## 함수 선언 부분 ##
+def load_sentences(fname) :
+    lines = []
+    with open(fname, encoding = 'utf-8') as f :
+        for line in f :
+            line = line.strip()
+            if line != "" :
+                lines.append(line)
+    return lines
+
+def accuracy(target, typed) :
+    hit = 0
+    for i in range(min(len(target), len(typed))) :
+        if target[i] == typed[i] :
+            hit += 1
+    return hit / max(len(target), 1) * 100
+
+def show_question() :
+    lblQuestion.configure(text = sentences[state['index']])
+    lblStatus.configure(text = "%d / %d 문장" % (state['index'] + 1, len(sentences)))
+    entAnswer.delete(0, END)
+
+def check(event = None) :        # Return 키가 부르면 event 가 들어온다
+    typed = entAnswer.get()
+    if typed == "" :             # 빈칸으로 엔터를 치면 무시한다
+        return
+    state['acc'].append(accuracy(sentences[state['index']], typed))
+    state['chars'] += len(typed)
+    state['index'] += 1
+    if state['index'] < len(sentences) :
+        show_question()
+    else :
+        finish()
+
+def finish() :
+    spent = time.time() - state['start']
+    avg = sum(state['acc']) / len(state['acc'])
+    lblQuestion.configure(text = "끝났습니다!")
+    lblStatus.configure(text = "%.1f초 · 정확도 %.1f%% · %d글자" % (spent, avg, state['chars']))
+    entAnswer.delete(0, END)
+
+## 전역 변수 선언 부분 ##
+sentences = load_sentences('ch14/typing.txt')
+state = {'index' : 0, 'chars' : 0, 'acc' : [], 'start' : time.time()}
+
+## 메인 코드 부분 ##
+window = Tk()
+window.title("타자 연습 — 2단계 : 채점")
+window.geometry("560x260")
+
+Label(window, text = "아래 문장을 그대로 치고 엔터!", font = ('맑은고딕', 11), fg = "gray").pack(pady = 10)
+lblQuestion = Label(window, text = "", font = ('맑은고딕', 16, 'bold'), fg = "navy")
+lblQuestion.pack(pady = 10)
+entAnswer = Entry(window, width = 40, font = ('맑은고딕', 13))
+entAnswer.pack(pady = 10)
+entAnswer.bind('<Return>', check)        # 엔터 키에 함수를 연결
+entAnswer.focus_set()
+lblStatus = Label(window, text = "", font = ('맑은고딕', 11))
+lblStatus.pack(pady = 15)
+
+show_question()
+window.mainloop()`;
+
+  const TY3 = String.raw`from tkinter import *
+import datetime
+import time
+
+## 함수 선언 부분 ##
+def load_sentences(fname) :
+    try :
+        with open(fname, encoding = 'utf-8') as f :
+            return [line.strip() for line in f if line.strip() != ""]
+    except FileNotFoundError :           # 문장 파일이 없어도 프로그램은 돌아가야 한다
+        return ['파이썬은 재미있다', '작게 만들고 자주 실행하자']
+
+def accuracy(target, typed) :
+    hit = 0
+    for i in range(min(len(target), len(typed))) :
+        if target[i] == typed[i] :
+            hit += 1
+    return hit / max(len(target), 1) * 100
+
+def save_result(spent, chars, acc) :
+    when = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+    with open(RESULT_FILE, 'a', encoding = 'utf-8') as f :          # 'a' = 이어 쓰기
+        f.write('%s,%.1f초,%d타,%.1f%%\n' % (when, spent, chars, acc))
+
+def recent_results(n = 3) :
+    try :
+        with open(RESULT_FILE, encoding = 'utf-8') as f :
+            lines = [line.strip() for line in f if line.strip() != ""]
+    except FileNotFoundError :
+        return ["아직 기록이 없습니다"]
+    return lines[-n:]
+
+def show_question() :
+    lblQuestion.configure(text = sentences[state['index']])
+    lblStatus.configure(text = "%d / %d 문장" % (state['index'] + 1, len(sentences)))
+    entAnswer.delete(0, END)
+    entAnswer.focus_set()
+
+def check(event = None) :
+    typed = entAnswer.get()
+    if typed == "" :
+        return
+    state['acc'].append(accuracy(sentences[state['index']], typed))
+    state['chars'] += len(typed)
+    state['index'] += 1
+    if state['index'] < len(sentences) :
+        show_question()
+    else :
+        finish()
+
+def finish() :
+    spent = max(0.1, time.time() - state['start'])       # 0 으로 나누지 않도록
+    acc = sum(state['acc']) / len(state['acc'])
+    speed = state['chars'] / spent * 60                  # 분당 타수
+    lblQuestion.configure(text = "수고했어요!")
+    lblStatus.configure(text = "%.1f초 · 분당 %.0f타 · 정확도 %.1f%%" % (spent, speed, acc))
+    entAnswer.delete(0, END)
+    save_result(spent, state['chars'], acc)
+    lblRecord.configure(text = "최근 기록\n" + "\n".join(recent_results()))
+
+def restart() :
+    state['index'], state['chars'] = 0, 0
+    state['acc'] = []
+    state['start'] = time.time()
+    show_question()
+
+## 전역 변수 선언 부분 ##
+RESULT_FILE = 'typing_result.txt'
+sentences = load_sentences('ch14/typing.txt')
+state = {'index' : 0, 'chars' : 0, 'acc' : [], 'start' : time.time()}
+
+## 메인 코드 부분 ##
+window = Tk()
+window.title("타자 연습")
+window.geometry("600x360")
+
+Label(window, text = "아래 문장을 그대로 치고 엔터!", font = ('맑은고딕', 11), fg = "gray").pack(pady = 8)
+lblQuestion = Label(window, text = "", font = ('맑은고딕', 16, 'bold'), fg = "navy")
+lblQuestion.pack(pady = 8)
+entAnswer = Entry(window, width = 40, font = ('맑은고딕', 13))
+entAnswer.pack(pady = 8)
+entAnswer.bind('<Return>', check)
+lblStatus = Label(window, text = "", font = ('맑은고딕', 12))
+lblStatus.pack(pady = 6)
+Button(window, text = "다시 시작", command = restart).pack(pady = 4)
+lblRecord = Label(window, text = "최근 기록\n" + "\n".join(recent_results()), font = ('맑은고딕', 10), fg = "gray")
+lblRecord.pack(pady = 8)
+
+show_question()
+window.mainloop()`;
+
+  const C_RESULT_FILE = String.raw`RESULT_FILE = 'typing_result.txt'
+
+def save_result(when, spent, chars, acc) :
+    with open(RESULT_FILE, 'a', encoding = 'utf-8') as f :   # 'a' = 이어 쓰기(덮어쓰지 않음)
+        f.write('%s,%.1f초,%d타,%.1f%%\n' % (when, spent, chars, acc))
+
+def recent_results(n = 3) :
+    try :
+        with open(RESULT_FILE, encoding = 'utf-8') as f :
+            return [line.strip() for line in f if line.strip() != ""][-n:]
+    except FileNotFoundError :
+        return []
+
+print('처음 기록 :', recent_results())
+save_result('2026-03-02 10:00', 25.4, 120, 97.5)
+save_result('2026-03-02 10:05', 22.1, 121, 99.0)
+save_result('2026-03-02 10:11', 20.8, 122, 99.5)
+save_result('2026-03-02 10:20', 19.3, 123, 100.0)
+for line in recent_results() :
+    print(line)`;
+
+  /* ---------------- [프로젝트 4] CSV 막대그래프 */
+  const CH_LOAD = String.raw`import csv
+
+def load_sales(fname) :
+    """CSV 파일을 읽어 (열 이름, 숫자 행 목록) 을 돌려준다"""
+    rows = []
+    with open(fname, encoding = 'utf-8') as f :
+        reader = csv.reader(f)
+        head = next(reader)                 # 첫 줄은 제목 줄
+        for line in reader :
+            rows.append([int(v) for v in line])
+    return head, rows
+
+head, rows = load_sales('ch14/sales.csv')
+print('열 이름 :', head)
+print('행 수   :', len(rows))
+print('첫 행   :', rows[0])
+print('끝 행   :', rows[-1])
+
+ice = [r[1] for r in rows]
+print('합계 :', sum(ice))
+print('평균 : %.1f' % (sum(ice) / len(ice)))
+print('최대 :', max(ice), '(', rows[ice.index(max(ice))][0], '월 )')
+print('최소 :', min(ice), '(', rows[ice.index(min(ice))][0], '월 )')`;
+
+  const C_SCALE = String.raw`CHART_H = 300          # 그래프 영역의 높이(픽셀)
+BASE_Y = 340           # 막대가 서 있는 바닥 선의 y 좌표
+
+def bar_top(value, vmax) :
+    """값을 화면 y 좌표로 바꾼다 (값이 클수록 위 = y 가 작다)"""
+    return BASE_Y - value / vmax * CHART_H
+
+vmax = 1040
+for v in [120, 520, 1040] :
+    print(v, '→ y =', round(bar_top(v, vmax), 1), ', 막대 높이 =', round(BASE_Y - bar_top(v, vmax), 1))
+
+print('0 의 y :', bar_top(0, vmax))
+print('최대값의 y :', bar_top(vmax, vmax))`;
+
+  const CH2 = String.raw`from tkinter import *
+import csv
+
+## 함수 선언 부분 ##
+def load_sales(fname) :
+    rows = []
+    with open(fname, encoding = 'utf-8') as f :
+        reader = csv.reader(f)
+        head = next(reader)
+        for line in reader :
+            rows.append([int(v) for v in line])
+    return head, rows
+
+## 전역 변수 선언 부분 ##
+W, H = 640, 400
+LEFT, BASE, CHART_H = 70, 340, 260       # 왼쪽 여백 · 바닥 선 · 그래프 높이
+head, rows = load_sales('ch14/sales.csv')
+values = [r[1] for r in rows]
+vmax = max(values)
+
+## 메인 코드 부분 ##
+window = Tk()
+window.title("2단계 : 막대만 그리기")
+canvas = Canvas(window, width = W, height = H, bg = "white")
+canvas.pack()
+
+for i in range(len(values)) :
+    x = LEFT + i * 46
+    top = BASE - values[i] / vmax * CHART_H       # 값 → 화면 좌표
+    canvas.create_rectangle(x, top, x + 36, BASE, fill = "#4c8dff", outline = "")
+
+window.mainloop()`;
+
+  const CH3 = String.raw`from tkinter import *
+from tkinter import messagebox
+import csv
+
+## 함수 선언 부분 ##
+def load_sales(fname) :
+    rows = []
+    with open(fname, encoding = 'utf-8') as f :
+        reader = csv.reader(f)
+        head = next(reader)
+        for line in reader :
+            rows.append([int(v) for v in line])
+    return head, rows
+
+def summary(values) :
+    """합계 · 평균 · 최대 · 최소를 한 번에 계산한다"""
+    return {'합계' : sum(values), '평균' : sum(values) / len(values),
+            '최대' : max(values), '최소' : min(values)}
+
+def draw_chart(col) :
+    canvas.delete(ALL)                                 # 다시 그리기 전에 지운다
+    values = [r[col] for r in rows]
+    vmax = max(values)
+    st = summary(values)
+
+    canvas.create_text(W / 2, 26, text = "월별 " + head[col] + " 판매량",
+                       font = ('맑은고딕', 15, 'bold'))
+    for k in range(0, 5) :                             # 가로 눈금선 5개
+        v = vmax * k / 4
+        y = BASE - v / vmax * CHART_H
+        canvas.create_line(LEFT, y, W - 20, y, fill = "#dddddd")
+        canvas.create_text(LEFT - 8, y, text = str(int(v)), anchor = E, font = ('맑은고딕', 9))
+
+    avgY = BASE - st['평균'] / vmax * CHART_H           # 평균선
+    canvas.create_line(LEFT, avgY, W - 20, avgY, fill = "red")
+    canvas.create_text(W - 24, avgY - 10, text = "평균 %.0f" % st['평균'],
+                       fill = "red", anchor = E, font = ('맑은고딕', 10))
+
+    for i in range(len(rows)) :
+        x = LEFT + i * 46
+        top = BASE - values[i] / vmax * CHART_H
+        color = "#ff7043" if values[i] == vmax else "#4c8dff"    # 최대값만 다른 색
+        canvas.create_rectangle(x, top, x + 36, BASE, fill = color, outline = "")
+        canvas.create_text(x + 18, top - 10, text = str(values[i]), font = ('맑은고딕', 9))
+        canvas.create_text(x + 18, BASE + 16, text = "%d월" % rows[i][0], font = ('맑은고딕', 10))
+
+    canvas.create_line(LEFT, BASE, W - 20, BASE)       # x 축
+    canvas.create_line(LEFT, BASE, LEFT, 45)           # y 축
+    lblInfo.configure(text = "합계 %d · 평균 %.1f · 최대 %d · 최소 %d"
+                             % (st['합계'], st['평균'], st['최대'], st['최소']))
+
+def change(value) :
+    draw_chart(1 if value == head[1] else 2)
+
+def save_summary() :
+    with open('sales_summary.txt', 'w', encoding = 'utf-8') as f :
+        for col in (1, 2) :
+            st = summary([r[col] for r in rows])
+            f.write("%s 합계 %d 평균 %.1f 최대 %d 최소 %d\n"
+                    % (head[col], st['합계'], st['평균'], st['최대'], st['최소']))
+    messagebox.showinfo("저장", "sales_summary.txt 로 저장했습니다.")
+
+## 전역 변수 선언 부분 ##
+W, H = 640, 400
+LEFT, BASE, CHART_H = 70, 340, 260
+head, rows = load_sales('ch14/sales.csv')
+
+## 메인 코드 부분 ##
+window = Tk()
+window.title("월별 판매량 막대그래프")
+
+topFrame = Frame(window)
+topFrame.pack(pady = 6)
+choice = StringVar(value = head[1])
+OptionMenu(topFrame, choice, head[1], head[2], command = change).pack(side = LEFT, padx = 6)
+Button(topFrame, text = "요약 저장", command = save_summary).pack(side = LEFT, padx = 6)
+
+lblInfo = Label(window, text = "", font = ('맑은고딕', 11))
+lblInfo.pack()
+canvas = Canvas(window, width = W, height = H, bg = "white")
+canvas.pack()
+
+draw_chart(1)
+window.mainloop()`;
+
+  const C_SUMMARY_FILE = String.raw`import csv
+
+def load_sales(fname) :
+    rows = []
+    with open(fname, encoding = 'utf-8') as f :
+        reader = csv.reader(f)
+        head = next(reader)
+        for line in reader :
+            rows.append([int(v) for v in line])
+    return head, rows
+
+def summary(values) :
+    return {'합계' : sum(values), '평균' : sum(values) / len(values),
+            '최대' : max(values), '최소' : min(values)}
+
+head, rows = load_sales('ch14/sales.csv')
+with open('sales_summary.txt', 'w', encoding = 'utf-8') as f :
+    for col in (1, 2) :
+        st = summary([r[col] for r in rows])
+        f.write('%s 합계 %d 평균 %.1f 최대 %d 최소 %d\n'
+                % (head[col], st['합계'], st['평균'], st['최대'], st['최소']))
+
+with open('sales_summary.txt', encoding = 'utf-8') as f :
+    print(f.read(), end = '')`;
+
+  const C_MODULE_SPLIT = String.raw`# ===== File: salesdata.py =====
+"""데이터를 읽고 통계를 내는 부분만 모은 모듈 (화면과 상관없다)"""
+import csv
+
+def load_sales(fname) :
+    rows = []
+    with open(fname, encoding = 'utf-8') as f :
+        reader = csv.reader(f)
+        head = next(reader)
+        for line in reader :
+            rows.append([int(v) for v in line])
+    return head, rows
+
+def summary(values) :
+    return {'합계' : sum(values), '평균' : sum(values) / len(values),
+            '최대' : max(values), '최소' : min(values)}
+
+# ===== File: main.py =====
+import salesdata
+
+head, rows = salesdata.load_sales('ch14/sales.csv')
+st = salesdata.summary([r[1] for r in rows])
+print(head[1], '통계 :', st)
+print('화면을 그리는 코드는 main.py 에, 계산하는 코드는 salesdata.py 에 둔다')`;
+
   PY_COURSE.addChapter({
     id: 'ch14',
     no: '14',
     title: '미니 프로젝트',
     subtitle: 'Pillow 미니 포토샵 · pygame 슈팅 게임',
-    summary: '외부 라이브러리 Pillow 로 사진을 열고 확대 · 회전 · 밝기 · 필터 · 흑백 처리를 하는 [미니 포토샵]을 tkinter 메뉴로 만들고, pygame 으로 방향키로 우주선을 움직여 미사일로 우주괴물을 맞히는 [우주괴물 무찌르기] 슈팅 게임을 기능별로 한 단계씩 완성합니다.',
+    summary: '외부 라이브러리 Pillow 로 사진을 열고 확대 · 회전 · 밝기 · 필터 · 흑백 처리를 하는 [미니 포토샵]을 tkinter 메뉴로 만들고, pygame 으로 [우주괴물 무찌르기] 슈팅 게임을 기능별로 한 단계씩 완성합니다. 이어서 요구 사항 정리 → 기능 분해 → 단계별 개발 → 리팩터링 → 확장이라는 프로젝트 진행 방법을 직접 적용해 [타자 연습]과 [판매량 막대그래프] 두 프로젝트를 더 만들고, 코드 정리와 README 쓰기로 마무리합니다.',
     goals: [
+      '프로젝트를 요구 사항 → 기능 분해 → 단계별 개발 → 리팩터링 → 확장의 순서로 진행할 수 있다',
+      '화면 코드와 계산 코드를 나누고, 상태를 딕셔너리 · 클래스로 묶어 전역 변수를 줄일 수 있다',
       '외부 라이브러리(Pillow, pygame)를 설치하고 import 해서 활용할 수 있다',
       'tkinter 메뉴와 대화상자로 프로그램의 틀을 만들고 메뉴마다 함수를 연결할 수 있다',
       'Pillow 의 Image · ImageFilter · ImageEnhance · ImageOps 로 컬러 이미지를 처리할 수 있다',
       '원본과 결과 이미지를 나누어 관리하고 화면(캔버스)에 출력하는 구조를 설명할 수 있다',
       'pygame 의 게임 루프(이벤트 → 계산 → 그리기 → 업데이트)를 이해하고 키보드로 물체를 움직일 수 있다',
-      '무작위 등장 · 미사일 발사 · 충돌 판정 · 점수 표시를 갖춘 슈팅 게임을 완성할 수 있다'
+      '무작위 등장 · 미사일 발사 · 충돌 판정 · 점수 표시를 갖춘 슈팅 게임을 완성할 수 있다',
+      '되돌리기 · 저장 형식 선택 · 난이도 · 생명 · 최고 점수 기록으로 프로그램을 확장할 수 있다',
+      'tkinter 와 파일 · 시간을 엮어 타자 연습 프로그램을 스스로 설계해 만들 수 있다',
+      'CSV 데이터를 읽어 통계를 내고 Canvas 에 막대그래프로 그릴 수 있다',
+      '코드를 모듈로 나누어 정리하고 README 를 써서 프로젝트를 설명할 수 있다'
     ],
     sections: [
       /* ============================================================ 14-1 */
@@ -894,21 +1788,52 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
         title: '미니 포토샵 준비: Pillow 와 메뉴 뼈대',
         minutes: 50,
         goals: [
+          '프로젝트 진행 5단계(요구 사항 → 기능 분해 → 단계별 개발 → 리팩터링 → 확장)를 설명할 수 있다',
+          'print · type · repr 로 버그를 좁혀 가는 디버깅 요령을 쓸 수 있다',
           '외부 라이브러리가 무엇인지 알고 pip 로 설치하는 방법을 설명할 수 있다',
           'Pillow 로 사진을 열어 크기 · 형식 · 점의 색을 알아낼 수 있다',
           '미니 포토샵의 메뉴 구성도를 보고 필요한 함수를 정리할 수 있다',
           'Menu · add_cascade · add_command · add_separator 로 메뉴 뼈대(Code14-01)를 만들 수 있다'
         ],
-        flow: [['도입: 이 장에서 만들 두 프로그램', 5], ['외부 라이브러리와 Pillow 설치', 10], ['Pillow 로 사진 다루기', 12], ['메뉴 구성도 · Code14-01', 15], ['퀴즈 · 실습', 8]],
+        flow: [['도입: 이 장에서 만들 네 프로그램', 4], ['프로젝트 진행 5단계 · 디버깅 요령', 8], ['외부 라이브러리와 Pillow 설치', 8], ['Pillow 로 사진 다루기', 10], ['메뉴 구성도 · Code14-01', 12], ['퀴즈 · 실습', 8]],
         content: [
           { type: 'h', text: '이 장에서 만들 두 프로그램' },
           { type: 'p', html: '마지막 장에서는 지금까지 배운 변수 · 조건문 · 반복문 · 함수 · 윈도 프로그래밍을 모두 모아 <b>제법 그럴듯한 프로그램 두 개</b>를 만듭니다. 둘 다 파이썬에 기본으로 들어 있지 않은 <b>외부 라이브러리</b>를 빌려 씁니다.' },
           { type: 'table', head: ['프로젝트', '무엇을 만드나', '사용하는 라이브러리'], rows: [
             ['[프로젝트 1] 미니 포토샵', '사진을 열어 확대 · 축소 · 반전 · 회전 · 밝기 조절 · 블러 · 엠보싱 · 흑백 처리를 하고 저장하는 프로그램', '<code>tkinter</code> (창 · 메뉴 · 대화상자) + <b>Pillow</b> (이미지 처리)'],
-            ['[프로젝트 2] 우주괴물 무찌르기', '방향키로 우주선을 움직이고 스페이스바로 미사일을 쏘아 우주괴물을 맞히는 슈팅 게임', '<b>pygame</b> (게임 화면 · 키보드 · 그림)']
+            ['[프로젝트 2] 우주괴물 무찌르기', '방향키로 우주선을 움직이고 스페이스바로 미사일을 쏘아 우주괴물을 맞히는 슈팅 게임', '<b>pygame</b> (게임 화면 · 키보드 · 그림)'],
+            ['[프로젝트 3] 타자 연습 (14-6)', '제시 문장을 따라 치고 시간 · 분당 타수 · 정확도를 계산해 결과를 파일에 기록', '<code>tkinter</code> + <code>time</code> · <code>datetime</code> · 파일'],
+            ['[프로젝트 4] 판매량 막대그래프 (14-7)', 'CSV 데이터를 읽어 통계를 내고 캔버스에 막대그래프로 그려 주는 프로그램', '<code>tkinter</code> Canvas + <code>csv</code>']
           ] },
+          { type: 'p', html: '앞의 두 프로젝트는 강의자료를 따라 만들고, 뒤의 두 프로젝트(14-6 · 14-7)는 <b>같은 진행 방법을 스스로 적용</b>해 보는 연습입니다. 다루는 기술은 다르지만 만드는 <b>순서</b>는 똑같습니다.' },
           { type: 'p', html: '포토샵처럼 사진을 가공하는 프로그램을 <b>영상 처리(Image Processing) 프로그램</b>이라고 합니다. 영상 처리는 대학에서 한 과목으로 따로 배울 만큼 깊은 분야지만, 이 장에서는 어려운 이론 대신 <mark>Pillow 가 이미 만들어 둔 기능을 불러 써서 화면에 결과를 보여 주는 것</mark>에 집중합니다.' },
           { type: 'callout', kind: 'info', title: '큰 프로그램을 만드는 요령', html: '처음부터 완성된 코드를 한 번에 쓰려고 하지 마세요. ① 어떤 기능이 필요한지 <b>목록(구성도)</b>을 만들고 ② 각 기능을 <b>빈 함수(pass)</b>로 먼저 만들어 실행되는 뼈대를 세운 뒤 ③ 함수를 하나씩 채우며 매번 실행해 봅니다. 이 장의 두 프로젝트 모두 이 순서로 진행합니다.' },
+
+          { type: 'h', text: '프로젝트는 이렇게 진행합니다' },
+          { type: 'p', html: '이 장에서 배우는 것은 Pillow 와 pygame 의 사용법만이 아닙니다. 그보다 오래 쓸모 있는 것은 <b>프로그램 하나를 처음부터 끝까지 만들어 내는 순서</b>입니다. 실무에서도 규모만 다를 뿐 아래 다섯 단계를 그대로 반복합니다.' },
+          { type: 'figure', html: SVG_PROCESS, caption: '프로젝트 진행 5단계 — ③ 과 ④ 사이를 여러 번 오간다' },
+          { type: 'table', head: ['단계', '하는 일', '미니 포토샵에서는'], rows: [
+            ['① 요구 사항', '무엇을 만들지 <b>한 문장</b>으로 적고, 입력 · 출력 · 규칙을 목록으로 정리', '“사진을 열어 여러 효과를 주고 저장하는 프로그램”'],
+            ['② 기능 분해', '큰 일을 <b>기능 단위</b>로 쪼갠다. 기능 하나 = 함수 하나 = 메뉴 하나', '열기 · 저장 · 확대 · 축소 · 반전 · 회전 · 밝기 · 필터 · 흑백'],
+            ['③ 단계별 개발', '<b>실행되는 뼈대</b>부터 만들고 기능을 하나씩 채운다. 채울 때마다 ▶ 실행', 'Code14-01 뼈대 → 14-02 열기 → 14-03 저장 → …'],
+            ['④ 리팩터링', '동작은 그대로 두고 <b>중복 · 이름 · 구조</b>를 다듬는다', '13개 함수의 같은 부분을 <code>apply_effect()</code> 하나로'],
+            ['⑤ 확장', '요구 사항을 더 붙인다 (되돌리기 · 저장 형식 · 최고 점수 …)', '14-3 의 “미니 포토샵 플러스”']
+          ] },
+          { type: 'callout', kind: 'more', title: '📘 요구 사항은 “장면” 으로 적으면 분명해집니다', html: '<p>“좋은 사진 편집기” 처럼 두루뭉술한 목표는 언제 끝났는지 알 수 없습니다. 대신 <b>사용자가 겪을 장면</b>으로 적어 보세요.</p><ul><li>프로그램을 켜면 빈 창과 메뉴 막대가 보인다</li><li>[파일] → [열기] 에서 <code>picture02.jpg</code> 를 고르면 창이 사진 크기로 바뀌고 사진이 나타난다</li><li>[이미지 처리(2)] → [흑백이미지] 를 누르면 같은 사진이 흑백으로 바뀐다</li><li>사진을 열지 않고 [흑백이미지] 를 눌러도 <b>오류 없이</b> 안내 문구만 나온다</li></ul><p>이렇게 적어 두면 그대로 <b>확인 목록(체크리스트)</b> 이 됩니다. 기능을 하나 채울 때마다 해당 줄에 표시하며 진행하세요.</p>' },
+
+          { type: 'h', text: '작게 만들고 자주 실행하기 · 디버깅 요령' },
+          { type: 'p', html: '초보자가 가장 자주 겪는 어려움은 “100줄을 다 쓰고 실행했더니 오류가 잔뜩” 입니다. <mark>20~30줄마다 한 번씩 실행</mark>하면, 오류의 원인은 거의 언제나 <b>방금 쓴 몇 줄</b> 안에 있습니다. 찾는 범위가 좁아지는 것이 핵심입니다.' },
+          { type: 'list', items: [
+            '<b>좁히기</b> — 오류가 난 줄 번호부터 확인합니다. 같은 코드를 새 파일에 <b>몇 줄만</b> 옮겨 실행해 보면 원인이 금방 드러납니다.',
+            '<b>보기</b> — 의심스러운 변수를 <code>print(변수)</code>, <code>print(type(변수))</code>, <code>print(repr(변수))</code> 로 찍어 봅니다. 생각한 값 · 생각한 자료형이 맞는지 확인하는 것이 시작입니다.',
+            '<b>고정하기</b> — 난수가 섞인 프로그램은 <code>random.seed(14)</code> 로 결과를 고정해 놓고 원인을 찾습니다.',
+            '<b>나누기</b> — 화면에 그리는 코드와 계산하는 코드를 함수로 나누면, 계산 부분만 따로 실행해 시험할 수 있습니다 (이 장의 “화면 없이” 실습들이 그 방법입니다).',
+            '<b>기록하기</b> — 고친 내용을 한 줄로 적어 두면 같은 실수를 두 번 하지 않습니다.'
+          ] },
+          { type: 'code', title: '추가 예제. print · type · repr 로 버그 찾아가기', code: C_DEBUG,
+            expect: "['90', '80', '70']\n<class 'str'>\n'90'\n평균 : 80.0",
+            desc: '<code>print(scores)</code> 만 보면 숫자처럼 보이지만 <code>type</code> 으로는 <code>str</code>, <code>repr</code> 로는 따옴표가 붙은 <code>\'90\'</code> 이 나옵니다. <b>보이는 것</b>과 <b>실제 값</b>이 다를 때 <code>repr</code> 이 큰 도움이 됩니다.' },
+          { type: 'callout', kind: 'more', title: '📘 오류 메시지는 아래에서 위로 읽습니다', html: '<p>파이썬의 오류(traceback)는 <b>맨 마지막 줄</b>에 오류의 종류와 이유가, 그 위에 <b>어느 파일 몇 번째 줄</b>에서 났는지가 적혀 있습니다. 먼저 마지막 줄을 읽고, 그다음 내 파일에서 난 가장 아래쪽 줄 번호를 찾으면 됩니다.</p><ul><li><code>NameError: name \'func_blur\' is not defined</code> — 이름을 잘못 썼거나 아직 만들지 않은 함수</li><li><code>TypeError: \'NoneType\' object is not subscriptable</code> — <code>None</code> 이 들어 있는 변수를 썼다(대화상자에서 [취소]!)</li><li><code>FileNotFoundError</code> — 파일 이름 · 폴더 이름(<code>JPG/</code>, <code>game/</code>)을 확인</li><li><code>IndentationError</code> — 들여쓰기가 어긋났다(탭과 공백을 섞지 마세요)</li></ul>' },
 
           { type: 'h', text: '외부 라이브러리 설치' },
           { type: 'p', html: '파이썬을 설치하면 함께 들어오는 <code>random</code>, <code>tkinter</code>, <code>sqlite3</code> 같은 모듈을 <b>표준 라이브러리</b>라고 합니다. 이와 달리 다른 개발자들이 만들어 인터넷(PyPI, 파이썬 패키지 저장소)에 올려 둔 것을 <b>외부 라이브러리</b>(서드파티 라이브러리)라고 하며, 쓰기 전에 <code>pip</code> 라는 설치 도구로 내려받아야 합니다.' },
@@ -975,6 +1900,29 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
             hint: '<code>from tkinter import messagebox</code> 를 추가하고, <code>func_about()</code> 함수를 만든 뒤 <code>helpMenu</code> 를 <code>add_cascade</code> 로 붙입니다.',
             starter: ps(1).replace('ImageOps\n', 'ImageOps\nfrom tkinter import messagebox\n').replace('window.mainloop()', '# TODO: 도움말 메뉴 만들기\nwindow.mainloop()'),
             solution: ps(1, { funcs: P_HELP_MENU_FUNCS, menu: P_HELP_MENU }).replace('ImageOps\n', 'ImageOps\nfrom tkinter import messagebox\n')
+          },
+          {
+            title: '실습 14-3. 사진 네 장 비교하기', level: 1,
+            desc: '<p><code>JPG/picture01.jpg</code> ~ <code>picture04.jpg</code> 네 장을 차례로 열어 <b>파일 이름 · 크기 · 점의 수</b>를 출력하고, 마지막에 <b>전체 점의 수</b>와 <b>가장 큰 사진</b>의 이름을 출력하세요.</p>',
+            hint: '가장 큰 것을 찾을 때는 “지금까지 가장 큰 값” 을 담는 변수(<code>bestPx</code>)를 0 으로 시작해 두고, 더 큰 값을 만나면 바꿔치기합니다.',
+            starter: "from PIL import Image\n\nfiles = ['JPG/picture01.jpg', 'JPG/picture02.jpg', 'JPG/picture03.jpg', 'JPG/picture04.jpg']\ntotal = 0\nbest, bestPx = '', 0\nfor f in files :\n    img = Image.open(f)\n    # TODO: 점의 수를 구해 출력하고 total 에 더하기\n    # TODO: 지금까지 가장 큰 사진인지 확인\n    pass\nprint('전체 점의 수 :', total)\nprint('가장 큰 사진 :', best)\n",
+            solution: "from PIL import Image\n\nfiles = ['JPG/picture01.jpg', 'JPG/picture02.jpg', 'JPG/picture03.jpg', 'JPG/picture04.jpg']\ntotal = 0\nbest, bestPx = '', 0\nfor f in files :\n    img = Image.open(f)\n    px = img.width * img.height\n    print(f, img.size, px, '점')\n    total += px\n    if px > bestPx :\n        best, bestPx = f, px\nprint('전체 점의 수 :', total)\nprint('가장 큰 사진 :', best)\n",
+            expect: 'JPG/picture01.jpg (320, 240) 76800 점\nJPG/picture02.jpg (240, 300) 72000 점\nJPG/picture03.jpg (320, 200) 64000 점\nJPG/picture04.jpg (260, 260) 67600 점\n전체 점의 수 : 280400\n가장 큰 사진 : JPG/picture01.jpg'
+          },
+          {
+            title: '실습 14-4. 요구 사항 → 기능 분해 → 뼈대 만들기 (그림판)', level: 2,
+            desc: '<p>다음 요구 사항을 읽고 <b>메뉴 뼈대</b>를 만드세요. 함수는 아직 <code>pass</code> 로 두고, 메뉴를 누르면 무슨 기능인지 <code>print()</code> 로만 알려 주면 됩니다.</p><ul><li>[파일] 메뉴 — 새로 그리기 / 그림 저장 / 종료</li><li>[펜] 메뉴 — 검정 / 빨강 / 파랑 / 굵기 바꾸기</li></ul><p>즉 함수 7개와 메뉴 2개가 필요합니다. 이 뼈대는 14-6, 14-7 에서 만들 프로젝트의 출발점과 같은 모양입니다.</p>',
+            hint: '<code>def func_new() : print("새로 그리기")</code> 처럼 한 줄짜리 함수 7개를 만들고, <code>Menu</code> → <code>add_cascade</code> → <code>add_command</code> 로 연결합니다. <code>command</code> 에는 괄호 없이 함수 이름만!',
+            starter: "from tkinter import *\n\n## 함수 선언 부분 ##\ndef func_new() :\n    print('새로 그리기')\n\n# TODO: func_save, func_exit, func_black, func_red, func_blue, func_width 만들기\n\n## 메인 코드 부분 ##\nwindow = Tk()\nwindow.geometry('300x200')\nwindow.title('그림판 뼈대')\n\nmainMenu = Menu(window)\nwindow.config(menu = mainMenu)\n# TODO: [파일] · [펜] 메뉴 만들고 함수 연결하기\n\nwindow.mainloop()\n",
+            solution: "from tkinter import *\n\n## 함수 선언 부분 ##\ndef func_new() :\n    print('새로 그리기')\n\ndef func_save() :\n    print('그림 저장')\n\ndef func_black() :\n    print('펜 색 : 검정')\n\ndef func_red() :\n    print('펜 색 : 빨강')\n\ndef func_blue() :\n    print('펜 색 : 파랑')\n\ndef func_width() :\n    print('굵기 바꾸기')\n\n## 메인 코드 부분 ##\nwindow = Tk()\nwindow.geometry('300x200')\nwindow.title('그림판 뼈대')\n\nmainMenu = Menu(window)\nwindow.config(menu = mainMenu)\n\nfileMenu = Menu(mainMenu)\nmainMenu.add_cascade(label = '파일', menu = fileMenu)\nfileMenu.add_command(label = '새로 그리기', command = func_new)\nfileMenu.add_command(label = '그림 저장', command = func_save)\nfileMenu.add_separator()\nfileMenu.add_command(label = '종료', command = window.destroy)\n\npenMenu = Menu(mainMenu)\nmainMenu.add_cascade(label = '펜', menu = penMenu)\npenMenu.add_command(label = '검정', command = func_black)\npenMenu.add_command(label = '빨강', command = func_red)\npenMenu.add_command(label = '파랑', command = func_blue)\npenMenu.add_separator()\npenMenu.add_command(label = '굵기 바꾸기', command = func_width)\n\nwindow.mainloop()\n"
+          },
+          {
+            title: '실습 14-5. 고장난 메뉴 프로그램 고치기', level: 3,
+            desc: '<p>아래 프로그램에는 <b>버그가 세 개</b> 있습니다. 실행해 보고 오류 메시지를 읽어 가며 하나씩 고치세요.</p><ol><li>실행하자마자 메시지 상자가 떠 버린다</li><li>[종료] 를 눌러도 아무 일이 없다 (연결한 이름이 잘못됨)</li><li>사진을 열기 전에 [정보] 를 누르면 오류가 난다 — <code>photo</code> 가 <code>None</code> 일 때를 대비해야 한다</li></ol><p>고친 뒤에는 시험 삼아 <code>func_info()</code> 를 사진 열기 전과 후에 한 번씩 불러 보세요.</p>',
+            hint: '① <code>command = 함수이름()</code> 처럼 괄호를 붙이면 그 자리에서 실행됩니다. ② 선언한 함수 이름과 <code>command</code> 에 쓴 이름이 같은지 확인하세요. ③ <code>if photo == None : return</code> 으로 먼저 막습니다.',
+            starter: "from tkinter import *\nfrom tkinter import messagebox\nfrom PIL import Image\n\nphoto = None\n\ndef func_open() :\n    global photo\n    photo = Image.open('JPG/picture03.jpg')\n    print('사진을 열었습니다')\n\ndef func_info() :\n    messagebox.showinfo('정보', '크기 : %d x %d' % (photo.width, photo.height))\n\nwindow = Tk()\nwindow.geometry('260x120')\nmainMenu = Menu(window)\nwindow.config(menu = mainMenu)\nfileMenu = Menu(mainMenu)\nmainMenu.add_cascade(label = '파일', menu = fileMenu)\nfileMenu.add_command(label = '열기', command = func_open)\nfileMenu.add_command(label = '정보', command = func_info())      # 버그 1\nfileMenu.add_command(label = '종료', command = func_quit)        # 버그 2\nwindow.mainloop()\n",
+            solution: "from tkinter import *\nfrom tkinter import messagebox\nfrom PIL import Image\n\nphoto = None\n\ndef func_open() :\n    global photo\n    photo = Image.open('JPG/picture03.jpg')\n    print('사진을 열었습니다')\n\ndef func_info() :\n    if photo == None :                       # 버그 3 : 열기 전에도 안전하게\n        messagebox.showwarning('알림', '먼저 [열기] 를 누르세요.')\n        return\n    messagebox.showinfo('정보', '크기 : %d x %d' % (photo.width, photo.height))\n\ndef func_quit() :                            # 버그 2 : 없던 함수를 만든다\n    window.destroy()\n\nwindow = Tk()\nwindow.geometry('260x120')\nmainMenu = Menu(window)\nwindow.config(menu = mainMenu)\nfileMenu = Menu(mainMenu)\nmainMenu.add_cascade(label = '파일', menu = fileMenu)\nfileMenu.add_command(label = '열기', command = func_open)\nfileMenu.add_command(label = '정보', command = func_info)        # 버그 1 : 괄호 제거\nfileMenu.add_command(label = '종료', command = func_quit)\n\nfunc_info()        # 열기 전 : 안내만 나온다\nfunc_open()\nfunc_info()        # 연 뒤 : 크기가 나온다\nwindow.mainloop()\n",
+            expect: '사진을 열었습니다'
           }
         ],
         quiz: [
@@ -996,7 +1944,18 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
             ['미니 포토샵', '사진 열기 · 확대 · 반전 · 회전 · 밝기 · 필터 · 흑백 · 저장', 'tkinter + <b>Pillow</b>'],
             ['우주괴물 무찌르기', '방향키로 우주선 이동 · 미사일 발사 · 점수', '<b>pygame</b>']
           ], lead: '둘 다 파이썬에 기본으로 없는 <b>외부 라이브러리</b>를 씁니다',
-            notes: '<p>포토샵 같은 프로그램을 영상 처리 프로그램이라고 부른다는 점, 영상 처리는 대학에서 따로 배우는 분야라는 점을 짧게 소개합니다. 이론보다 “라이브러리를 빌려 쓰는 법” 이 오늘의 핵심.</p>' },
+            notes: '<p>포토샵 같은 프로그램을 영상 처리 프로그램이라고 부른다는 점, 영상 처리는 대학에서 따로 배우는 분야라는 점을 짧게 소개합니다. 이론보다 “라이브러리를 빌려 쓰는 법” 이 오늘의 핵심. 14-6 · 14-7 에서 타자 연습과 막대그래프 프로젝트를 하나씩 더 만든다고 예고합니다.</p>' },
+          { layout: 'diagram', title: '프로젝트 진행 5단계', html: SVG_PROCESS, caption: '③ 단계별 개발 ↔ ④ 리팩터링 을 여러 번 오간다',
+            notes: '<p>이 장의 진짜 주제입니다. “라이브러리 사용법은 검색하면 나오지만, 만드는 순서는 몸에 익혀야 한다” 고 말해 주세요.</p><p>발문: “지금까지 만든 프로그램 중 가장 길었던 것은 몇 줄이었나요? 한 번에 다 쓰고 실행했나요?” — 대부분 그렇게 하다 고생한 경험이 있습니다.</p><p>시간: 5분</p>' },
+          { layout: 'bullets', title: '요구 사항은 “장면” 으로 적는다', lead: '언제 끝났는지 알 수 있게 적는 것이 좋은 요구 사항', bullets: [
+            '❌ “좋은 사진 편집기를 만든다” — 끝을 알 수 없다',
+            '⭕ “켜면 빈 창과 메뉴 막대가 보인다”',
+            '⭕ “[열기] 로 picture02.jpg 를 고르면 사진이 나타난다”',
+            '⭕ “사진을 열지 않고 [흑백] 을 눌러도 <b>오류 없이</b> 안내만 나온다”',
+            '적어 둔 장면 목록이 그대로 <b>확인 목록</b>이 된다'
+          ], notes: '<p>마지막 항목(예외 상황)을 특히 강조합니다. 초보자의 프로그램은 “정상적인 순서로 눌렀을 때만” 동작하는 경우가 많습니다. 실습 14-5 가 바로 그 연습입니다.</p>' },
+          { layout: 'code', title: '디버깅: print · type · repr', code: C_DEBUG, points: ['보이는 값 ≠ 실제 값', '<code>type()</code> 으로 자료형 확인', '<code>repr()</code> 은 따옴표까지 보여 준다', '20~30줄마다 한 번씩 실행'],
+            notes: '<p>실행해서 <code>&lt;class \'str\'&gt;</code> 이 나오는 순간을 보여 줍니다. 오류 메시지는 <b>마지막 줄부터</b> 읽는다는 것도 함께 알려 주세요.</p><p>시간: 4분</p>' },
           { layout: 'bullets', title: '외부 라이브러리와 pip', bullets: [
             '표준 라이브러리: 설치하면 함께 오는 모듈 (random, tkinter …)',
             '외부 라이브러리: 다른 개발자가 PyPI 에 올린 것 → <b>설치 필요</b>',
@@ -1036,9 +1995,11 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
           '원본 이미지(photo)와 결과 이미지(photo2)를 나누어 쓰는 이유를 설명할 수 있다',
           'displayImage() 가 픽셀 색을 문자열로 바꿔 캔버스에 그리는 과정을 설명할 수 있다',
           'askopenfilename 과 Image.open 으로 사진 파일을 열 수 있다 (Code14-02)',
-          'asksaveasfile 과 save 로 처리한 이미지를 파일로 저장할 수 있다 (Code14-03)'
+          'asksaveasfile 과 save 로 처리한 이미지를 파일로 저장할 수 있다 (Code14-03)',
+          '픽셀 · 채널 · 필터의 뜻을 설명하고 밝기 조절을 직접 계산해 볼 수 있다',
+          '점마다 도는 반복과 라이브러리 호출의 성능 차이를 측정해 설명할 수 있다'
         ],
-        flow: [['복습 · 기본 구조(그림 14-6)', 7], ['displayImage 원리', 15], ['func_open · 실행', 13], ['func_save · 저장 형식', 8], ['퀴즈 · 실습', 7]],
+        flow: [['복습 · 기본 구조(그림 14-6)', 6], ['displayImage 원리', 12], ['func_open · 실행', 10], ['func_save · 저장 형식', 7], ['픽셀 · 채널 · 성능', 8], ['퀴즈 · 실습', 7]],
         content: [
           { type: 'h', text: '이미지를 처리하고 화면에 출력하는 기본 구조' },
           { type: 'p', html: '미니 포토샵은 이미지를 두 개 가지고 다닙니다. 파일에서 읽은 <b>원본 이미지 <code>photo</code></b> 와, 원본을 복사해 가공한 <b>결과 이미지 <code>photo2</code></b> 입니다. 메뉴를 누를 때마다 <mark>원본의 복사본(photo.copy())을 새로 만들어 가공</mark>하고, 그 결과를 <code>displayImage()</code> 로 화면에 그립니다.' },
@@ -1075,11 +2036,30 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
           { type: 'p', html: '저장 형식은 확장자로 정해집니다. 대화상자 없이 Pillow 만으로 저장해 보면 다음과 같습니다.' },
           { type: 'code', title: '추가 예제. 확장자에 따라 다른 형식으로 저장하기', code: C_SAVE_DEMO,
             expect: 'PNG (260, 260)\nJPEG (260, 260)' },
-          { type: 'callout', kind: 'more', title: '📘 JPG 와 PNG 의 차이', html: '<b>JPG(JPEG)</b> 는 사람 눈에 잘 띄지 않는 정보를 버려서 파일을 작게 만드는 <b>손실 압축</b>입니다. 사진에 알맞지만 저장할 때마다 조금씩 화질이 떨어집니다. <b>PNG</b> 는 정보를 버리지 않는 <b>무손실 압축</b>이고 투명한 부분(알파)도 저장할 수 있어 그림 · 아이콘 · 게임 캐릭터에 알맞습니다. 슈팅 게임의 우주선과 괴물 그림이 PNG 인 이유입니다. 참고로 JPG 는 투명(RGBA)을 저장할 수 없어 RGBA 이미지를 .jpg 로 저장하면 오류가 나는데, 미니 포토샵은 열 때 <code>convert(\'RGB\')</code> 를 하므로 괜찮습니다.' }
+          { type: 'callout', kind: 'more', title: '📘 JPG 와 PNG 의 차이', html: '<b>JPG(JPEG)</b> 는 사람 눈에 잘 띄지 않는 정보를 버려서 파일을 작게 만드는 <b>손실 압축</b>입니다. 사진에 알맞지만 저장할 때마다 조금씩 화질이 떨어집니다. <b>PNG</b> 는 정보를 버리지 않는 <b>무손실 압축</b>이고 투명한 부분(알파)도 저장할 수 있어 그림 · 아이콘 · 게임 캐릭터에 알맞습니다. 슈팅 게임의 우주선과 괴물 그림이 PNG 인 이유입니다. 참고로 JPG 는 투명(RGBA)을 저장할 수 없어 RGBA 이미지를 .jpg 로 저장하면 오류가 나는데, 미니 포토샵은 열 때 <code>convert(\'RGB\')</code> 를 하므로 괜찮습니다.' },
+
+          { type: 'h', text: '한 걸음 더: 픽셀 · 채널 · 필터라는 말' },
+          { type: 'p', html: '이미지 처리를 하려면 용어 세 개만 알면 충분합니다.' },
+          { type: 'table', head: ['용어', '뜻', '코드에서'], rows: [
+            ['<b>픽셀</b> (pixel, 화소)', '사진을 이루는 점 하나. 320×240 사진에는 76,800개', '<code>getpixel((x, y))</code> · <code>putpixel</code>'],
+            ['<b>채널</b> (channel)', '점 하나가 가진 값의 종류. RGB 는 빨강 · 초록 · 파랑 세 채널(각 0~255)', '<code>r, g, b = img.getpixel(...)</code>'],
+            ['<b>필터</b> (filter)', '한 점의 새 색을 <b>주변 점들과 함께</b> 계산하는 방법. 블러 · 엠보싱 · 윤곽선이 모두 필터', '<code>img.filter(ImageFilter.BLUR)</code>']
+          ] },
+          { type: 'p', html: '<b>밝기 조절</b>은 필터가 아니라 점마다 독립적인 계산입니다. 각 채널 값에 같은 배율을 곱하고 255 를 넘으면 255 로 자릅니다(포화, saturation). 직접 반복문으로 만들어 보면 라이브러리가 하는 일이 분명해집니다.' },
+          { type: 'code', title: '추가 예제. 밝기 조절을 직접 만들어 보기 (라이브러리와 비교)', code: C_BRIGHT_LOOP,
+            expect: '원본 점    : (243, 165, 100)\n직접 계산  : (255, 247, 150)\n라이브러리 : (255, 247, 150)\n같은 결과인가? : True\n점의 수 : 1000',
+            desc: '두 방법의 결과가 같습니다. <code>min(255, …)</code> 이 없으면 255 를 넘는 값 때문에 오류가 나거나 색이 이상해집니다. 이 예제는 사진을 40×25 로 <b>줄여서</b> 실험했습니다 — 큰 사진으로 바로 하면 오래 걸리기 때문입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 흑백 변환도 채널 계산이다', html: '<code>ImageOps.grayscale()</code> 은 각 점의 <code>R × 0.299 + G × 0.587 + B × 0.114</code> 를 계산해 <b>한 채널짜리</b>(모드 <code>L</code>) 이미지를 만듭니다. 초록의 계수가 가장 큰 이유는 사람 눈이 초록 빛에 가장 민감하기 때문입니다. 단순히 <code>(R + G + B) / 3</code> 으로 하면 빨강과 파랑이 실제보다 밝게 보입니다.' },
+
+          { type: 'h', text: '성능 생각하기: 점마다 반복 vs 라이브러리' },
+          { type: 'p', html: '<code>displayImage()</code> 가 느린 이유는 알고리즘이 나빠서가 아니라 <b>파이썬 반복문이 점 하나마다 도는 횟수</b>가 너무 많기 때문입니다. 320×240 이면 76,800번, 4배로 확대하면 1,228,800번입니다. Pillow 같은 라이브러리는 같은 계산을 C 언어로 미리 만들어 두고 <b>한 번의 호출로 전체 이미지를 처리</b>합니다.' },
+          { type: 'code', title: '추가 예제. 얼마나 차이 날까? (직접 반복 vs 라이브러리)', code: C_SPEED, nondeterministic: true,
+            desc: '<code>time.perf_counter()</code> 는 짧은 시간을 재는 데 쓰는 시계입니다. 컴퓨터마다 다르지만 보통 <b>수십 배</b> 차이가 납니다. 실행마다 값이 달라지므로 정확한 숫자보다 <b>자릿수</b>를 보세요.' },
+          { type: 'callout', kind: 'more', title: '📘 “느리다” 를 해결하는 세 가지 순서', html: '<ol><li><b>안 해도 되는 일을 없앤다</b> — 매번 원본 전체를 다시 그리는 대신 바뀐 부분만 그린다.</li><li><b>더 좋은 도구에 맡긴다</b> — 픽셀 반복문 대신 Pillow · NumPy 의 함수를 쓴다(<code>ImageTk.PhotoImage</code> 로 바꾼 것이 바로 이것).</li><li><b>그래도 느리면 자료 구조를 바꾼다</b> — 리스트 대신 딕셔너리 · 집합으로 찾기 등.</li></ol><p>순서가 중요합니다. 코드를 비틀어 최적화하기 전에 먼저 “이 일을 꼭 해야 하나?” 를 묻습니다. 그리고 <b>측정하지 않고 추측으로 고치지 마세요</b> — 위 예제처럼 시간을 재 보는 것이 먼저입니다.</p>' }
         ],
         practice: [
           {
-            title: '실습 14-3. 프로그램을 시작하자마자 사진 열기', level: 2,
+            title: '실습 14-6. 프로그램을 시작하자마자 사진 열기', level: 2,
             desc: '<p>Code14-02 를 고쳐서, 프로그램이 시작되면 메뉴를 누르지 않아도 <b>파일 열기 대화상자가 바로 뜨도록</b> 하세요. (<code>window.mainloop()</code> 바로 앞에서 함수를 한 번 부르면 됩니다.)</p>',
             hint: '메뉴가 부르는 함수도 평범한 함수입니다. <code>func_open()</code> 을 직접 호출하세요.',
             starter: ps(2).replace('window.mainloop()', '# TODO: 시작하자마자 파일 열기\nwindow.mainloop()'),
@@ -1087,12 +2067,37 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
             dialogs: ['JPG/picture02.jpg']
           },
           {
-            title: '실습 14-4. 사진 정보 한 줄 요약', level: 1,
+            title: '실습 14-7. 사진 정보 한 줄 요약', level: 1,
             desc: '<p><code>JPG/picture01.jpg</code> 를 열어 폭 · 높이 · 전체 점(픽셀) 수를 출력하고, 복사본을 <code>small.png</code> 로 저장한 뒤 다시 열어 형식을 출력하세요.</p><p>출력 예: <code>320 x 240 = 76800 점</code> / <code>PNG</code></p>',
             hint: '점의 수는 폭 × 높이입니다. 저장 형식은 확장자로 정해집니다.',
             starter: "from PIL import Image\n\nphoto = Image.open('JPG/picture01.jpg')\n# TODO: 폭 x 높이 = 점의 수 출력\n# TODO: 복사본을 small.png 로 저장하고 다시 열어 format 출력\n",
             solution: "from PIL import Image\n\nphoto = Image.open('JPG/picture01.jpg')\nprint(photo.width, 'x', photo.height, '=', photo.width * photo.height, '점')\nphoto2 = photo.copy()\nphoto2.save('small.png')\nprint(Image.open('small.png').format)\n",
             expect: '320 x 240 = 76800 점\nPNG'
+          },
+          {
+            title: '실습 14-8. 가운데 가로줄의 평균 색 구하기', level: 1,
+            desc: '<p><code>JPG/picture03.jpg</code> 의 <b>세로 한가운데 가로줄</b>(<code>y = height // 2</code>)에 있는 점들의 R · G · B 평균을 구해 출력하고, 그 색을 <code>#rrggbb</code> 형식의 색 코드로도 출력하세요.</p>',
+            hint: '<code>for x in range(photo.width)</code> 로 그 줄의 점을 모두 돌며 r, g, b 를 각각 더한 뒤 점의 수로 나눕니다. 색 코드는 <code>"#%02x%02x%02x" % (…)</code>.',
+            starter: "from PIL import Image\n\nphoto = Image.open('JPG/picture03.jpg').convert('RGB')\ny = photo.height // 2\nrs, gs, bs = 0, 0, 0\n# TODO: 그 줄의 점을 모두 돌며 r, g, b 를 더하기\nn = photo.width\nprint('y =', y, '/ 점', n, '개')\n# TODO: 평균과 색 코드 출력\n",
+            solution: "from PIL import Image\n\nphoto = Image.open('JPG/picture03.jpg').convert('RGB')\ny = photo.height // 2\nrs, gs, bs = 0, 0, 0\nfor x in range(photo.width) :\n    r, g, b = photo.getpixel((x, y))\n    rs += r\n    gs += g\n    bs += b\nn = photo.width\nprint('y =', y, '/ 점', n, '개')\nprint('평균 색 : (%d, %d, %d)' % (rs / n, gs / n, bs / n))\nprint('색 코드 : #%02x%02x%02x' % (rs // n, gs // n, bs // n))\n",
+            expect: 'y = 100 / 점 320 개\n평균 색 : (158, 115, 80)\n색 코드 : #9e7350'
+          },
+          {
+            title: '실습 14-9. 흑백 변환을 직접 만들어 라이브러리와 비교하기', level: 2,
+            desc: '<p>컬러 이미지를 받아 <code>R × 0.299 + G × 0.587 + B × 0.114</code> 로 흑백(모드 <code>L</code>) 이미지를 만드는 함수 <code>my_gray(img)</code> 를 만들고, <code>ImageOps.grayscale()</code> 의 결과와 <b>가장 큰 차이</b>를 출력하세요. (사진은 30×30 으로 줄여서 실험합니다.)</p>',
+            hint: '<code>Image.new(\'L\', img.size)</code> 로 빈 흑백 이미지를 만들고 <code>putpixel((x, y), 밝기)</code> 로 채웁니다. 모드 L 은 값 하나만 넣습니다.',
+            starter: "from PIL import Image, ImageOps\n\ndef my_gray(img) :\n    out = Image.new('L', img.size)\n    # TODO: 모든 점을 돌며 밝기 계산해 넣기\n    return out\n\nphoto = Image.open('JPG/picture02.jpg').convert('RGB').resize((30, 30))\na = my_gray(photo)\nb = ImageOps.grayscale(photo)\n# TODO: 두 이미지의 가장 큰 차이 구하기\n",
+            solution: "from PIL import Image, ImageOps\n\ndef my_gray(img) :\n    out = Image.new('L', img.size)\n    for y in range(img.height) :\n        for x in range(img.width) :\n            r, g, b = img.getpixel((x, y))\n            out.putpixel((x, y), int(r * 0.299 + g * 0.587 + b * 0.114))\n    return out\n\nphoto = Image.open('JPG/picture02.jpg').convert('RGB').resize((30, 30))\na = my_gray(photo)\nb = ImageOps.grayscale(photo)\n\nmaxdiff = 0\nfor y in range(30) :\n    for x in range(30) :\n        diff = abs(a.getpixel((x, y)) - b.getpixel((x, y)))\n        if diff > maxdiff :\n            maxdiff = diff\n\nprint('내 함수 모드 :', a.mode)\nprint('가장 큰 차이 :', maxdiff)\nprint('가운데 점 :', a.getpixel((15, 15)), b.getpixel((15, 15)))\n",
+            expect: '내 함수 모드 : L\n가장 큰 차이 : 1\n가운데 점 : 101 101',
+            nondeterministic: false
+          },
+          {
+            title: '실습 14-10. 사진 뷰어 만들기 (설계부터)', level: 3,
+            desc: '<p>메뉴 없이 <b>버튼만</b> 있는 작은 사진 뷰어를 설계해 만드세요.</p><ul><li>요구 사항 ① 창에 <code>JPG/picture01.jpg</code> 가 보인다</li><li>요구 사항 ② [다음 사진] 을 누르면 picture01 → 02 → 03 → 04 → 01 … 순서로 바뀐다</li><li>요구 사항 ③ 창 아래에 <b>파일 이름과 크기</b>가 보인다</li></ul><p>화면에 그리는 일은 <code>show()</code> 함수 하나에 모으고, 지금 몇 번째 사진인지는 변수 하나로 관리하세요. (이것이 14-6 · 14-7 프로젝트에서 쓸 구조와 같습니다.)</p>',
+            hint: '<code>ImageTk.PhotoImage</code> 로 만든 이미지는 <b>전역 변수</b>에 담아 두어야 사라지지 않습니다. 다음 번호는 <code>idx = (idx + 1) % len(files)</code> 로 돌립니다.',
+            starter: "from tkinter import *\nfrom PIL import Image, ImageTk\n\nfiles = ['JPG/picture01.jpg', 'JPG/picture02.jpg', 'JPG/picture03.jpg', 'JPG/picture04.jpg']\nidx = 0\ntkimg = None\n\ndef show() :\n    # TODO: files[idx] 를 열어 라벨에 넣고, 아래 상태 글도 바꾸기\n    pass\n\ndef next_photo() :\n    # TODO: idx 를 다음으로 옮기고 show()\n    pass\n\nwindow = Tk()\nwindow.title('사진 뷰어')\nlblImage = Label(window)\nlblImage.pack()\nButton(window, text = '다음 사진', command = next_photo).pack(pady = 4)\nlblInfo = Label(window, text = '')\nlblInfo.pack()\nshow()\nwindow.mainloop()\n",
+            solution: "from tkinter import *\nfrom PIL import Image, ImageTk\n\nfiles = ['JPG/picture01.jpg', 'JPG/picture02.jpg', 'JPG/picture03.jpg', 'JPG/picture04.jpg']\nidx = 0\ntkimg = None\n\ndef show() :\n    global tkimg\n    img = Image.open(files[idx])\n    tkimg = ImageTk.PhotoImage(img)          # 전역 변수로 두어야 사라지지 않는다\n    lblImage.configure(image = tkimg)\n    lblInfo.configure(text = '%s  (%d x %d)' % (files[idx], img.width, img.height))\n    print(files[idx], img.size)\n\ndef next_photo() :\n    global idx\n    idx = (idx + 1) % len(files)             # 마지막 다음은 처음으로\n    show()\n\nwindow = Tk()\nwindow.title('사진 뷰어')\nlblImage = Label(window)\nlblImage.pack()\nButton(window, text = '다음 사진', command = next_photo).pack(pady = 4)\nlblInfo = Label(window, text = '')\nlblInfo.pack()\n\nshow()\nnext_photo()        # 시험 삼아 한 장 넘겨 본다\nwindow.mainloop()\n",
+            expect: 'JPG/picture01.jpg (320, 240)\nJPG/picture02.jpg (240, 300)'
           }
         ],
         quiz: [
@@ -1126,7 +2131,11 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
             notes: '<p>대화상자 없이 save 만 따로 실험해 봅니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: '<code>"#%02x%02x%02x" % (0, 128, 255)</code> 의 결과는?', options: ['#0080ff', '#00128255', '#080ff', '#ff8000'], answer: 0,
             explain: '0→00, 128→80, 255→ff', notes: '<p>16진수를 처음 보는 학생이 있으면 128 = 8×16 이라서 80 이라고 풀어 줍니다.</p>' },
-          { layout: 'practice', title: '실습 14-4. 사진 정보 한 줄 요약', desc: 'picture01.jpg 의 폭 × 높이 = 점의 수를 출력하고 small.png 로 저장 후 형식 확인',
+          { layout: 'two', title: '픽셀 · 채널 · 필터', left: { title: '용어', bullets: ['<b>픽셀</b> : 사진을 이루는 점 하나', '<b>채널</b> : 점이 가진 값 (R · G · B, 0~255)', '<b>필터</b> : 주변 점까지 보고 새 색을 계산', '밝기 조절은 필터가 아니라 점마다 곱하기'] }, right: { title: '직접 계산해 보면', code: 'from PIL import Image, ImageEnhance\n\nimg = Image.new(\'RGB\', (1, 1), (100, 50, 20))\nr, g, b = img.getpixel((0, 0))\nmine = (min(255, int(r * 1.5)), min(255, int(g * 1.5)), min(255, int(b * 1.5)))\nlib = ImageEnhance.Brightness(img).enhance(1.5)\nprint(mine)\nprint(lib.getpixel((0, 0)))' },
+            notes: '<p>밝기 조절이 “각 채널에 같은 수를 곱하고 255 에서 자르기” 라는 것을 한 점으로 보여 줍니다. 본문의 40×25 예제로 사진 전체에도 똑같이 적용된다는 것을 확인시키세요.</p>' },
+          { layout: 'code', title: '성능: 점마다 반복 vs 라이브러리', code: C_SPEED, points: ['76,800번 반복 vs 한 번 호출', '<code>time.perf_counter()</code> 로 측정', '보통 수십 배 차이', '추측하지 말고 재 본다'],
+            notes: '<p>실제로 실행해 숫자를 보여 줍니다(컴퓨터마다 다름). 빠르게 만드는 순서 — ① 안 해도 되는 일 없애기 ② 좋은 도구에 맡기기 ③ 자료 구조 바꾸기 — 를 칠판에 적어 주세요. 14-3 의 ImageTk 전환이 ②의 예입니다.</p>' },
+          { layout: 'practice', title: '실습 14-7. 사진 정보 한 줄 요약', desc: 'picture01.jpg 의 폭 × 높이 = 점의 수를 출력하고 small.png 로 저장 후 형식 확인',
             starter: "from PIL import Image\n\nphoto = Image.open('JPG/picture01.jpg')\n# TODO\n",
             solution: "from PIL import Image\n\nphoto = Image.open('JPG/picture01.jpg')\nprint(photo.width, 'x', photo.height, '=', photo.width * photo.height, '점')\nphoto2 = photo.copy()\nphoto2.save('small.png')\nprint(Image.open('small.png').format)\n",
             notes: '<p>실습 14-3(시작하자마자 열기)은 본문에서 각자 하도록 안내합니다. 7분.</p>' },
@@ -1138,16 +2147,18 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
       /* ============================================================ 14-3 */
       {
         id: 'ch14-3',
-        title: '미니 포토샵: 이미지 처리 기능과 완성',
+        title: '미니 포토샵: 이미지 처리 기능과 완성 · 확장판',
         minutes: 50,
         goals: [
           'resize 로 이미지를 확대 · 축소하고 askinteger 로 배율을 입력받을 수 있다 (Code14-04)',
           'transpose 와 rotate 로 이미지를 반전 · 회전할 수 있다 (Code14-05, 06)',
           'ImageEnhance.Brightness 로 밝기를 조절할 수 있다 (Code14-07)',
           'ImageFilter 와 ImageOps 로 블러 · 엠보싱 · 흑백 효과를 줄 수 있다 (Code14-08, 09)',
-          '모든 처리 함수가 같은 틀(복사 → 가공 → 출력)을 가진다는 것을 설명할 수 있다'
+          '모든 처리 함수가 같은 틀(복사 → 가공 → 출력)을 가진다는 것을 설명할 수 있다',
+          '중복된 함수들을 딕셔너리 + 함수 하나로 리팩터링할 수 있다',
+          '되돌리기 · 저장 형식 선택 · 안내 메시지로 프로그램을 확장할 수 있다'
         ],
-        flow: [['처리 함수의 공통 틀', 5], ['확대 · 축소 · 반전 · 회전', 15], ['밝기 · 필터 · 흑백', 12], ['완성 코드 실행 · 빠른 출력', 10], ['퀴즈 · 실습', 8]],
+        flow: [['처리 함수의 공통 틀', 4], ['확대 · 축소 · 반전 · 회전', 12], ['밝기 · 필터 · 흑백', 10], ['완성 코드 실행 · 빠른 출력', 8], ['확장: 리팩터링 · 되돌리기 · UX', 10], ['퀴즈 · 실습', 6]],
         content: [
           { type: 'h', text: '처리 함수의 공통 틀' },
           { type: 'p', html: '이제부터 만드는 처리 함수는 모두 <b>같은 모양</b>입니다. 다른 곳은 가운데의 <mark>가공하는 한 줄</mark>(과 필요하면 값을 묻는 대화상자 한 줄)뿐입니다.' },
@@ -1205,18 +2216,75 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
           { type: 'p', html: '<code>PIL.ImageTk.PhotoImage(이미지)</code> 는 Pillow 이미지를 <b>한 번에</b> tkinter 이미지로 바꿔 줍니다. displayImage() 의 반복문 10줄이 한 줄로 줄고, 큰 사진도 순식간에 나타납니다. 다른 함수는 하나도 고칠 필요가 없습니다. 이렇게 <mark>함수의 안쪽만 바꾸고 사용하는 쪽은 그대로 두는 것</mark>이 함수로 나누어 만든 프로그램의 장점입니다.' },
           { type: 'code', title: '추가 예제. 미니 포토샵 — 빠른 displayImage 버전', code: ps(9, { fast: true }),
             desc: '4행에 <code>ImageTk</code> 를 추가하고 displayImage() 만 바꿨습니다. 4배 확대도 바로 됩니다.' },
-          { type: 'callout', kind: 'more', title: '📘 Pillow 에는 더 많은 기능이 있어요', html: '미니 포토샵에서 쓴 모듈은 Image · ImageFilter · ImageEnhance · ImageOps 뿐이지만, Pillow 에는 그림 위에 도형 · 글자를 그리는 <code>ImageDraw</code>, 두 사진을 합성하는 <code>Image.blend</code> · <code>paste</code>, 사진을 잘라 내는 <code>crop</code>, 썸네일을 만드는 <code>thumbnail</code> 등 훨씬 많은 기능이 있습니다. 공식 문서(pillow.readthedocs.io)의 Reference 를 둘러보고 나만의 메뉴를 추가해 보세요.' }
+          { type: 'callout', kind: 'more', title: '📘 Pillow 에는 더 많은 기능이 있어요', html: '미니 포토샵에서 쓴 모듈은 Image · ImageFilter · ImageEnhance · ImageOps 뿐이지만, Pillow 에는 그림 위에 도형 · 글자를 그리는 <code>ImageDraw</code>, 두 사진을 합성하는 <code>Image.blend</code> · <code>paste</code>, 사진을 잘라 내는 <code>crop</code>, 썸네일을 만드는 <code>thumbnail</code> 등 훨씬 많은 기능이 있습니다. 공식 문서(pillow.readthedocs.io)의 Reference 를 둘러보고 나만의 메뉴를 추가해 보세요.' },
+
+          { type: 'h', text: '확장 단계 ① 지금 프로그램의 불편한 점 찾기' },
+          { type: 'p', html: '“완성” 은 끝이 아니라 <b>다음 단계의 출발점</b>입니다. 프로그램을 직접 써 보면서 불편한 점을 적어 보면 그것이 그대로 다음 요구 사항이 됩니다.' },
+          { type: 'table', head: ['불편한 점', '왜 그런가', '어떻게 고칠까'], rows: [
+            ['효과가 <b>쌓이지 않는다</b> (회전 후 흑백 → 흑백만)', '모든 함수가 <code>photo</code>(원본)를 복사해서 시작', '<code>photo2</code>(지금 화면)를 가공하도록 바꾼다'],
+            ['<b>되돌릴 수 없다</b>', '이전 상태를 아무 데도 남기지 않음', '바꾸기 전 이미지를 <code>history</code> 리스트에 쌓는다'],
+            ['사진을 열기 전에 메뉴를 누르면 <b>오류</b>', '<code>photo2</code> 가 <code>None</code> 인 경우를 확인하지 않음', '먼저 검사하고 <b>안내 문구</b>를 보여 준다'],
+            ['저장 <b>형식을 고를 수 없다</b>', '확장자를 <code>.jpg</code> 로 고정', 'PNG · JPG 를 고르게 하고 형식에 맞게 저장'],
+            ['같은 코드가 <b>13번 반복</b>된다', '함수마다 “복사 → 가공 → 출력” 을 그대로 씀', '가공하는 부분만 표로 만들고 함수 하나로 합친다']
+          ] },
+
+          { type: 'h', text: '확장 단계 ② 리팩터링: 비슷한 함수 13개를 하나로' },
+          { type: 'p', html: '<b>리팩터링(refactoring)</b> 은 <mark>동작은 그대로 두고 코드의 구조만 고치는 일</mark>입니다. 기능을 더하는 것이 아니므로 결과 화면은 똑같아야 합니다. 미니 포토샵의 처리 함수들은 “가공하는 한 줄” 만 다르므로, 그 한 줄을 <b>딕셔너리의 값</b>으로 모으면 함수 하나로 충분합니다.' },
+          { type: 'code', run: false, title: '리팩터링의 핵심 아이디어', code: 'EFFECT = {\n    "블러링" : lambda img : img.filter(ImageFilter.BLUR),\n    "엠보싱" : lambda img : img.filter(ImageFilter.EMBOSS),\n    "흑백"   : lambda img : ImageOps.grayscale(img).convert(\'RGB\'),\n}\n\ndef apply_effect(name) :      # 함수 13개 → 함수 1개\n    global photo2\n    photo2 = EFFECT[name](photo2)\n    displayImage(photo2)\n\nfor name in EFFECT :          # 메뉴도 반복문으로 만든다\n    editMenu.add_command(label = name, command = lambda n = name : apply_effect(n))',
+            desc: '<code>lambda img : …</code> 는 “이미지를 받아 가공해 돌려주는 이름 없는 함수” 입니다. 딕셔너리에 <b>함수 자체를 값으로</b> 담아 두었다가 필요할 때 꺼내 부릅니다. 이렇게 하면 효과를 하나 더하는 일이 <b>딕셔너리에 한 줄 추가</b>로 끝납니다.' },
+          { type: 'callout', kind: 'warn', title: 'lambda 를 반복문 안에서 만들 때의 함정', html: '<code>command = lambda : apply_effect(name)</code> 라고 쓰면 <b>모든 메뉴가 마지막 이름</b>으로 동작합니다. 람다 안의 <code>name</code> 은 “만들 때의 값” 이 아니라 “부를 때의 값” 을 읽기 때문입니다. 그래서 <code>lambda n = name : apply_effect(n)</code> 처럼 <b>기본값으로 지금 값을 붙잡아</b> 둡니다.' },
+          { type: 'code', title: '추가 예제. 람다의 함정 직접 확인하기', code: C_LAMBDA_TRAP,
+            expect: "잘못된 방법 : ['흑백', '흑백', '흑백']\n올바른 방법 : ['블러', '엠보싱', '흑백']",
+            desc: '반복이 끝난 뒤 <code>name</code> 에는 마지막 값만 남아 있습니다. 기본값(<code>n = name</code>)은 함수를 <b>만드는 순간</b> 평가되므로 그때의 값이 그대로 보관됩니다.' },
+
+          { type: 'h', text: '확장 단계 ③ 되돌리기 (Undo)' },
+          { type: 'p', html: '되돌리기는 어렵지 않습니다. <b>바꾸기 직전의 상태를 리스트에 쌓아 두고</b>, 되돌릴 때 맨 뒤에서 하나 꺼내면(<code>pop()</code>) 됩니다. 이렇게 “나중에 넣은 것을 먼저 꺼내는” 구조를 <b>스택(stack)</b> 이라고 합니다.' },
+          { type: 'code', title: '추가 예제. 되돌리기의 원리 (이미지 없이)', code: C_UNDO,
+            expect: '처리 : 원본 → 흑백\n처리 : 원본 → 흑백 → 블러\n되돌림 : 원본 → 흑백\n되돌림 : 원본\n되돌릴 작업이 없습니다',
+            desc: '이미지 대신 문자열로 실험해 본 것입니다. 실제 프로그램에서는 <code>history.append(photo2.copy())</code> 로 <b>복사본</b>을 쌓아야 합니다 — 같은 객체를 넣으면 나중에 함께 바뀌어 버립니다. 이미지가 크면 메모리를 많이 쓰므로 <b>10단계까지만</b> 보관하고 오래된 것은 <code>history.pop(0)</code> 으로 버립니다.' },
+
+          { type: 'h', text: '확장 단계 ④ 미니 포토샵 플러스 (완성)' },
+          { type: 'p', html: '위 네 가지를 모두 적용한 확장판입니다. 함수는 오히려 <b>줄었는데</b> 기능은 더 많아졌다는 점을 눈여겨보세요. 창 아래의 <b>상태 표시줄</b>이 지금 무슨 일이 일어났는지 계속 알려 줍니다.' },
+          { type: 'code', title: '추가 예제. [프로젝트 1] 확장판 — 미니 포토샵 플러스', code: C_PS_PLUS,
+            desc: '[파일] → [열기] 로 사진을 연 뒤 [편집] 메뉴의 효과를 <b>여러 번 겹쳐</b> 눌러 보세요(효과가 쌓입니다). [되돌리기] 로 한 단계씩 되돌아가고, [다른 이름으로 저장] 에서 <code>my.png</code> 또는 <code>my.jpg</code> 로 저장해 보세요.' },
+          { type: 'callout', kind: 'more', title: '📘 사용자 경험(UX): 프로그램이 친절해지는 네 가지', html: '<ol><li><b>오류 대신 안내</b> — 사진을 열기 전에 효과를 누르면 빨간 오류(traceback) 대신 “먼저 사진을 여세요” 라고 알려 줍니다. 오류 메시지는 <b>무엇을 하면 되는지</b>를 담아야 합니다.</li><li><b>되돌리기</b> — 실수해도 괜찮다는 안심을 줍니다. 되돌릴 수 있는 프로그램은 사람을 과감하게 만듭니다.</li><li><b>상태 보여 주기</b> — 지금 어떤 파일을 열었는지, 방금 무엇을 했는지 상태 표시줄에 적어 둡니다.</li><li><b>저장 · 복구</b> — 사용자가 만든 결과를 잃지 않게 합니다. 저장할 때는 기본 확장자를 정해 주고, 덮어쓰기 전에 확인합니다.</li></ol><p>기능이 같아도 이 네 가지가 있으면 “쓸 만한 프로그램” 이 됩니다.</p>' }
         ],
         practice: [
           {
-            title: '실습 14-5. [이미지 처리(3)] 메뉴 추가 (선명하게 · 윤곽선)', level: 2,
+            title: '실습 14-11. 필터 네 가지를 한꺼번에 적용해 저장하기', level: 1,
+            desc: '<p><code>JPG/picture04.jpg</code> 를 120×120 으로 줄인 뒤 <b>블러 · 윤곽선 · 엠보싱 · 선명하게</b> 네 필터를 각각 적용해 PNG 파일로 저장하고, 저장한 파일을 다시 열어 <b>이름 · 형식 · 크기 · 색 모드</b>를 출력하세요.</p>',
+            hint: '필터를 딕셔너리에 모아 두면 <code>for</code> 한 번으로 끝납니다: <code>{\'blur\' : ImageFilter.BLUR, …}</code>',
+            starter: "from PIL import Image, ImageFilter\n\nphoto = Image.open('JPG/picture04.jpg').convert('RGB').resize((120, 120))\nfilters = {'blur' : ImageFilter.BLUR, 'contour' : ImageFilter.CONTOUR,\n           'emboss' : ImageFilter.EMBOSS, 'sharpen' : ImageFilter.SHARPEN}\nfor name in filters :\n    # TODO: 필터 적용 → name + '.png' 로 저장 → 다시 열어 정보 출력\n    pass\n",
+            solution: "from PIL import Image, ImageFilter\n\nphoto = Image.open('JPG/picture04.jpg').convert('RGB').resize((120, 120))\nfilters = {'blur' : ImageFilter.BLUR, 'contour' : ImageFilter.CONTOUR,\n           'emboss' : ImageFilter.EMBOSS, 'sharpen' : ImageFilter.SHARPEN}\nfor name in filters :\n    out = photo.filter(filters[name])\n    fname = name + '.png'\n    out.save(fname)\n    check = Image.open(fname)\n    print(name, check.format, check.size, check.mode)\n",
+            expect: 'blur PNG (120, 120) RGB\ncontour PNG (120, 120) RGB\nemboss PNG (120, 120) RGB\nsharpen PNG (120, 120) RGB'
+          },
+          {
+            title: '실습 14-12. ImageEnhance 네 가지 비교하기', level: 1,
+            desc: '<p>색이 <code>(120, 60, 180)</code> 인 1×1 그림에 <b>밝기 · 대비 · 채도 · 선명도</b> 조절을 각각 <code>0.5</code> 로 적용하고 결과 색을 출력하세요. 어떤 것이 아무 변화가 없는지, 왜 그런지 생각해 보세요.</p>',
+            hint: '도구 클래스를 딕셔너리에 담아 둡니다: <code>{\'밝기\' : ImageEnhance.Brightness, …}</code>. 값이 아니라 <b>클래스 자체</b>를 담는 것입니다.',
+            starter: "from PIL import Image, ImageEnhance\n\nimg = Image.new('RGB', (1, 1), (120, 60, 180))\ntools = {'밝기' : ImageEnhance.Brightness, '대비' : ImageEnhance.Contrast,\n         '채도' : ImageEnhance.Color, '선명도' : ImageEnhance.Sharpness}\nprint('원본   :', img.getpixel((0, 0)))\n# TODO: 네 도구를 0.5 로 적용해 결과 출력\n",
+            solution: "from PIL import Image, ImageEnhance\n\nimg = Image.new('RGB', (1, 1), (120, 60, 180))\ntools = {'밝기' : ImageEnhance.Brightness, '대비' : ImageEnhance.Contrast,\n         '채도' : ImageEnhance.Color, '선명도' : ImageEnhance.Sharpness}\nprint('원본   :', img.getpixel((0, 0)))\nfor name in tools :\n    out = tools[name](img).enhance(0.5)\n    print('%s 0.5 :' % name, out.getpixel((0, 0)))\n",
+            expect: '원본   : (120, 60, 180)\n밝기 0.5 : (60, 30, 90)\n대비 0.5 : (106, 76, 136)\n채도 0.5 : (106, 76, 136)\n선명도 0.5 : (120, 60, 180)'
+          },
+          {
+            title: '실습 14-13. [이미지 처리(3)] 메뉴 추가 (선명하게 · 윤곽선)', level: 2,
             desc: '<p>완성된 미니 포토샵에 <b>[이미지 처리(3)]</b> 메뉴를 추가하고 <b>[선명하게]</b>(<code>ImageFilter.SHARPEN</code>), <b>[윤곽선]</b>(<code>ImageFilter.CONTOUR</code>) 항목을 넣으세요.</p>',
             hint: 'func_blur() 를 복사해 필터 이름만 바꾼 함수 두 개를 만들고, image3Menu 를 add_cascade 로 붙입니다.',
             starter: ps(9, { fast: true }).replace('window.mainloop()', '# TODO: 이미지 처리(3) 메뉴와 두 함수 추가\nwindow.mainloop()'),
             solution: ps(9, { fast: true, funcs: P_EXTRA_FUNCS, menu: P_EXTRA_MENU })
           },
           {
-            title: '실습 14-6. 원본으로 되돌리기 · 취소에 대비하기', level: 3,
+            title: '실습 14-14. 확장판에 효과 두 개 더하기 (한 줄씩!)', level: 2,
+            desc: '<p>“미니 포토샵 플러스” 의 <code>EFFECT</code> 딕셔너리에 효과 두 개를 추가하세요.</p><ul><li><b>세피아</b> — <code>ImageOps.colorize(ImageOps.grayscale(img), (60, 30, 10), (255, 230, 190))</code> (흑백으로 만든 뒤 어두운 곳은 갈색, 밝은 곳은 크림색으로 물들이기)</li><li><b>윤곽선</b> — <code>img.filter(ImageFilter.CONTOUR)</code></li></ul><p>메뉴를 따로 만들지 않아도 두 항목이 저절로 생기는 것을 확인하세요. 정답 코드는 시험 삼아 사진을 열고 두 효과를 겹쳐 준 뒤 한 번 되돌립니다.</p>',
+            hint: '딕셔너리에 <code>"세피아" : lambda img : …,</code> 한 줄을 넣으면 <code>for name in EFFECT :</code> 반복문이 메뉴까지 만들어 줍니다. 이것이 리팩터링의 보람입니다.',
+            starter: C_PS_PLUS.replace('\n}\ncanvas, paper', '\n    # TODO: "세피아" 와 "윤곽선" 효과를 한 줄씩 추가\n}\ncanvas, paper'),
+            solution: C_PS_PLUS
+              .replace('\n}\ncanvas, paper', '\n    "세피아"    : lambda img : ImageOps.colorize(ImageOps.grayscale(img), (60, 30, 10), (255, 230, 190)),\n    "윤곽선"    : lambda img : img.filter(ImageFilter.CONTOUR),\n}\ncanvas, paper')
+              .replace('\nwindow.mainloop()', "\nphoto = Image.open('JPG/picture03.jpg').convert('RGB')   # 시험 삼아 직접 열어 본다\nphoto2 = photo.copy()\ndisplayImage(photo2)\napply_effect('세피아')\napply_effect('윤곽선')\nfunc_undo()\nprint('결과 크기 :', photo2.size)\n\nwindow.mainloop()"),
+            expect: '결과 크기 : (320, 200)'
+          },
+          {
+            title: '실습 14-15. 원본으로 되돌리기 · 취소에 대비하기', level: 3,
             desc: '<p>① [이미지 처리(1)] 메뉴 맨 아래에 <b>[원본으로]</b> 항목을 추가해, 누르면 원본 사진이 다시 보이게 하세요 (<code>func_reset</code>).<br>② 사진을 열지 않은 상태에서 [원본으로] 를 눌러도 오류가 나지 않게 하세요.</p><p>이 문제의 정답은 시험 삼아 시작하자마자 사진(<code>JPG/picture03.jpg</code>)을 열고, 좌우 반전한 뒤 원본으로 되돌립니다.</p>',
             hint: '<code>photo == None</code> 이면 return. 원본으로 되돌리기는 photo2 = photo.copy() 후 displayImage 입니다.',
             starter: ps(9, { fast: true }).replace('window.mainloop()', '# TODO: func_reset 함수와 [원본으로] 메뉴 추가\nwindow.mainloop()'),
@@ -1268,7 +2336,18 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
             notes: '<p>displayImage 한 함수만 바꿨는데 전체 프로그램이 빨라진다 → 함수로 나눈 장점. 두 버전을 모두 실행해 속도를 비교해 보게 합니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: '320×240 사진을 축소 배율 4 로 줄이면?', options: ['(80, 60)', '(1280, 960)', '(80, 240)', '(316, 236)'], answer: 0,
             explain: 'int(320/4), int(240/4)', notes: '<p>원본 기준이라는 점도 다시 확인.</p>' },
-          { layout: 'practice', title: '실습 14-5. [이미지 처리(3)] 메뉴', desc: '선명하게(SHARPEN) · 윤곽선(CONTOUR) 메뉴 추가 — 필터 비교 예제로 먼저 효과 확인',
+          { layout: 'bullets', title: '완성 다음은 확장 — 불편한 점 찾기', lead: '직접 써 보며 적은 불편이 곧 다음 요구 사항', bullets: [
+            '효과가 <b>쌓이지 않는다</b> → photo2 를 가공하도록',
+            '<b>되돌릴 수 없다</b> → history 리스트(스택)에 쌓기',
+            '사진 없이 누르면 <b>오류</b> → 먼저 검사하고 안내',
+            '저장 <b>형식 선택 불가</b> → PNG · JPG 고르기',
+            '같은 코드 <b>13번 반복</b> → 딕셔너리 + 함수 하나'
+          ], notes: '<p>학생들에게 직접 미니 포토샵을 2~3분 만져 보게 한 뒤 “불편한 점” 을 말하게 합니다. 대부분 이 다섯 가지를 스스로 찾아냅니다. 교사는 그것을 칠판에 적고 요구 사항으로 정리하는 시범을 보입니다.</p>' },
+          { layout: 'code', title: '리팩터링: 함수 13개 → 1개', code: 'from PIL import Image, ImageFilter, ImageOps\n\nEFFECT = {\n    "블러링" : lambda img : img.filter(ImageFilter.BLUR),\n    "엠보싱" : lambda img : img.filter(ImageFilter.EMBOSS),\n    "흑백"   : lambda img : ImageOps.grayscale(img).convert(\'RGB\'),\n}\n\nphoto = Image.open(\'JPG/picture03.jpg\').convert(\'RGB\')\nfor name in EFFECT :\n    out = EFFECT[name](photo)       # 이름으로 효과를 꺼내 쓴다\n    print(name, out.size, out.mode)', points: ['값이 <b>함수</b>인 딕셔너리', '효과 추가 = 한 줄 추가', '메뉴도 <code>for</code> 로 생성', '<code>lambda n = name :</code> 로 값 붙잡기'],
+            notes: '<p>실행하면 세 효과가 차례로 적용됩니다. “같은 모양의 코드가 여러 번 보이면 표로 만들 수 있다” 는 신호라고 정리해 주세요. 람다 함정(C_LAMBDA_TRAP)은 본문 예제로 확인시킵니다.</p>' },
+          { layout: 'code', title: '되돌리기(Undo) 의 원리', code: C_UNDO, points: ['바꾸기 전 상태를 <code>append</code>', '되돌릴 때 <code>pop()</code>', '빈 스택 검사 필수', '이미지는 <code>copy()</code> 로 저장'],
+            notes: '<p>스택 = 접시 쌓기. 맨 위부터 꺼낸다고 비유합니다. 이미지로 하면 메모리를 많이 쓰므로 10단계 제한을 두었다는 점도 설명하세요.</p>' },
+          { layout: 'practice', title: '실습 14-13. [이미지 처리(3)] 메뉴', desc: '선명하게(SHARPEN) · 윤곽선(CONTOUR) 메뉴 추가 — 필터 비교 예제로 먼저 효과 확인',
             starter: C_FILTER_SHOW.replace('window.mainloop()', '# TODO: BLUR, EMBOSS 를 SHARPEN, CONTOUR 로 바꿔 보기\nwindow.mainloop()'),
             solution: C_FILTER_SHOW.replace('BLUR', 'SHARPEN').replace('EMBOSS', 'CONTOUR'),
             notes: '<p>슬라이드에서는 필터만 바꿔 효과를 확인하고, 본문 실습 14-5 에서 메뉴까지 추가합니다. 실습 14-6(원본으로)은 도전 과제.</p>' },
@@ -1286,9 +2365,11 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
           'pygame 게임 프로그램의 기본 구조(초기화 · 무한 반복 · 이벤트 · 화면 업데이트)를 설명할 수 있다',
           '게임에 필요한 기능과 주요 변수를 정리할 수 있다',
           '무작위 배경색의 기본 게임 화면을 만들 수 있다 (Code14-10)',
-          '우주선 그림을 불러와 방향키로 화면 아래쪽 절반 안에서 움직일 수 있다 (Code14-11)'
+          '우주선 그림을 불러와 방향키로 화면 아래쪽 절반 안에서 움직일 수 있다 (Code14-11)',
+          '게임 루프를 입력 → 갱신 → 그리기 → 대기 네 단계로 나누어 설명할 수 있다',
+          '전역 변수 대신 딕셔너리 · 클래스로 상태를 묶는 방법을 쓸 수 있다'
         ],
-        flow: [['게임 소개 · pygame 설치', 5], ['기능 구성 · 주요 변수', 10], ['게임 루프 · Code14-10', 15], ['키보드 이벤트 · Code14-11', 15], ['퀴즈 · 실습', 5]],
+        flow: [['게임 소개 · pygame 설치', 4], ['기능 구성 · 주요 변수', 8], ['게임 루프 · Code14-10', 12], ['키보드 이벤트 · Code14-11', 12], ['루프 4단계 · 상태 묶기', 9], ['퀴즈 · 실습', 5]],
         content: [
           { type: 'h', text: '슈팅 게임 소개: 우주괴물 무찌르기' },
           { type: 'p', html: '[프로젝트 2] 는 화면 위쪽에서 왼쪽 → 오른쪽으로 지나가는 <b>우주괴물</b>을, 아래쪽의 <b>우주선</b>에서 <b>미사일</b>을 쏘아 맞히는 게임입니다. 맞힐 때마다 화면 아래에 <b>파괴한 우주괴물 수</b>가 1씩 올라갑니다.' },
@@ -1348,11 +2429,57 @@ image3Menu.add_command(label = "윤곽선", command = func_contour)
           { type: 'code', title: 'Code14-11. 우주선 이미지를 추가하고 방향키로 움직이기', code: game(11), nondeterministic: true,
             desc: '▶ 실행한 뒤 게임 창을 클릭하고 방향키를 눌러 보세요. 우주선은 화면의 <b>아래쪽 절반</b> 안에서만 움직입니다. <code>@기능 2-4</code> 의 조건문은 “움직인 뒤의 위치(<code>shipX + dx</code>)” 가 화면 안일 때만 실제로 위치를 바꿉니다. 오른쪽 경계가 <code>swidth - shipSize[0]</code> 인 이유는 위치가 그림의 <b>왼쪽 위</b> 모서리이기 때문입니다.' },
           { type: 'callout', kind: 'more', title: '📘 key.get_pressed() 로 움직이는 방법', html: '<code>pressed = pygame.key.get_pressed()</code> 를 반복마다 부르면 지금 눌려 있는 키를 모두 알 수 있습니다. <code>if pressed[pygame.K_LEFT] : shipX -= 5</code> 처럼 쓰면 KEYUP 처리 없이도 되고, 두 키(←와 ↑)를 동시에 눌러 대각선으로 움직이기도 쉽습니다. 교재 방식은 한 방향키를 떼면 <code>dx, dy</code> 가 모두 0 이 되어 대각선 이동 중 한 키만 떼도 멈춥니다.' },
-          { type: 'callout', kind: 'info', title: '줄 끝의 역슬래시(\\)', html: '<code>if … \\</code> 처럼 줄 끝에 역슬래시를 쓰면 “다음 줄에 이어진다” 는 뜻입니다. 조건이 길 때 두 줄로 나눠 쓸 수 있습니다. 괄호 <code>( )</code> 안이라면 역슬래시 없이도 줄을 바꿀 수 있습니다.' }
+          { type: 'callout', kind: 'info', title: '줄 끝의 역슬래시(\\)', html: '<code>if … \\</code> 처럼 줄 끝에 역슬래시를 쓰면 “다음 줄에 이어진다” 는 뜻입니다. 조건이 길 때 두 줄로 나눠 쓸 수 있습니다. 괄호 <code>( )</code> 안이라면 역슬래시 없이도 줄을 바꿀 수 있습니다.' },
+
+          { type: 'h', text: '한 걸음 더: 게임 루프를 네 단계로 나누어 생각하기' },
+          { type: 'p', html: '게임 루프 안에 코드를 아무렇게나 쌓으면 금세 뒤죽박죽이 됩니다. 어떤 게임이든 루프 한 바퀴(= <b>1 프레임</b>)는 <mark>① 입력 → ② 갱신 → ③ 그리기 → ④ 대기</mark> 네 단계로 나뉩니다. 이 순서를 지키고 <b>서로 섞지 않는 것</b>이 게임 코드를 읽기 쉽게 만드는 첫 번째 규칙입니다.' },
+          { type: 'figure', html: SVG_LOOP4, caption: '게임 루프 한 바퀴 = 1 프레임' },
+          { type: 'table', head: ['단계', '하는 일', '하지 말아야 할 일'], rows: [
+            ['① 입력', '<code>event.get()</code> 으로 키 · 마우스 · 창 닫기를 읽어 <b>의도</b>를 변수에 적는다', '여기서 바로 그리지 않는다'],
+            ['② 갱신', '위치 · 점수 · 생명 · 충돌을 <b>계산만</b> 한다', '화면 함수를 부르지 않는다'],
+            ['③ 그리기', '배경 → 물체 → 글자 순으로 그리고 <code>display.update()</code>', '여기서 값을 바꾸지 않는다'],
+            ['④ 대기', '<code>clock.tick(50)</code> 으로 속도를 맞춘다', '<code>time.sleep()</code> 을 쓰지 않는다']
+          ] },
+          { type: 'p', html: '②를 함수로 떼어 내면 <b>화면 없이도 시험</b>할 수 있습니다. 아래 예제는 pygame 없이 게임 루프를 흉내 낸 것입니다 — 버그를 찾을 때 이렇게 쪼개 보면 원인이 금방 드러납니다.' },
+          { type: 'code', title: '추가 예제. 게임 루프를 pygame 없이 흉내 내기', code: C_LOOP_PURE,
+            expect: '프레임 1 : 우주선 x = 250\n프레임 2 : 우주선 x = 255\n프레임 3 : 우주선 x = 260\n프레임 4 : 우주선 x = 255\n프레임 5 : 우주선 x = 255',
+            desc: '<code>update()</code> 는 <b>값만</b> 바꾸고 <code>draw()</code> 는 <b>보여 주기만</b> 합니다. 실제 게임에서는 <code>inputs</code> 대신 <code>pygame.event.get()</code> 이 들어올 뿐 구조는 똑같습니다.' },
+          { type: 'callout', kind: 'more', title: '📘 프레임 수(FPS)와 움직이는 거리', html: '<p><code>clock.tick(50)</code> 은 “1초에 최대 50번” 을 뜻합니다. 우주선이 한 프레임에 5픽셀 움직이면 1초에 250픽셀을 갑니다. 그래서 <b>tick 값을 바꾸면 게임 속도가 통째로 바뀝니다</b>.</p><p>전문적인 게임은 컴퓨터마다 프레임 수가 달라도 같은 속도로 움직이도록, 지난 프레임에서 흐른 시간(<code>dt = clock.tick(60) / 1000</code>)을 곱해 <code>x += speed * dt</code> 처럼 계산합니다. 이것을 <b>델타 타임(delta time)</b> 방식이라고 합니다. 이 장에서는 이해하기 쉬운 고정 방식을 씁니다.</p>' },
+
+          { type: 'h', text: '한 걸음 더: 전역 변수 줄이기' },
+          { type: 'p', html: '교재 코드는 <code>ship, shipSize, monster, missile …</code> 처럼 전역 변수가 많고, 함수마다 <code>global</code> 을 길게 적어야 합니다. 전역 변수가 많으면 <b>누가 언제 바꿨는지 알기 어려워</b> 버그를 찾기 힘듭니다. 해결책은 두 가지입니다.' },
+          { type: 'list', ordered: true, items: [
+            '<b>딕셔너리 하나에 모으기</b> — <code>state = {\'x\' : 250, \'y\' : 560, \'score\' : 0}</code> 처럼 관련된 값을 한 덩어리로 묶습니다. 딕셔너리는 통째로 넘겨도 <b>안의 값을 바꿀 수 있으므로</b> <code>global</code> 이 필요 없습니다.',
+            '<b>클래스로 만들기</b> — 값(위치 · 속도)과 그 값을 다루는 동작(움직이기)을 한 곳에 둡니다. 물체가 여러 개일 때 특히 편합니다.'
+          ] },
+          { type: 'code', title: '추가 예제. 우주선을 클래스로 만들어 보기', code: String.raw`class Ship :
+    def __init__(self, x, y, speed) :
+        self.x = x
+        self.y = y
+        self.speed = speed
+
+    def move(self, dx, dy, maxX, maxY) :
+        if 0 <= self.x + dx * self.speed <= maxX :      # 화면 안일 때만
+            self.x += dx * self.speed
+        if 0 <= self.y + dy * self.speed <= maxY :
+            self.y += dy * self.speed
+
+    def __str__(self) :
+        return '우주선(%d, %d)' % (self.x, self.y)
+
+ship = Ship(250, 560, 5)
+ship.move(1, 0, 452, 636)       # 오른쪽으로
+ship.move(0, -1, 452, 636)      # 위로
+print(ship)
+ship.move(-1, 0, 452, 636)      # 왼쪽으로
+print(ship, '/ 속도', ship.speed)`,
+            expect: '우주선(255, 555)\n우주선(250, 555) / 속도 5',
+            desc: '<code>__str__</code> 을 만들어 두면 <code>print(객체)</code> 가 보기 좋게 나옵니다(디버깅에 아주 편합니다). 우주괴물이 여러 마리인 게임을 만들 때는 이렇게 클래스로 만들고 <b>리스트에 담아</b> 관리합니다.' },
+          { type: 'callout', kind: 'more', title: '📘 어디까지 나눌까?', html: '규칙은 간단합니다. <b>같이 바뀌는 값끼리 묶고</b>(우주선의 x · y · 속도), <b>한 화면에 안 들어오는 함수는 쪼갭니다</b>(대략 30줄). 처음부터 완벽한 구조를 만들려고 시간을 쓰기보다, 일단 동작하게 만든 뒤 “같은 코드가 세 번 나오면 함수로, 관련 변수가 네 개를 넘으면 딕셔너리나 클래스로” 정도의 기준으로 다듬는 편이 빠릅니다.' }
         ],
         practice: [
           {
-            title: '실습 14-7. 우주선을 더 빠르게, 화면 전체에서 움직이기', level: 2,
+            title: '실습 14-16. 우주선을 더 빠르게, 화면 전체에서 움직이기', level: 2,
             desc: '<p>작은 버전 예제를 고쳐서 ① 방향키 ↑ ↓ 도 처리하고 ② 한 번에 움직이는 거리를 <b>10</b> 으로 늘리고 ③ 우주선이 창(300×300) 밖으로 나가지 않게 하세요.</p>',
             hint: '<code>dy</code> 를 추가하고, 이동하기 전에 <code>0 &lt;= x + dx &lt;= 300 - 폭</code> 인지 확인합니다. 우주선 크기는 <code>ship.get_rect().size</code>.',
             starter: C_PG_KEYS.replace('x, y, dx = 130, 200, 0', 'x, y, dx = 130, 200, 0\n# TODO: dy 추가, 크기 구하기').replace('    x += dx', '    # TODO: 화면 안일 때만 이동\n    x += dx'),
@@ -1389,12 +2516,35 @@ while True :
             nondeterministic: true
           },
           {
-            title: '실습 14-8. 우주선 위치 계산 연습 (화면 없이)', level: 1,
+            title: '실습 14-17. 우주선 위치 계산 연습 (화면 없이)', level: 1,
             desc: '<p>화면 폭 500, 우주선 폭 48 일 때, 우주선이 x = 440 에서 오른쪽(dx = +5)으로 계속 움직인다고 합시다. Code14-11 의 조건 <code>0 &lt; shipX + dx and shipX + dx &lt;= swidth - shipSize[0]</code> 을 써서, 몇 번 움직인 뒤 멈추는지와 멈춘 위치를 출력하세요.</p>',
             hint: '<code>while</code> 로 조건이 참인 동안 <code>shipX += dx</code> 하고 횟수를 셉니다.',
             starter: "swidth = 500\nshipSize = (48, 64)\nshipX, dx = 440, 5\ncount = 0\n# TODO: 조건이 참인 동안 이동하고 횟수 세기\nprint(count, '번 이동, 위치', shipX)\n",
             solution: "swidth = 500\nshipSize = (48, 64)\nshipX, dx = 440, 5\ncount = 0\nwhile 0 < shipX + dx and shipX + dx <= swidth - shipSize[0] :\n    shipX += dx\n    count += 1\nprint(count, '번 이동, 위치', shipX)\n",
             expect: '2 번 이동, 위치 450'
+          },
+          {
+            title: '실습 14-18. 프레임 수로 속도 계산하기', level: 1,
+            desc: '<p>게임이 1초에 <b>50 프레임</b>이고 우주선이 한 프레임에 <b>5픽셀</b> 움직인다고 합시다.</p><ul><li>1초 · 2초 · 3초 동안 몇 픽셀을 움직이는지 출력하세요.</li><li>화면 폭 500, 우주선 폭 48 일 때 왼쪽 끝에서 오른쪽 끝까지 가는 데 몇 프레임 · 몇 초가 걸리는지 출력하세요.</li></ul>',
+            hint: '1초에 움직이는 거리 = 프레임 수 × 한 프레임 이동량. 걸리는 프레임 = 거리 ÷ 이동량.',
+            starter: "FPS = 50          # 1초에 그리는 프레임 수\nSTEP = 5          # 한 프레임에 움직이는 픽셀\n\nfor sec in [1, 2, 3] :\n    # TODO: sec 초 동안의 이동 거리 출력\n    pass\n\ndist = 500 - 48   # 왼쪽 끝에서 오른쪽 끝까지의 거리\n# TODO: 몇 프레임 · 몇 초인지 출력\n",
+            solution: "FPS = 50          # 1초에 그리는 프레임 수\nSTEP = 5          # 한 프레임에 움직이는 픽셀\n\nfor sec in [1, 2, 3] :\n    print(sec, '초 →', FPS * STEP * sec, '픽셀')\n\ndist = 500 - 48   # 왼쪽 끝에서 오른쪽 끝까지의 거리\nframes = dist / STEP\nprint('화면 끝까지 : %.1f 프레임 = %.2f 초' % (frames, frames / FPS))\n",
+            expect: '1 초 → 250 픽셀\n2 초 → 500 픽셀\n3 초 → 750 픽셀\n화면 끝까지 : 90.4 프레임 = 1.81 초'
+          },
+          {
+            title: '실습 14-19. 갱신 함수에 경계와 발사 더하기', level: 2,
+            desc: '<p>본문의 “게임 루프 흉내 내기” 예제를 고쳐 <b>화면 없이 시험</b>해 보세요.</p><ul><li>한 번에 <b>10픽셀</b> 움직인다</li><li>x 는 항상 <b>0 이상 452 이하</b>여야 한다 (넘으면 끝에 붙인다)</li><li>입력에 <code>\'FIRE\'</code> 가 들어오면 발사 횟수 <code>shots</code> 를 1 늘린다</li></ul><p>시작 위치 445, 입력이 <code>[[\'RIGHT\'], [\'RIGHT\'], [\'FIRE\'], [\'LEFT\', \'FIRE\'], [\'LEFT\']]</code> 일 때의 결과를 프레임마다 출력하세요.</p>',
+            hint: '경계 처리는 <code>if state[\'x\'] &gt; 452 : state[\'x\'] = 452</code> 처럼 “넘으면 되돌리기” 로 간단히 합니다. 한 입력에 키가 두 개 들어올 수도 있습니다.',
+            starter: "def update(state, keys) :\n    if 'LEFT' in keys :\n        state['x'] -= 10\n    if 'RIGHT' in keys :\n        state['x'] += 10\n    # TODO: 0 ~ 452 를 벗어나지 않게 하기\n    # TODO: 'FIRE' 가 있으면 shots 1 증가\n    state['frame'] += 1\n\ndef draw(state) :\n    print('프레임 %d : x = %d, 발사 %d' % (state['frame'], state['x'], state['shots']))\n\nstate = {'x' : 445, 'frame' : 0, 'shots' : 0}\ninputs = [['RIGHT'], ['RIGHT'], ['FIRE'], ['LEFT', 'FIRE'], ['LEFT']]\nfor keys in inputs :\n    update(state, keys)\n    draw(state)\n",
+            solution: "def update(state, keys) :\n    if 'LEFT' in keys :\n        state['x'] -= 10\n    if 'RIGHT' in keys :\n        state['x'] += 10\n    if state['x'] < 0 :\n        state['x'] = 0\n    if state['x'] > 452 :\n        state['x'] = 452\n    if 'FIRE' in keys :\n        state['shots'] += 1\n    state['frame'] += 1\n\ndef draw(state) :\n    print('프레임 %d : x = %d, 발사 %d' % (state['frame'], state['x'], state['shots']))\n\nstate = {'x' : 445, 'frame' : 0, 'shots' : 0}\ninputs = [['RIGHT'], ['RIGHT'], ['FIRE'], ['LEFT', 'FIRE'], ['LEFT']]\nfor keys in inputs :\n    update(state, keys)\n    draw(state)\n",
+            expect: '프레임 1 : x = 452, 발사 0\n프레임 2 : x = 452, 발사 0\n프레임 3 : x = 452, 발사 1\n프레임 4 : x = 442, 발사 2\n프레임 5 : x = 432, 발사 2'
+          },
+          {
+            title: '실습 14-20. 벽에 튕기는 공 두 개', level: 3,
+            desc: '<p>400×300 창 안에서 <b>공 두 개</b>가 서로 다른 속도 · 크기 · 색으로 움직이다가 벽에 닿으면 <b>튕기는</b> 프로그램을 만드세요.</p><ul><li>공 하나의 정보(x, y, dx, dy, 반지름, 색)를 <b>딕셔너리</b> 하나로 만들고, 공들을 <b>리스트</b>에 담습니다</li><li>게임 루프는 ① 입력 ② 갱신 ③ 그리기 ④ 대기 순서를 지킵니다</li><li>창의 [X] 를 누르면 <code>pygame.quit()</code> · <code>sys.exit()</code> 로 끝냅니다</li></ul>',
+            hint: '튕기기는 부호 뒤집기입니다: 왼쪽 벽이나 오른쪽 벽에 닿으면 <code>b[\'dx\'] = -b[\'dx\']</code>. 공의 가장자리는 중심에서 반지름만큼 떨어져 있다는 점을 잊지 마세요.',
+            starter: "import pygame\nimport sys\n\npygame.init()\nmonitor = pygame.display.set_mode((400, 300))\npygame.display.set_caption('튕기는 공')\nclock = pygame.time.Clock()\n\nballs = [{'x' : 50, 'y' : 40, 'dx' : 4, 'dy' : 3, 'r' : 14, 'c' : (250, 200, 80)}]\n# TODO: 공을 하나 더 넣기\n\nwhile True :\n    for e in pygame.event.get() :\n        if e.type == pygame.QUIT :\n            pygame.quit()\n            sys.exit()\n    # TODO: 공마다 위치를 바꾸고 벽에 닿으면 튕기기\n    monitor.fill((25, 25, 45))\n    # TODO: 공마다 그리기\n    pygame.display.update()\n    clock.tick(50)\n",
+            solution: "import pygame\nimport sys\n\npygame.init()\nmonitor = pygame.display.set_mode((400, 300))\npygame.display.set_caption('튕기는 공')\nclock = pygame.time.Clock()\n\nballs = [{'x' : 50, 'y' : 40, 'dx' : 4, 'dy' : 3, 'r' : 14, 'c' : (250, 200, 80)},\n         {'x' : 300, 'y' : 200, 'dx' : -3, 'dy' : 5, 'r' : 22, 'c' : (120, 200, 250)}]\n\nwhile True :\n    # ① 입력\n    for e in pygame.event.get() :\n        if e.type == pygame.QUIT :\n            pygame.quit()\n            sys.exit()\n\n    # ② 갱신\n    for b in balls :\n        b['x'] += b['dx']\n        b['y'] += b['dy']\n        if b['x'] - b['r'] < 0 or b['x'] + b['r'] > 400 :\n            b['dx'] = -b['dx']\n        if b['y'] - b['r'] < 0 or b['y'] + b['r'] > 300 :\n            b['dy'] = -b['dy']\n\n    # ③ 그리기\n    monitor.fill((25, 25, 45))\n    for b in balls :\n        pygame.draw.circle(monitor, b['c'], (b['x'], b['y']), b['r'])\n    pygame.display.update()\n\n    # ④ 대기\n    clock.tick(50)\n"
           }
         ],
         quiz: [
@@ -1434,7 +2584,11 @@ while True :
             notes: '<p>본문의 Code14-11 전체도 실행하게 합니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: 'swidth, sheight = 500, 700 일 때 shipX, shipY 의 처음 값은?', options: ['250.0, 560.0', '500, 700', '250, 350', '0, 0'], answer: 0,
             explain: '500/2, 700*0.8', notes: '<p>실수(float)가 되는 이유도 묻습니다.</p>' },
-          { layout: 'practice', title: '실습 14-8. 우주선 위치 계산', desc: 'x=440 에서 dx=+5 로 움직일 때 몇 번 뒤 멈추나? (화면 폭 500, 우주선 폭 48)',
+          { layout: 'diagram', title: '루프 한 바퀴 = 입력 → 갱신 → 그리기 → 대기', html: SVG_LOOP4, caption: '네 단계를 섞지 않는 것이 첫 번째 규칙',
+            notes: '<p>앞의 6단계 그림(SVG_LOOP)을 네 덩어리로 정리한 것입니다. “갱신에서는 그리지 않고, 그리기에서는 계산하지 않는다” 를 구호처럼 반복해 주세요. 14-5 의 확장판 코드가 이 주석 순서 그대로입니다.</p>' },
+          { layout: 'code', title: '갱신 함수는 화면 없이 시험할 수 있다', code: C_LOOP_PURE, points: ['<code>update()</code> 는 값만 바꾼다', '<code>draw()</code> 는 보여 주기만', 'pygame 없이 실행 가능', '버그 찾기가 훨씬 쉬워진다'],
+            notes: '<p>실습 14-19 로 이어집니다. 화면이 없으면 결과를 눈으로 확인하기 쉽고, 같은 입력으로 몇 번이든 다시 돌려볼 수 있다는 장점을 강조하세요.</p>' },
+          { layout: 'practice', title: '실습 14-17. 우주선 위치 계산', desc: 'x=440 에서 dx=+5 로 움직일 때 몇 번 뒤 멈추나? (화면 폭 500, 우주선 폭 48)',
             starter: "swidth = 500\nshipSize = (48, 64)\nshipX, dx = 440, 5\ncount = 0\n# TODO\nprint(count, '번 이동, 위치', shipX)\n",
             solution: "swidth = 500\nshipSize = (48, 64)\nshipX, dx = 440, 5\ncount = 0\nwhile 0 < shipX + dx and shipX + dx <= swidth - shipSize[0] :\n    shipX += dx\n    count += 1\nprint(count, '번 이동, 위치', shipX)\n",
             notes: '<p>답: 2번, 450. 452 까지 갈 수 있지만 5씩 움직이므로 455 는 넘는다. 실습 14-7 은 게임 창으로 직접 실험.</p>' },
@@ -1452,9 +2606,11 @@ while True :
           'random.choice 와 randrange 로 우주괴물의 그림 · 위치 · 속도를 무작위로 정할 수 있다 (Code14-12)',
           'None 을 이용해 미사일을 “쏘지 않은 상태” 로 관리하고 발사 · 이동 · 소멸을 구현할 수 있다 (Code14-13)',
           '두 사각형 좌표를 비교해 충돌(맞힘)을 판정할 수 있다',
-          'font 로 점수를 화면에 쓰고 슈팅 게임을 완성할 수 있다 (Code14-14)'
+          'font 로 점수를 화면에 쓰고 슈팅 게임을 완성할 수 있다 (Code14-14)',
+          '난이도 · 생명 · 최고 점수 · 효과음으로 게임을 확장할 수 있다',
+          '파일에 기록을 남길 때 예외 처리로 첫 실행과 잘못된 내용을 대비할 수 있다'
         ],
-        flow: [['우주괴물 등장 · 이동', 12], ['미사일 발사 · 이동', 12], ['충돌 판정 · 점수 · 완성', 16], ['정리 · 퀴즈 · 실습', 10]],
+        flow: [['우주괴물 등장 · 이동', 10], ['미사일 발사 · 이동', 10], ['충돌 판정 · 점수 · 완성', 13], ['확장: 난이도 · 생명 · 기록 · 소리', 10], ['정리 · 퀴즈 · 실습', 7]],
         content: [
           { type: 'h', text: '우주괴물이 나타나면 자동으로 움직이기 (Code14-12)' },
           { type: 'p', html: '우주괴물 그림 10개의 파일 이름을 리스트 <code>monsterImage</code> 에 넣어 두고, 괴물이 나타날 때마다 <code>random.choice()</code> 로 하나를 고릅니다. 세로 위치는 화면 위쪽 30% 안에서, 속도는 1~4 사이에서 무작위로 정합니다.' },
@@ -1518,11 +2674,42 @@ while True :
             '슈팅 게임: 게임 루프(이벤트 → 계산 → 그리기 → update) 안에서 우주선 · 우주괴물 · 미사일의 위치를 바꾸고, 좌표 비교로 충돌을 판정해 점수를 올렸습니다.',
             '큰 프로그램은 <b>기능 목록 → 뼈대(빈 함수 · 주석 자리) → 기능 하나씩 채우고 실행</b> 순서로 만듭니다.'
           ] },
-          { type: 'callout', kind: 'more', title: '📘 게임을 더 발전시켜 보기', html: '<ul><li>괴물이 오른쪽 끝을 그냥 지나가면 “놓친 수” 를 세고 3마리를 놓치면 게임 오버</li><li>점수가 오를수록 괴물 속도를 빠르게 (<code>randrange(1, 5 + fireCount // 5)</code>)</li><li><code>pygame.mixer.Sound(\'파일.wav\').play()</code> 로 발사 · 폭발 소리</li><li>미사일을 리스트로 관리해 여러 발 동시에 쏘기</li></ul>' }
+          { type: 'callout', kind: 'more', title: '📘 게임을 더 발전시켜 보기', html: '<ul><li>괴물이 오른쪽 끝을 그냥 지나가면 “놓친 수” 를 세고 3마리를 놓치면 게임 오버</li><li>점수가 오를수록 괴물 속도를 빠르게 (<code>randrange(1, 5 + fireCount // 5)</code>)</li><li><code>pygame.mixer.Sound(\'파일.wav\').play()</code> 로 발사 · 폭발 소리</li><li>미사일을 리스트로 관리해 여러 발 동시에 쏘기</li></ul>' },
+
+          { type: 'h', text: '확장 단계 ① 무엇을 더할지 정하기' },
+          { type: 'p', html: '게임이 “한 판 하고 싶어지는” 게임이 되려면 <b>목표 · 긴장 · 기록</b>이 필요합니다. 아래 네 가지가 그 최소 조합입니다.' },
+          { type: 'table', head: ['확장', '왜 필요한가', '어떻게 구현하나'], rows: [
+            ['<b>난이도</b>', '계속 같은 속도면 금방 지루하다', '점수에 따라 괴물 속도를 올린다 (<code>randrange(1, 5) + score // 5</code>)'],
+            ['<b>생명</b>', '실패할 수 있어야 긴장이 생긴다', '괴물을 놓치면 <code>life -= 1</code>, 0 이면 게임 오버'],
+            ['<b>최고 점수</b>', '다시 하고 싶은 이유를 만든다', '파일에 기록하고 시작할 때 읽어 온다'],
+            ['<b>효과음</b>', '조작에 대한 반응이 있어야 손맛이 난다', '<code>pygame.mixer.Sound(\'game/shoot.wav\').play()</code>']
+          ] },
+          { type: 'code', title: '추가 예제. 점수에 따라 난이도 올리기', code: C_LEVEL,
+            expect: '점수  0 → 레벨 1 · 기본 속도 + 0\n점수  2 → 레벨 1 · 기본 속도 + 0\n점수  3 → 레벨 1 · 기본 속도 + 1\n점수  8 → 레벨 2 · 기본 속도 + 2\n점수 15 → 레벨 4 · 기본 속도 + 5\n점수 30 → 레벨 5 · 기본 속도 + 10',
+            desc: '<code>//</code> 는 몫만 남기는 나눗셈이라 “몇 마리마다 한 단계” 를 쉽게 표현합니다. <code>min(5, …)</code> 으로 <b>상한</b>을 두지 않으면 나중에 손댈 수 없을 만큼 빨라집니다 — 난이도는 반드시 한계를 정해 두세요.' },
+          { type: 'h', text: '확장 단계 ② 최고 점수를 파일에 남기기' },
+          { type: 'p', html: '프로그램이 끝나면 변수는 모두 사라집니다. 기록을 남기려면 <b>파일</b>에 써야 합니다. 이때 중요한 것은 <mark>파일이 아직 없는 첫 실행</mark>과 <mark>파일 내용이 망가진 경우</mark>를 모두 견디는 것입니다.' },
+          { type: 'code', title: '추가 예제. 최고 점수 읽기 · 쓰기 (예외 처리 포함)', code: C_HIGHSCORE,
+            expect: '처음 최고 점수 : 0\n3 점 → 신기록!\n7 점 → 신기록!\n5 점 (최고 기록은 7 점)\n저장된 값 : 7',
+            desc: '<code>try … except FileNotFoundError</code> 로 첫 실행을, <code>except ValueError</code> 로 숫자가 아닌 내용을 막았습니다. 이렇게 <b>실패해도 프로그램이 멈추지 않게</b> 만드는 것이 사용자 경험의 기본입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 효과음 넣기', html: '<p>이 강좌의 작업 폴더에는 짧은 효과음 두 개가 준비되어 있습니다 — <code>game/shoot.wav</code>(발사), <code>game/boom.wav</code>(폭발). 파이썬으로 소리를 직접 합성해 만든 파일입니다.</p><pre><code>shoot = pygame.mixer.Sound(\'game/shoot.wav\')\nshoot.set_volume(0.5)\nshoot.play()</code></pre><p>소리 파일이 없는 환경에서도 게임이 돌아가야 하므로, 불러오는 부분을 <code>try … except</code> 로 감싸고 소리가 없으면 그냥 넘어가게 만드는 것이 좋습니다. 아래 확장판 코드가 그렇게 되어 있습니다.</p>' },
+
+          { type: 'h', text: '확장 단계 ③ 슈팅 게임 확장판 (완성)' },
+          { type: 'p', html: '네 가지 확장을 모두 넣고, 앞에서 배운 <b>루프 4단계</b>와 <b>state 딕셔너리</b>로 구조를 다시 짠 코드입니다. 전역 변수가 크게 줄어 <code>global</code> 선언이 한 줄도 없다는 점을 눈여겨보세요.' },
+          { type: 'code', title: '추가 예제. [프로젝트 2] 확장판 — 난이도 · 생명 · 최고 점수 · 효과음', code: C_GAME_PLUS, nondeterministic: true,
+            desc: '게임 창을 클릭한 뒤 방향키와 스페이스바로 즐겨 보세요. 괴물을 놓치면 생명이 줄고, 0 이 되면 콘솔에 최종 점수와 최고 기록이 출력되며 끝납니다. 다시 실행하면 <code>best_score.txt</code> 에서 최고 기록을 읽어 옵니다.' },
+          { type: 'table', caption: '교재 코드와 확장판의 구조 비교', head: ['항목', '교재 Code14-14', '확장판'], rows: [
+            ['전역 변수', '<code>monitor, ship, shipSize, monster, monsterImage, missile, r, g, b …</code>', '상수(<code>SW, SH, BEST_FILE</code>)와 <code>monitor, font</code> 정도'],
+            ['<code>global</code> 선언', '함수마다 길게 나열', '없음 — <code>state</code> 딕셔너리를 넘겨 쓴다'],
+            ['괴물 만들기', '같은 네 줄이 세 군데 반복', '<code>new_monster(score)</code> 함수 하나'],
+            ['루프 안', '기능 주석이 순서 없이 섞임', '① 입력 ② 갱신 ③ 그리기 ④ 대기 로 구분'],
+            ['충돌 판정', '부등호 네 개를 <code>and</code> 로', '<code>pygame.Rect(...).collidepoint(...)</code>']
+          ] },
+          { type: 'callout', kind: 'more', title: '📘 여기서 더 나아간다면', html: '<ul><li><b>미사일 여러 발</b> — <code>missiles = []</code> 리스트로 관리하고, 매 프레임 모두 움직인 뒤 화면 밖으로 나간 것만 지웁니다(실습 14-24).</li><li><b>괴물 여러 마리</b> — <code>monsters = [new_monster(0) for _ in range(3)]</code></li><li><b>스프라이트</b> — pygame 의 <code>sprite.Sprite</code> · <code>sprite.Group</code> · <code>spritecollide()</code> 를 쓰면 여러 물체의 이동 · 그리기 · 충돌을 한 줄씩으로 처리할 수 있습니다.</li><li><b>시작 화면 · 일시 정지</b> — <code>scene</code> 변수로 \'title\' · \'play\' · \'over\' 를 구분하고 루프 안에서 갈라 줍니다(상태 기계).</li></ul>' }
         ],
         practice: [
           {
-            title: '실습 14-9. 놓친 우주괴물 세기 (게임 오버)', level: 3,
+            title: '실습 14-21. 놓친 우주괴물 세기 (게임 오버)', level: 3,
             desc: '<p>완성된 게임에서 우주괴물이 맞지 않고 오른쪽 끝을 지나가면 <b>놓친 수(missCount)</b>를 1 올리세요. 점수 옆에 놓친 수도 표시하고, <b>3마리를 놓치면</b> 콘솔에 “게임 오버! 점수 : N” 을 출력하고 게임을 끝내세요.</p>',
             hint: '<code>@기능 3-3</code> 의 <code>if monsterX &gt; swidth :</code> 안에서 <code>missCount += 1</code>. writeScore 에 매개변수를 하나 더 주거나 문자열을 바꿉니다. 끝낼 때는 <code>pygame.quit()</code> · <code>sys.exit()</code>.',
             starter: game(14).replace('    fireCount = 0', '    fireCount = 0\n    # TODO: missCount 변수'),
@@ -1535,12 +2722,40 @@ while True :
             nondeterministic: true
           },
           {
-            title: '실습 14-10. 충돌 판정 표 만들기 (화면 없이)', level: 1,
+            title: '실습 14-22. 충돌 판정 표 만들기 (화면 없이)', level: 1,
             desc: '<p>우주괴물이 (200, 100) 에 있고 크기가 (60, 52) 일 때, 미사일 위치 (230, 120), (190, 120), (230, 160), (259, 151) 각각에 대해 맞았는지 출력하세요. Code14-14 와 같은 조건을 사용합니다.</p>',
             hint: '미사일 위치를 튜플의 리스트로 만들고 for 로 돌며 조건을 검사합니다.',
             starter: "monsterX, monsterY = 200, 100\nmonsterSize = (60, 52)\nfor missileX, missileY in [(230, 120), (190, 120), (230, 160), (259, 151)] :\n    # TODO: 맞았으면 '맞음', 아니면 '빗나감'\n    pass\n",
             solution: "monsterX, monsterY = 200, 100\nmonsterSize = (60, 52)\nfor missileX, missileY in [(230, 120), (190, 120), (230, 160), (259, 151)] :\n    if (monsterX < missileX and missileX < monsterX + monsterSize[0]) and \\\n        (monsterY < missileY and missileY < monsterY + monsterSize[1]) :\n        print(missileX, missileY, '맞음')\n    else :\n        print(missileX, missileY, '빗나감')\n",
             expect: '230 120 맞음\n190 120 빗나감\n230 160 빗나감\n259 151 맞음'
+          },
+          {
+            title: '실습 14-23. 난이도 표 만들기', level: 1,
+            desc: '<p>점수에 따라 <b>레벨 · 괴물 속도 범위 · 등급</b>이 어떻게 달라지는지 표로 출력하세요.</p><ul><li>레벨 = <code>min(5, 1 + 점수 // 5)</code></li><li>속도 범위 = <code>1 ~ (4 + 점수 // 5)</code></li><li>등급 = 20점 이상 “고수”, 10점 이상 “중수”, 그 밖에는 “초보”</li></ul><p>점수 0, 7, 12, 25 에 대해 출력합니다.</p>',
+            hint: '등급은 <code>if … elif … else</code> 로 나누고, 큰 값부터 검사해야 합니다(20 을 먼저!).',
+            starter: "def level_of(score) :\n    return min(5, 1 + score // 5)\n\ndef grade_of(score) :\n    # TODO: 20 이상 고수 / 10 이상 중수 / 나머지 초보\n    return ''\n\nfor score in [0, 7, 12, 25] :\n    # TODO: '점수 %2d : 레벨 %d, 속도 1~%d, %s' 형식으로 출력\n    pass\n",
+            solution: "def level_of(score) :\n    return min(5, 1 + score // 5)\n\ndef grade_of(score) :\n    if score >= 20 :\n        return '고수'\n    elif score >= 10 :\n        return '중수'\n    else :\n        return '초보'\n\nfor score in [0, 7, 12, 25] :\n    print('점수 %2d : 레벨 %d, 속도 1~%d, %s'\n          % (score, level_of(score), 4 + score // 5, grade_of(score)))\n",
+            expect: '점수  0 : 레벨 1, 속도 1~4, 초보\n점수  7 : 레벨 2, 속도 1~5, 초보\n점수 12 : 레벨 3, 속도 1~6, 중수\n점수 25 : 레벨 5, 속도 1~9, 고수'
+          },
+          {
+            title: '실습 14-24. 미사일을 여러 발 쏘기 (확장판 고치기)', level: 2,
+            desc: '<p>확장판 게임은 미사일을 <b>한 번에 한 발</b>만 쏠 수 있습니다. <code>state[\'mx\'], state[\'my\']</code> 대신 <b>미사일 리스트</b>를 써서 여러 발을 동시에 쏠 수 있게 고치세요.</p><ul><li>발사할 때 <code>state[\'shots\'].append({\'x\' : …, \'y\' : …})</code></li><li>갱신할 때 모든 미사일을 위로 옮기고, 화면 밖으로 나간 것과 괴물을 맞힌 것은 리스트에서 <b>지웁니다</b></li><li>그리기에서도 모든 미사일을 그립니다</li></ul>',
+            hint: '반복하면서 리스트에서 지우면 건너뛰는 항목이 생깁니다. <b>남길 것만 모아 새 리스트를 만드는</b> 방법이 안전합니다: <code>state[\'shots\'] = keep</code>',
+            starter: C_GAME_PLUS.replace("             'mx' : None, 'my' : None, 'score' : 0, 'life' : 3, 'best' : load_best()}", "             'shots' : [], 'score' : 0, 'life' : 3, 'best' : load_best()}\n    # TODO: mx · my 를 쓰는 부분을 모두 shots 리스트로 바꾸기"),
+            solution: C_GAME_PLUS
+              .replace("             'mx' : None, 'my' : None, 'score' : 0, 'life' : 3, 'best' : load_best()}", "             'shots' : [], 'score' : 0, 'life' : 3, 'best' : load_best()}")
+              .replace("                elif e.key == pygame.K_SPACE and state['mx'] == None :\n                    state['mx'] = state['x'] + shipSize[0] / 2\n                    state['my'] = state['y']\n                    play_sound(shoot)", "                elif e.key == pygame.K_SPACE :\n                    state['shots'].append({'x' : state['x'] + shipSize[0] / 2, 'y' : state['y']})\n                    play_sound(shoot)")
+              .replace("        if state['mx'] != None :\n            state['my'] -= 12\n            if state['my'] < 0 :\n                state['mx'], state['my'] = None, None\n\n        if state['mx'] != None :\n            box = pygame.Rect(monster['x'], monster['y'], monster['size'][0], monster['size'][1])\n            if box.collidepoint(state['mx'], state['my']) :\n                state['score'] += 1\n                play_sound(boom)\n                monster = new_monster(state['score'])\n                state['mx'], state['my'] = None, None", "        box = pygame.Rect(monster['x'], monster['y'], monster['size'][0], monster['size'][1])\n        keep = []                                       # 남길 미사일만 모은다\n        for m in state['shots'] :\n            m['y'] -= 12\n            if m['y'] < 0 :                             # 화면 위로 나감\n                continue\n            if box.collidepoint(m['x'], m['y']) :       # 맞힘\n                state['score'] += 1\n                play_sound(boom)\n                monster = new_monster(state['score'])\n                continue\n            keep.append(m)\n        state['shots'] = keep")
+              .replace("        if state['mx'] != None :\n            monitor.blit(missile, (int(state['mx']), int(state['my'])))", "        for m in state['shots'] :\n            monitor.blit(missile, (int(m['x']), int(m['y'])))"),
+            nondeterministic: true
+          },
+          {
+            title: '실습 14-25. 상위 3위 기록표 만들기', level: 2,
+            desc: '<p>게임이 끝날 때마다 점수를 파일 <code>rank.txt</code> 에 한 줄씩 이어 쓰고, <b>상위 3위</b>를 출력하는 함수를 만드세요.</p><p>점수 5, 12, 3, 20, 9 를 차례로 기록한 뒤 전체 기록 수와 1~3위를 출력합니다.</p>',
+            hint: '<code>sorted(리스트, reverse = True)</code> 로 큰 값부터 정렬하고 <code>[:3]</code> 으로 앞 3개만 자릅니다. 순위 번호는 <code>enumerate(목록, 1)</code> 로 붙입니다.',
+            starter: "RANK_FILE = 'rank.txt'\n\ndef add_score(score) :\n    # TODO: 파일에 한 줄 이어 쓰기 ('a' 모드)\n    pass\n\ndef load_scores() :\n    # TODO: 파일을 읽어 정수 리스트로 (없으면 빈 리스트)\n    return []\n\ndef top3() :\n    # TODO: 큰 값부터 3개\n    return []\n\nfor s in [5, 12, 3, 20, 9] :\n    add_score(s)\nprint('기록 수 :', len(load_scores()))\n",
+            solution: "RANK_FILE = 'rank.txt'\n\ndef add_score(score) :\n    with open(RANK_FILE, 'a', encoding = 'utf-8') as f :\n        f.write(str(score) + '\\n')\n\ndef load_scores() :\n    try :\n        with open(RANK_FILE, encoding = 'utf-8') as f :\n            return [int(line) for line in f if line.strip() != '']\n    except FileNotFoundError :\n        return []\n\ndef top3() :\n    return sorted(load_scores(), reverse = True)[:3]\n\nfor s in [5, 12, 3, 20, 9] :\n    add_score(s)\nprint('기록 수 :', len(load_scores()))\nfor i, s in enumerate(top3(), 1) :\n    print('%d위 : %d점' % (i, s))\n",
+            expect: '기록 수 : 5\n1위 : 20점\n2위 : 12점\n3위 : 9점'
           }
         ],
         quiz: [
@@ -1577,12 +2792,396 @@ while True :
             notes: '<p>9장 함수 단원 복습입니다.</p>' },
           { layout: 'quiz', title: '확인 퀴즈', q: '괴물 (100, 50), 크기 (60, 52) — 맞은 미사일 위치는?', options: ['(150, 90)', '(170, 90)', '(150, 110)', '(100, 60)'], answer: 0,
             explain: 'x: 100 초과 160 미만, y: 50 초과 102 미만', notes: '<p>경계값 (100, 60) 이 왜 빗나감인지도 묻습니다.</p>' },
-          { layout: 'practice', title: '실습 14-10. 충돌 판정 표', desc: '괴물 (200, 100), 크기 (60, 52) 일 때 미사일 네 위치의 맞음/빗나감 출력',
+          { layout: 'bullets', title: '확장: 목표 · 긴장 · 기록', lead: '“한 판 더” 하고 싶어지는 게임의 최소 조합', bullets: [
+            '<b>난이도</b> — 점수에 따라 속도 상승 (상한을 꼭 둔다)',
+            '<b>생명</b> — 놓치면 <code>life -= 1</code>, 0 이면 게임 오버',
+            '<b>최고 점수</b> — 파일에 남기고 시작할 때 읽기',
+            '<b>효과음</b> — <code>mixer.Sound(\'game/shoot.wav\').play()</code>',
+            '구조도 함께 정리: 전역 변수 → <code>state</code> 딕셔너리'
+          ], notes: '<p>확장 아이디어를 학생들에게 먼저 물어본 뒤 이 네 가지로 정리합니다. 난이도에 상한이 없으면 곧 플레이가 불가능해진다는 점을 실제로 보여 주면 재미있습니다.</p>' },
+          { layout: 'code', title: '최고 점수 파일 (예외 처리)', code: C_HIGHSCORE.replace('    except ValueError :             # 파일 내용이 숫자가 아니면\n        return 0\n', ''), points: ['첫 실행 = 파일 없음', '<code>except FileNotFoundError</code>', '내용이 망가지면 <code>ValueError</code>', '실패해도 멈추지 않게'],
+            notes: '<p>파일이 없을 때 그냥 오류로 죽는 프로그램과, 0 으로 시작하는 프로그램의 차이를 이야기합니다. “예외 처리는 사용자를 위한 배려” 라고 정리하세요.</p>' },
+          { layout: 'practice', title: '실습 14-22. 충돌 판정 표', desc: '괴물 (200, 100), 크기 (60, 52) 일 때 미사일 네 위치의 맞음/빗나감 출력',
             starter: "monsterX, monsterY = 200, 100\nmonsterSize = (60, 52)\nfor missileX, missileY in [(230, 120), (190, 120), (230, 160), (259, 151)] :\n    # TODO\n    pass\n",
             solution: "monsterX, monsterY = 200, 100\nmonsterSize = (60, 52)\nfor missileX, missileY in [(230, 120), (190, 120), (230, 160), (259, 151)] :\n    if (monsterX < missileX and missileX < monsterX + monsterSize[0]) and \\\n        (monsterY < missileY and missileY < monsterY + monsterSize[1]) :\n        print(missileX, missileY, '맞음')\n    else :\n        print(missileX, missileY, '빗나감')\n",
-            notes: '<p>도전 과제 실습 14-9(놓친 수 · 게임 오버)는 본문에서 진행합니다. 시간이 남으면 “더 발전시켜 보기” 목록 중 하나를 골라 보게 합니다.</p>' },
-          { layout: 'summary', title: 'Chapter 14 정리', bullets: ['외부 라이브러리: pip install → import', '미니 포토샵: 메뉴 · 원본 복사 · Pillow 가공 · 출력', '슈팅 게임: 게임 루프 안에서 위치 변경 · 그리기', 'None 으로 “없음” 표시, 좌표 비교로 충돌 판정', '큰 프로그램 = 뼈대 먼저, 기능 하나씩'],
-            notes: '<p>과정 전체를 마무리합니다. 두 프로젝트를 자기만의 기능으로 확장해 보는 것을 과제로 제안합니다.</p>' }
+            notes: '<p>도전 과제 실습 14-21(놓친 수 · 게임 오버)는 본문에서 진행합니다. 시간이 남으면 확장판 코드를 열어 두고 “더 발전시켜 보기” 목록 중 하나를 골라 보게 합니다.</p>' },
+          { layout: 'summary', title: '[프로젝트 2] 정리', bullets: ['슈팅 게임: 게임 루프 안에서 위치 변경 · 그리기', 'None 으로 “없음” 표시, 좌표 비교로 충돌 판정', '확장: 난이도 · 생명 · 최고 점수 · 효과음', '구조 정리: 전역 변수 → <code>state</code> 딕셔너리 · 함수 분리', '다음 시간부터는 같은 방법으로 <b>새 프로젝트</b>를 만든다'],
+            notes: '<p>두 프로젝트를 자기만의 기능으로 확장해 보는 것을 과제로 제안합니다. 14-6(타자 연습) · 14-7(막대그래프)에서는 강의자료 없이 요구 사항부터 스스로 만들어 본다고 예고하세요.</p>' }
+        ]
+      },
+
+      /* ============================================================ 14-6 (추가) */
+      {
+        id: 'ch14-6',
+        title: '[프로젝트 3] 타자 연습 만들기 (tkinter · 시간 · 파일)',
+        minutes: 50,
+        goals: [
+          '요구 사항을 목록으로 적고 기능을 화면 · 채점 · 통계로 분해할 수 있다',
+          '1단계 화면 → 2단계 동작 → 3단계 완성의 순서로 프로그램을 키워 갈 수 있다',
+          'Entry 위젯과 <Return> 키 이벤트를 연결해 입력을 처리할 수 있다',
+          '여러 상태 값을 딕셔너리 하나로 묶어 전역 변수를 줄일 수 있다',
+          'time 으로 걸린 시간을 재고 정확도 · 분당 타수를 계산할 수 있다',
+          '결과를 파일에 이어 쓰고 다시 읽어 최근 기록을 보여 줄 수 있다'
+        ],
+        flow: [['요구 사항 정리 · 기능 분해', 8], ['1단계 화면 만들기', 8], ['2단계 채점과 다음 문제', 12], ['3단계 통계 · 파일 기록', 12], ['확장 아이디어', 4], ['퀴즈 · 실습', 6]],
+        content: [
+          { type: 'h', text: '이번에는 처음부터 우리가 설계합니다' },
+          { type: 'p', html: '앞의 두 프로젝트는 만들 것이 정해져 있었습니다. 이번에는 <b>요구 사항을 적는 일부터</b> 직접 해 봅니다. 만들 프로그램은 <b>타자 연습</b>입니다 — 화면에 나온 문장을 그대로 치고 엔터를 누르면 다음 문장이 나오고, 끝나면 <b>걸린 시간 · 분당 타수 · 정확도</b>를 알려 주며 결과를 파일에 남깁니다.' },
+          { type: 'h', text: '① 요구 사항' },
+          { type: 'list', ordered: true, items: [
+            '프로그램을 켜면 문장 하나와 입력칸이 보이고, 커서가 입력칸에 있다.',
+            '문장을 치고 <b>엔터</b>를 누르면 채점하고 다음 문장으로 넘어간다.',
+            '화면에 “<b>3 / 8 문장</b>” 처럼 진행 상황이 보인다.',
+            '문장을 모두 치면 <b>걸린 시간 · 분당 타수 · 정확도</b>를 보여 준다.',
+            '결과 한 줄을 <b>파일에 기록</b>하고, 화면 아래에 최근 기록 3개를 보여 준다.',
+            '[다시 시작] 을 누르면 처음부터 다시 할 수 있다.',
+            '빈칸으로 엔터를 쳐도, 문장 파일이 없어도 <b>오류로 멈추지 않는다</b>.'
+          ] },
+          { type: 'h', text: '② 기능 분해 — 화면 / 상태 / 계산 / 저장' },
+          { type: 'figure', html: SVG_TYPING, caption: '화면에 보이는 것과 화면 뒤에 숨은 것(상태)' },
+          { type: 'table', head: ['덩어리', '필요한 것', '함수'], rows: [
+            ['화면', '문장 Label · 입력 Entry · 상태 Label · 버튼', '<code>show_question()</code>'],
+            ['상태', '몇 번째 문장 · 친 글자 수 · 문장별 정확도 · 시작 시각', '<code>state</code> 딕셔너리'],
+            ['계산', '정확도(%) · 걸린 시간 · 분당 타수', '<code>accuracy()</code> · <code>finish()</code>'],
+            ['저장', '결과 한 줄 기록 · 최근 기록 읽기', '<code>save_result()</code> · <code>recent_results()</code>'],
+            ['데이터', '연습할 문장 목록', '<code>load_sentences()</code>']
+          ] },
+          { type: 'callout', kind: 'tip', title: '문장은 파일에서 읽습니다', html: '작업 폴더의 <code>ch14/typing.txt</code> 에 연습 문장 8개가 한 줄씩 들어 있습니다. 문장을 코드 안에 적지 않고 <b>파일에서 읽으면</b>, 문장을 바꾸고 싶을 때 코드를 건드릴 필요가 없습니다. 이렇게 “바뀌는 것(데이터)” 과 “바뀌지 않는 것(코드)” 을 떼어 놓는 것이 좋은 설계의 기본입니다.' },
+
+          { type: 'h', text: '1단계 — 화면부터 만들기' },
+          { type: 'p', html: '먼저 <b>움직이지 않는 화면</b>만 만듭니다. 이 단계의 목표는 “보이는 것이 다 있는가?” 뿐입니다. 아직 엔터를 눌러도 아무 일도 일어나지 않습니다.' },
+          { type: 'code', title: '타자 연습 1단계. 화면 만들기', code: TY1,
+            desc: '<code>pack(pady = …)</code> 으로 위젯 사이를 띄웠습니다. <code>entAnswer.focus_set()</code> 은 프로그램을 켜자마자 커서를 입력칸에 두어, 사용자가 바로 칠 수 있게 합니다 — 작지만 큰 배려입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 파일을 읽는 함수를 따로 만든 이유', html: '<code>load_sentences()</code> 는 화면과 아무 관련이 없습니다. 그래서 <b>화면 없이도 시험</b>할 수 있습니다. <code>print(load_sentences(\'ch14/typing.txt\'))</code> 만 해 보면 파일을 제대로 읽는지 바로 알 수 있지요. 화면을 만들기 전에 이런 부분부터 확인해 두면, 나중에 “화면이 안 나와요” 와 “파일을 못 읽어요” 를 헷갈리지 않습니다.' },
+
+          { type: 'h', text: '2단계 — 엔터를 누르면 채점하고 다음 문장' },
+          { type: 'p', html: '이제 <b>동작</b>을 넣습니다. 핵심은 두 가지입니다.' },
+          { type: 'list', items: [
+            '<b>키 이벤트 연결</b> — <code>entAnswer.bind(\'&lt;Return&gt;\', check)</code>. 엔터를 누르면 tkinter 가 <code>check(event)</code> 를 불러 줍니다. 그래서 <code>check()</code> 는 <code>def check(event = None)</code> 처럼 <b>매개변수 하나를 받을 준비</b>를 해 둡니다(버튼에서 부를 때는 값이 없으므로 기본값 None).',
+            '<b>상태 관리</b> — 몇 번째 문장인지, 몇 글자를 쳤는지를 <code>state</code> 딕셔너리 하나에 모읍니다. 딕셔너리는 <b>안의 값을 바꾸어도 같은 객체</b>이므로 함수 안에서 <code>global</code> 없이 <code>state[\'index\'] += 1</code> 이 됩니다.'
+          ] },
+          { type: 'p', html: '정확도는 두 문장을 <b>한 글자씩</b> 비교해서 맞은 글자의 비율로 계산합니다. 계산만 하는 함수이므로 화면 없이 먼저 시험해 봅시다.' },
+          { type: 'code', title: '추가 예제. 정확도 함수 먼저 만들고 시험하기', code: C_ASSERT,
+            expect: '100.0\n88.9\n33.3\n0.0\n테스트 통과!',
+            desc: '<code>assert 조건</code> 은 조건이 거짓이면 오류를 내며 멈춥니다. 이렇게 <b>스스로 검사하는 한 줄</b>을 붙여 두면, 나중에 함수를 고쳤을 때 잘못된 변경을 바로 알아챌 수 있습니다. <code>max(len(target), 1)</code> 은 빈 문장일 때 0 으로 나누는 것을 막습니다.' },
+          { type: 'code', title: '타자 연습 2단계. 채점하고 다음 문장으로', code: TY2,
+            desc: '<code>show_question()</code> 은 “지금 상태를 화면에 반영” 하는 함수이고, <code>check()</code> 는 “입력을 받아 상태를 바꾸는” 함수입니다. 게임 루프의 <b>그리기</b>와 <b>갱신</b>을 나눈 것과 똑같은 구조입니다.' },
+          { type: 'callout', kind: 'warn', title: '흔한 실수 세 가지', html: '<ul><li><code>bind(\'&lt;Return&gt;\', check())</code> — 괄호를 붙이면 그 자리에서 한 번 실행되고 끝입니다. <code>check</code> 만 넘기세요.</li><li><code>def check() :</code> 로 만들면 <code>TypeError: check() takes 0 positional arguments but 1 was given</code> — 이벤트가 들어올 자리를 만들어야 합니다.</li><li>마지막 문장을 친 뒤 <code>state[\'index\']</code> 가 문장 수와 같아졌는데 <code>show_question()</code> 을 부르면 <code>IndexError</code> — <b>끝났는지 먼저 검사</b>해야 합니다.</li></ul>' },
+
+          { type: 'h', text: '3단계 — 통계와 파일 기록 (완성)' },
+          { type: 'p', html: '마지막으로 <b>결과를 남기는</b> 기능을 넣습니다. 파일을 <code>\'a\'</code>(append, 이어 쓰기) 모드로 열면 기존 내용을 지우지 않고 뒤에 한 줄을 덧붙입니다.' },
+          { type: 'code', title: '추가 예제. 결과 파일에 이어 쓰고 최근 기록 읽기', code: C_RESULT_FILE,
+            expect: '처음 기록 : []\n2026-03-02 10:05,22.1초,121타,99.0%\n2026-03-02 10:11,20.8초,122타,99.5%\n2026-03-02 10:20,19.3초,123타,100.0%',
+            desc: '<code>[-3:]</code> 은 리스트의 <b>뒤에서 3개</b>를 잘라 냅니다. 기록이 3개보다 적어도 오류 없이 있는 만큼만 돌려줍니다. 실제 프로그램에서는 시각을 <code>datetime.datetime.now()</code> 로 얻지만, 여기서는 결과를 고정하려고 값을 직접 넘겼습니다.' },
+          { type: 'p', html: '분당 타수는 <code>친 글자 수 ÷ 걸린 시간(초) × 60</code> 입니다. 걸린 시간이 0 에 가까우면 어마어마한 숫자가 나오므로 <code>max(0.1, …)</code> 으로 <b>바닥을 깔아 둡니다</b>.' },
+          { type: 'code', title: '[프로젝트 3] 완성: 타자 연습', code: TY3,
+            desc: '문장을 모두 치면 통계가 나오고 <code>typing_result.txt</code> 에 기록이 쌓입니다. [다시 시작] 을 누르면 상태만 초기화하고 화면을 다시 그립니다 — <b>프로그램을 껐다 켜지 않아도</b> 처음으로 돌아갈 수 있게 만드는 것이 좋은 설계입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 여기서 더 해 본다면', html: '<ul><li><b>틀린 글자 표시</b> — 입력칸의 글자와 제시 문장을 비교해 틀린 위치부터 빨간색으로 보여 주기 (<code>Text</code> 위젯의 태그 기능)</li><li><b>제한 시간</b> — <code>window.after(1000, tick)</code> 으로 1초마다 남은 시간을 줄이고 0 이 되면 종료</li><li><b>난이도</b> — 문장 파일을 쉬움 · 어려움으로 나누고 시작 화면에서 고르기</li><li><b>통계 화면</b> — 기록 파일을 읽어 날짜별 분당 타수를 14-7 에서 배울 막대그래프로 그리기</li><li><b>키보드 소리</b> — 글자를 칠 때마다 짧은 소리 재생</li></ul>' }
+        ],
+        practice: [
+          {
+            title: '실습 14-26. 문장 파일 살펴보기', level: 1,
+            desc: '<p><code>ch14/typing.txt</code> 를 읽어 <b>문장 수</b>, <b>가장 긴 문장</b>, <b>글자 수 평균</b>을 출력하세요. (공백도 한 글자로 셉니다.)</p>',
+            hint: '<code>max(리스트, key = len)</code> 은 가장 긴 문자열을 돌려줍니다. 평균은 전체 글자 수 ÷ 문장 수.',
+            starter: "def load_sentences(fname) :\n    lines = []\n    with open(fname, encoding = 'utf-8') as f :\n        for line in f :\n            line = line.strip()\n            if line != '' :\n                lines.append(line)\n    return lines\n\nsentences = load_sentences('ch14/typing.txt')\nprint('문장 수 :', len(sentences))\n# TODO: 가장 긴 문장과 평균 글자 수 출력\n",
+            solution: "def load_sentences(fname) :\n    lines = []\n    with open(fname, encoding = 'utf-8') as f :\n        for line in f :\n            line = line.strip()\n            if line != '' :\n                lines.append(line)\n    return lines\n\nsentences = load_sentences('ch14/typing.txt')\nprint('문장 수 :', len(sentences))\nlongest = max(sentences, key = len)\nprint('가장 긴 문장 :', longest, '(%d글자)' % len(longest))\ntotal = 0\nfor s in sentences :\n    total += len(s)\nprint('평균 글자 수 : %.1f' % (total / len(sentences)))\n",
+            expect: '문장 수 : 8\n가장 긴 문장 : 파이썬은 배우기 쉬운 프로그래밍 언어이다 (22글자)\n평균 글자 수 : 17.9'
+          },
+          {
+            title: '실습 14-27. 분당 타수 계산기', level: 1,
+            desc: '<p>친 글자 수와 걸린 시간(초)을 받아 <b>분당 타수</b>를 돌려주는 함수 <code>speed(chars, spent)</code> 를 만드세요. 걸린 시간이 0 이거나 음수여도 오류가 나지 않아야 합니다(최소 0.1초로 봅니다).</p><p>(120글자, 30초) · (120글자, 60초) · (50글자, 0초) 세 경우를 출력하세요.</p>',
+            hint: '<code>spent = max(0.1, spent)</code> 로 바닥을 깔아 둔 뒤 <code>chars / spent * 60</code> 을 계산합니다.',
+            starter: "def speed(chars, spent) :\n    # TODO: 최소 0.1초로 보정한 뒤 분당 타수 계산\n    return 0\n\nfor chars, spent in [(120, 30), (120, 60), (50, 0)] :\n    print('%d글자 %.1f초 → 분당 %.0f타' % (chars, spent, speed(chars, spent)))\n",
+            solution: "def speed(chars, spent) :\n    spent = max(0.1, spent)        # 0 으로 나누지 않도록\n    return chars / spent * 60\n\nfor chars, spent in [(120, 30), (120, 60), (50, 0)] :\n    print('%d글자 %.1f초 → 분당 %.0f타' % (chars, spent, speed(chars, spent)))\n",
+            expect: '120글자 30.0초 → 분당 240타\n120글자 60.0초 → 분당 120타\n50글자 0.0초 → 분당 30000타'
+          },
+          {
+            title: '실습 14-28. 정확도 함수 고치기 (길이가 다를 때)', level: 2,
+            desc: '<p>본문의 <code>accuracy()</code> 는 <b>더 많이 친 경우</b>를 벌점 없이 넘어갑니다. 예를 들어 “파이썬” 을 “파이썬입니다” 로 쳐도 100% 가 나옵니다.</p><p>친 글자 수가 제시 문장보다 길면 그만큼 감점하도록 고치세요. 새 정확도 = <code>맞은 글자 수 ÷ max(제시 길이, 친 길이) × 100</code>.</p><p>비교를 위해 옛 함수와 새 함수의 결과를 함께 출력하세요.</p>',
+            hint: '분모만 <code>max(len(target), len(typed), 1)</code> 로 바꾸면 됩니다. 두 함수를 모두 두고 비교해 보세요.',
+            starter: "def accuracy(target, typed) :\n    hit = 0\n    for i in range(min(len(target), len(typed))) :\n        if target[i] == typed[i] :\n            hit += 1\n    return hit / max(len(target), 1) * 100\n\ndef accuracy2(target, typed) :\n    # TODO: 더 길게 친 경우도 감점되도록\n    return 0.0\n\nfor t in ['파이썬', '파이썬입니다', '파이선'] :\n    print(t, '→ 옛 %.1f' % accuracy('파이썬', t))\n",
+            solution: "def accuracy(target, typed) :\n    hit = 0\n    for i in range(min(len(target), len(typed))) :\n        if target[i] == typed[i] :\n            hit += 1\n    return hit / max(len(target), 1) * 100\n\ndef accuracy2(target, typed) :\n    hit = 0\n    for i in range(min(len(target), len(typed))) :\n        if target[i] == typed[i] :\n            hit += 1\n    return hit / max(len(target), len(typed), 1) * 100\n\nfor t in ['파이썬', '파이썬입니다', '파이선'] :\n    print('%s → 옛 %.1f / 새 %.1f' % (t, accuracy('파이썬', t), accuracy2('파이썬', t)))\n",
+            expect: '파이썬 → 옛 100.0 / 새 100.0\n파이썬입니다 → 옛 100.0 / 새 50.0\n파이선 → 옛 66.7 / 새 66.7'
+          },
+          {
+            title: '실습 14-29. 남은 시간 표시하기 (after 사용)', level: 2,
+            desc: '<p>타자 연습 창에 <b>제한 시간 30초</b>를 붙이세요.</p><ul><li>창 위쪽에 “남은 시간 : 30 초” 를 보여 준다</li><li><code>window.after(1000, tick)</code> 으로 <b>1초마다</b> 1씩 줄인다</li><li>0 이 되면 입력칸을 비우고 “시간 종료!” 를 보여 준다</li></ul>',
+            hint: '<code>after</code> 는 “몇 밀리초 뒤에 이 함수를 한 번 불러 달라” 는 예약입니다. 계속 반복하려면 함수 안에서 <b>자기 자신을 다시 예약</b>합니다.',
+            starter: "from tkinter import *\n\nwindow = Tk()\nwindow.title('남은 시간')\nwindow.geometry('300x120')\n\nleft = {'sec' : 30}\nlblTime = Label(window, text = '남은 시간 : 30 초', font = ('맑은고딕', 14))\nlblTime.pack(pady = 20)\n\ndef tick() :\n    # TODO: 1초 줄이고 화면에 표시, 0 보다 크면 다시 예약\n    pass\n\ntick()\nwindow.mainloop()\n",
+            solution: "from tkinter import *\n\nwindow = Tk()\nwindow.title('남은 시간')\nwindow.geometry('300x120')\n\nleft = {'sec' : 30}\nlblTime = Label(window, text = '남은 시간 : 30 초', font = ('맑은고딕', 14))\nlblTime.pack(pady = 20)\n\ndef tick() :\n    if left['sec'] <= 0 :\n        lblTime.configure(text = '시간 종료!')\n        return\n    lblTime.configure(text = '남은 시간 : %d 초' % left['sec'])\n    left['sec'] -= 1\n    window.after(1000, tick)        # 1초 뒤에 자기 자신을 다시 부른다\n\ntick()\nwindow.mainloop()\n"
+          },
+          {
+            title: '🚀 프로젝트 14-30. 낱말 맞히기 게임으로 바꾸기', level: 3,
+            desc: '<p>타자 연습의 구조(문장 목록 → 하나씩 제시 → 입력 채점 → 통계 → 기록)를 그대로 빌려 <b>낱말 맞히기 게임</b>을 만드세요.</p><ul><li><b>입력</b> : 낱말의 뜻을 보여 주고(예: “파이썬을 만든 사람”), 답을 입력받는다</li><li><b>규칙</b> : 맞으면 점수 +10, 틀리면 정답을 알려 준다. 문제는 5개</li><li><b>출력</b> : 끝나면 점수와 맞힌 개수를 보여 주고 <code>quiz_result.txt</code> 에 한 줄 기록</li><li>문제는 <code>[(\'뜻\', \'정답\'), …]</code> 리스트로 만든다 (파일에서 읽어도 좋다)</li></ul><p>정답 코드는 화면 없이도 확인할 수 있도록 채점 함수 <code>grade()</code> 를 따로 만들고, 창을 띄우기 전에 몇 가지를 시험해 봅니다.</p>',
+            hint: '구조는 타자 연습과 똑같습니다. <code>state = {\'index\' : 0, \'score\' : 0, \'hit\' : 0}</code> 로 시작하고, <code>check()</code> 안에서 정답과 비교하세요. 대소문자 · 앞뒤 공백은 <code>strip().lower()</code> 로 맞춰 줍니다.',
+            starter: "from tkinter import *\n\nQUIZ = [('파이썬을 만든 사람', '귀도'), ('0 과 1 만 쓰는 수 체계', '이진법'),\n        ('반복을 뜻하는 영어 낱말', 'loop'), ('참과 거짓 자료형', 'bool'),\n        ('화면에 출력하는 함수', 'print')]\n\ndef grade(answer, correct) :\n    # TODO: 앞뒤 공백과 대소문자를 무시하고 비교\n    return False\n\nstate = {'index' : 0, 'score' : 0, 'hit' : 0}\n\nwindow = Tk()\nwindow.title('낱말 맞히기')\nwindow.geometry('460x220')\nlblQ = Label(window, text = QUIZ[0][0], font = ('맑은고딕', 15, 'bold'))\nlblQ.pack(pady = 16)\nentA = Entry(window, width = 24, font = ('맑은고딕', 13))\nentA.pack(pady = 8)\nlblS = Label(window, text = '1 / 5 문제', font = ('맑은고딕', 11))\nlblS.pack(pady = 10)\n# TODO: check() 를 만들고 entA 의 <Return> 에 연결\nwindow.mainloop()\n",
+            solution: "from tkinter import *\n\nQUIZ = [('파이썬을 만든 사람', '귀도'), ('0 과 1 만 쓰는 수 체계', '이진법'),\n        ('반복을 뜻하는 영어 낱말', 'loop'), ('참과 거짓 자료형', 'bool'),\n        ('화면에 출력하는 함수', 'print')]\nRESULT_FILE = 'quiz_result.txt'\n\ndef grade(answer, correct) :\n    return answer.strip().lower() == correct.strip().lower()\n\ndef show() :\n    lblQ.configure(text = QUIZ[state['index']][0])\n    lblS.configure(text = '%d / %d 문제  ·  %d점' % (state['index'] + 1, len(QUIZ), state['score']))\n    entA.delete(0, END)\n    entA.focus_set()\n\ndef finish() :\n    lblQ.configure(text = '끝! %d문제 중 %d개 정답' % (len(QUIZ), state['hit']))\n    lblS.configure(text = '점수 %d점' % state['score'])\n    entA.delete(0, END)\n    with open(RESULT_FILE, 'a', encoding = 'utf-8') as f :\n        f.write('%d점 %d/%d\\n' % (state['score'], state['hit'], len(QUIZ)))\n\ndef check(event = None) :\n    answer = entA.get()\n    if answer == '' :\n        return\n    correct = QUIZ[state['index']][1]\n    if grade(answer, correct) :\n        state['score'] += 10\n        state['hit'] += 1\n        print('정답!')\n    else :\n        print('아쉬워요. 정답은', correct)\n    state['index'] += 1\n    if state['index'] < len(QUIZ) :\n        show()\n    else :\n        finish()\n\nstate = {'index' : 0, 'score' : 0, 'hit' : 0}\n\nprint(grade(' Loop ', 'loop'), grade('룹', 'loop'))     # 화면 없이 먼저 시험\n\nwindow = Tk()\nwindow.title('낱말 맞히기')\nwindow.geometry('460x220')\nlblQ = Label(window, text = '', font = ('맑은고딕', 15, 'bold'))\nlblQ.pack(pady = 16)\nentA = Entry(window, width = 24, font = ('맑은고딕', 13))\nentA.pack(pady = 8)\nentA.bind('<Return>', check)\nlblS = Label(window, text = '', font = ('맑은고딕', 11))\nlblS.pack(pady = 10)\n\nshow()\nwindow.mainloop()\n",
+            expect: 'True False'
+          }
+        ],
+        quiz: [
+          { q: '<code>entAnswer.bind(\'&lt;Return&gt;\', check)</code> 로 연결할 때 <code>check</code> 함수의 올바른 정의는?', options: ['<code>def check() :</code>', '<code>def check(event = None) :</code>', '<code>def check(self) :</code>', '<code>def check(*) :</code>'], answer: 1,
+            explain: '키 이벤트로 불릴 때는 이벤트 객체가 하나 전달됩니다. 버튼에서도 같은 함수를 쓰려면 기본값을 둔 <code>event = None</code> 이 편합니다.' },
+          { q: '다음 코드의 실행 결과는?<pre><code>state = {\'n\' : 0}\ndef up() :\n    state[\'n\'] += 1\nup()\nup()\nprint(state[\'n\'])</code></pre>', options: ['0', '1', '2', '오류 (global 선언이 없음)'], answer: 2,
+            explain: '<code>state</code> 라는 <b>이름</b>에 대입한 것이 아니라 딕셔너리 <b>안의 값</b>을 바꾼 것이므로 global 이 필요 없습니다. 그래서 전역 변수를 딕셔너리로 묶으면 편합니다.' },
+          { q: '파일을 <code>open(fname, \'a\')</code> 로 여는 것의 뜻은?', options: ['기존 내용을 지우고 새로 쓴다', '기존 내용 뒤에 이어 쓴다', '읽기만 한다', '파일을 지운다'], answer: 1,
+            explain: '<code>\'w\'</code> 는 덮어쓰기, <code>\'a\'</code> 는 이어 쓰기(append)입니다. 기록을 쌓을 때는 <code>\'a\'</code> 를 씁니다.' },
+          { q: '<code>accuracy(\'abcd\', \'abxd\')</code> 의 결과는? (본문의 정확도 함수)', options: ['100.0', '75.0', '50.0', '25.0'], answer: 1,
+            explain: '네 글자 중 a · b · d 세 글자가 같은 자리에 있으므로 3 / 4 × 100 = 75.0 입니다.' },
+          { q: '다음 코드에는 버그가 있습니다. 무엇인가?<pre><code>def check(event = None) :\n    state[\'index\'] += 1\n    show_question()      # 다음 문장 보여 주기</code></pre>', options: ['event 를 쓰지 않아서', '마지막 문장 다음에도 show_question() 을 불러 IndexError 가 난다', 'state 에 global 이 없어서', '정확도를 계산하지 않아서'], answer: 1,
+            explain: '<code>index</code> 가 문장 수와 같아지면 <code>sentences[index]</code> 가 없습니다. <b>끝났는지 먼저 검사</b>하고 끝이면 <code>finish()</code> 를 불러야 합니다.' },
+          { q: '분당 타수를 계산할 때 <code>spent = max(0.1, spent)</code> 를 넣는 이유는?', options: ['시간을 정확히 재려고', '0 으로 나누기(ZeroDivisionError)와 말도 안 되는 값을 막으려고', '정확도를 올리려고', '파일에 쓰기 위해'], answer: 1,
+            explain: '걸린 시간이 0 에 가까우면 나눗셈에서 오류가 나거나 터무니없이 큰 값이 나옵니다. 바닥값을 정해 두면 안전합니다.' }
+        ],
+        slides: [
+          { layout: 'title', title: '[프로젝트 3] 타자 연습', subtitle: 'Chapter 14 · 14-6 — 요구 사항부터 스스로 만들기', badge: '14-6',
+            notes: '<p>완성본을 먼저 한 번 시연하고 시작합니다(문장 8개를 빠르게 쳐서 통계 화면까지 보여 주기). “오늘은 교재 코드가 없습니다. 우리가 요구 사항부터 적습니다” 라고 선언하면 분위기가 달라집니다.</p><p>시간: 2분</p>' },
+          { layout: 'bullets', title: '① 요구 사항 적기', lead: '무엇이 되면 “다 만든 것” 인가?', bullets: [
+            '문장 하나와 입력칸이 보이고 커서가 입력칸에 있다',
+            '치고 엔터 → 채점하고 다음 문장',
+            '“3 / 8 문장” 처럼 진행 상황이 보인다',
+            '끝나면 시간 · 분당 타수 · 정확도를 보여 준다',
+            '결과를 파일에 남기고 최근 기록 3개를 보여 준다',
+            '빈칸 엔터 · 파일 없음에도 <b>멈추지 않는다</b>'
+          ], notes: '<p>마지막 줄(예외 상황)을 빠뜨리지 않는 것이 이 수업의 핵심 습관입니다. 학생들에게 “더 넣고 싶은 요구 사항” 을 두세 개 받아 칠판에 적어 두고, 나중에 확장 과제로 연결하세요.</p>' },
+          { layout: 'diagram', title: '② 기능 분해 — 화면과 상태', html: SVG_TYPING, caption: '보이는 것 3가지 · 숨은 상태 4가지',
+            notes: '<p>화면에 보이는 것과 보이지 않는 상태를 나누어 적게 하는 것이 설계의 시작입니다. 상태를 흩어진 전역 변수 4개로 두지 않고 state 딕셔너리 하나로 묶는다는 점을 강조하세요.</p>' },
+          { layout: 'code', title: '1단계 — 화면만 만들기', code: TY1.replace("## 함수 선언 부분 ##\ndef load_sentences(fname) :\n    lines = []\n    with open(fname, encoding = 'utf-8') as f :\n        for line in f :\n            line = line.strip()\n            if line != \"\" :\n                lines.append(line)\n    return lines\n\n## 전역 변수 선언 부분 ##\nsentences = load_sentences('ch14/typing.txt')", "sentences = ['작게 만들고 자주 실행해 보자', '오늘도 한 줄씩 꾸준히 써 보자']").replace('lblGuide = Label', 'lbl1 = Label').replace('lblGuide.pack', 'lbl1.pack'),
+            points: ['먼저 <b>움직이지 않는</b> 화면', '<code>pack(pady=…)</code> 로 간격', '<code>focus_set()</code> 으로 커서 위치', '여기까지 실행해 확인'],
+            notes: '<p>슬라이드에서는 문장 파일 읽기를 빼고 짧게 줄였습니다. 본문 코드는 파일에서 읽습니다. 1단계의 목표는 “보이는 것이 다 있는가?” 뿐임을 강조하세요.</p>' },
+          { layout: 'code', title: '계산 함수는 화면 없이 먼저 시험', code: C_ASSERT, points: ['정확도 = 맞은 글자 / 전체', '<code>assert</code> 로 스스로 검사', '<code>max(len, 1)</code> 로 0 나누기 방지'],
+            notes: '<p>화면을 만들기 전에 계산 함수를 완성해 두면 나중에 “화면 문제” 와 “계산 문제” 를 헷갈리지 않습니다. assert 는 이 강좌에서 처음 나오므로 “조건이 거짓이면 멈춘다” 정도로 짧게 소개하세요.</p>' },
+          { layout: 'two', title: '2단계 — 갱신과 그리기를 나눈다', left: { title: 'check() : 상태를 바꾼다', bullets: ['입력을 읽는다', '정확도 · 글자 수를 쌓는다', 'index 를 1 늘린다', '끝인지 검사한다'] }, right: { title: 'show_question() : 화면에 반영', bullets: ['문장 Label 바꾸기', '진행 상황 Label 바꾸기', '입력칸 비우기', '값을 계산하지 않는다'] },
+            notes: '<p>게임 루프의 “갱신 / 그리기” 와 똑같은 구조라는 점을 반드시 연결해 주세요. 한 함수가 두 가지 일을 하기 시작하면 코드가 어려워집니다.</p>' },
+          { layout: 'code', title: '엔터 키 연결하기', code: "from tkinter import *\n\nwindow = Tk()\nwindow.geometry('320x120')\n\ndef check(event = None) :          # 이벤트가 들어올 자리\n    print('입력 :', ent.get())\n    ent.delete(0, END)\n\nent = Entry(window, width = 24)\nent.pack(pady = 20)\nent.bind('<Return>', check)        # 괄호 없이 함수 이름만\nent.focus_set()\nButton(window, text = '확인', command = check).pack()\n\ncheck()      # 버튼처럼 값 없이 불러도 된다\nwindow.mainloop()", points: ['<code>bind(\'&lt;Return&gt;\', check)</code>', '<code>event = None</code> 기본값', '버튼과 같은 함수 공유', '괄호를 붙이면 즉시 실행'],
+            notes: '<p>가장 자주 나오는 TypeError(“takes 0 positional arguments but 1 was given”)를 실제로 보여 준 뒤 고치면 기억에 오래 남습니다.</p>' },
+          { layout: 'code', title: '3단계 — 결과를 파일에 남기기', code: C_RESULT_FILE, points: ['<code>\'a\'</code> = 이어 쓰기', '<code>[-3:]</code> = 뒤에서 3개', '파일이 없으면 빈 목록', '기록이 쌓이면 통계도 가능'],
+            notes: '<p>실행할 때마다 기록이 늘어나는 것을 보여 주세요. 14-7 에서 이 기록 파일을 막대그래프로 그려 보는 확장을 예고하면 두 교시가 자연스럽게 이어집니다.</p>' },
+          { layout: 'bullets', title: '완성 — 그리고 더 해 볼 것', bullets: [
+            '분당 타수 = 글자 수 ÷ 초 × 60 (<code>max(0.1, …)</code>)',
+            '[다시 시작] = 상태만 초기화하고 다시 그리기',
+            '확장 ① 틀린 글자 빨갛게 표시',
+            '확장 ② <code>after</code> 로 제한 시간',
+            '확장 ③ 기록을 그래프로 (14-7)'
+          ], notes: '<p>“껐다 켜지 않아도 처음으로 돌아갈 수 있어야 한다” 는 원칙을 강조합니다. 확장 항목은 실습 14-29 · 14-30 과 연결됩니다.</p>' },
+          { layout: 'quiz', title: '확인 퀴즈', q: '함수 안에서 <code>state[\'n\'] += 1</code> 을 할 때 <code>global state</code> 가 필요할까?', options: ['필요하다', '필요 없다 (딕셔너리 안의 값을 바꾸는 것이므로)', 'state 가 리스트일 때만 필요하다', '함수 밖에서는 쓸 수 없다'], answer: 1,
+            explain: '이름에 새로 대입할 때만 global 이 필요합니다. 딕셔너리 · 리스트 <b>안의 값</b>을 바꾸는 것은 대입이 아닙니다.',
+            notes: '<p>이 차이를 정확히 아는 것이 전역 변수를 줄이는 첫걸음입니다. 헷갈리는 학생을 위해 <code>state = {}</code> (대입)과 <code>state[\'n\'] = 1</code> (변경)을 나란히 써 보여 주세요.</p>' },
+          { layout: 'practice', title: '실습 14-27. 분당 타수 계산기', desc: '글자 수와 걸린 시간으로 분당 타수 구하기 (0초 대비)',
+            starter: "def speed(chars, spent) :\n    # TODO\n    return 0\n\nprint(speed(120, 30))\n",
+            solution: "def speed(chars, spent) :\n    spent = max(0.1, spent)\n    return chars / spent * 60\n\nfor chars, spent in [(120, 30), (120, 60), (50, 0)] :\n    print('%d글자 %.1f초 → 분당 %.0f타' % (chars, spent, speed(chars, spent)))\n",
+            notes: '<p>5분. 0초 입력을 넣어 보게 해서 왜 바닥값이 필요한지 스스로 느끼게 합니다.</p>' },
+          { layout: 'summary', title: '정리', bullets: ['요구 사항 → 기능 분해 → 1 · 2 · 3 단계', '화면(그리기)과 상태 변경(갱신)을 나눈다', '상태는 <code>state</code> 딕셔너리 하나로', '계산 함수는 화면 없이 <code>assert</code> 로 시험', '기록은 파일에 <code>\'a\'</code> 모드로 남긴다'],
+            notes: '<p>다음 시간에는 같은 순서로 데이터(CSV)를 읽어 그림을 그리는 프로젝트를 만들고, 프로젝트를 남에게 보여 주는 방법(README)까지 다룬다고 예고합니다.</p>' }
+        ]
+      },
+
+      /* ============================================================ 14-7 (추가) */
+      {
+        id: 'ch14-7',
+        title: '[프로젝트 4] 데이터로 막대그래프 그리기 · 프로젝트 마무리',
+        minutes: 50,
+        goals: [
+          'csv 모듈로 CSV 파일을 읽어 숫자 데이터로 바꿀 수 있다',
+          '합계 · 평균 · 최대 · 최소 같은 기초 통계를 함수로 만들어 쓸 수 있다',
+          '값을 화면 좌표로 바꾸는 스케일 변환을 이해하고 Canvas 에 막대를 그릴 수 있다',
+          '축 · 눈금 · 값 · 평균선을 더해 읽을 수 있는 그래프를 완성할 수 있다',
+          '계산 코드와 화면 코드를 모듈로 나누어 정리할 수 있다',
+          'README 를 써서 내 프로젝트를 남에게 설명할 수 있다'
+        ],
+        flow: [['요구 사항 · CSV 읽기', 10], ['통계 함수 만들기', 8], ['1 · 2단계 막대 그리기', 12], ['3단계 완성 (축 · 평균선 · 저장)', 10], ['모듈 나누기 · README', 6], ['퀴즈 · 실습', 4]],
+        content: [
+          { type: 'h', text: '① 요구 사항 — 무엇을 만들까' },
+          { type: 'p', html: '이번에는 <b>데이터</b>를 다룹니다. 작업 폴더의 <code>ch14/sales.csv</code> 에는 어느 가게의 <b>월별 판매량</b>이 들어 있습니다(아이스크림과 호빵). 이 숫자를 읽어 통계를 내고 <b>막대그래프</b>로 그려 주는 프로그램을 만듭니다.' },
+          { type: 'list', ordered: true, items: [
+            'CSV 파일을 읽어 <b>숫자</b>로 바꾼다 (파일의 내용은 모두 글자이다).',
+            '합계 · 평균 · 최대 · 최소를 계산해 화면에 보여 준다.',
+            '월별 값을 <b>막대그래프</b>로 그린다. 가장 큰 달은 다른 색으로 표시한다.',
+            '세로축 눈금과 값, 가로축의 월 이름, 그래프 제목을 보여 준다.',
+            '<b>평균선</b>을 빨간 선으로 그려 어느 달이 평균보다 높은지 한눈에 보이게 한다.',
+            '위쪽 메뉴에서 <b>품목을 고르면</b> 그래프가 바뀐다.',
+            '[요약 저장] 을 누르면 통계를 텍스트 파일로 저장한다.'
+          ] },
+          { type: 'h', text: '② CSV 파일 읽기' },
+          { type: 'p', html: 'CSV(Comma-Separated Values)는 값을 쉼표로 구분한 아주 단순한 표 파일입니다. 엑셀 · 구글 시트에서도 읽고 쓸 수 있어 데이터를 주고받는 표준처럼 쓰입니다. 파이썬에는 <code>csv</code> 모듈이 기본으로 들어 있습니다.' },
+          { type: 'code', run: false, title: 'ch14/sales.csv 의 내용 (앞부분)', code: '월,아이스크림,호빵\n1,120,430\n2,150,380\n3,240,260\n…' },
+          { type: 'code', title: '데이터 1단계. CSV 읽고 통계 내기', code: CH_LOAD,
+            expect: "열 이름 : ['월', '아이스크림', '호빵']\n행 수   : 12\n첫 행   : [1, 120, 430]\n끝 행   : [12, 140, 460]\n합계 : 5480\n평균 : 456.7\n최대 : 1040 ( 8 월 )\n최소 : 120 ( 1 월 )",
+            desc: '<code>csv.reader(파일)</code> 는 한 줄을 <b>문자열 리스트</b>로 돌려줍니다. <code>next(reader)</code> 로 첫 줄(제목 줄)을 먼저 꺼내고, 나머지는 <code>int()</code> 로 바꿔 담았습니다. <code>[int(v) for v in line]</code> 은 “줄 안의 값을 모두 정수로” 라는 뜻의 <b>컴프리헨션</b>입니다.' },
+          { type: 'callout', kind: 'warn', title: '파일에서 읽은 값은 모두 문자열', html: '<code>int()</code> 를 빼먹으면 <code>sum([\'120\', \'150\'])</code> 에서 <code>TypeError</code> 가 나거나, <code>max()</code> 가 글자 순서로 비교해 <b>\'9\' &gt; \'1040\'</b> 같은 엉뚱한 결과를 냅니다. 데이터를 읽은 <b>직후에 바로</b> 숫자로 바꾸는 습관을 들이세요.' },
+          { type: 'callout', kind: 'more', title: '📘 csv.reader 대신 split(\',\') 를 쓰면 안 될까?', html: '데이터에 쉼표가 들어 있지 않다면 <code>line.split(\',\')</code> 로도 충분합니다. 하지만 값 안에 쉼표가 있는 경우(<code>"서울, 강남",120</code>)나 따옴표 · 줄바꿈이 들어간 경우를 <code>csv</code> 모듈은 알아서 처리해 줍니다. <b>표준 라이브러리가 있으면 쓰는 것</b>이 안전합니다. 데이터가 더 커지면 <code>pandas</code> 같은 전문 라이브러리로 넘어갑니다.' },
+
+          { type: 'h', text: '③ 값을 화면 좌표로 — 스케일 변환' },
+          { type: 'p', html: '그래프를 그릴 때 가장 먼저 부딪히는 문제는 <mark>판매량 1040 을 화면의 어디에 그릴 것인가</mark> 입니다. 화면의 y 좌표는 <b>아래로 갈수록 커지므로</b> 값을 그대로 쓸 수 없습니다.' },
+          { type: 'figure', html: SVG_CHART, caption: '값 → 화면 좌표 변환 (스케일 변환)' },
+          { type: 'code', title: '추가 예제. 값을 막대의 y 좌표로 바꾸기', code: C_SCALE,
+            expect: '120 → y = 305.4 , 막대 높이 = 34.6\n520 → y = 190.0 , 막대 높이 = 150.0\n1040 → y = 40.0 , 막대 높이 = 300.0\n0 의 y : 340.0\n최대값의 y : 40.0',
+            desc: '값을 <b>최대값으로 나누면</b> 0 ~ 1 사이의 비율이 되고, 거기에 그래프 높이를 곱하면 픽셀 높이가 됩니다. 바닥(<code>BASE_Y</code>)에서 그만큼 <b>빼면</b> 막대의 윗변 y 좌표입니다. 이 식 하나면 어떤 데이터든 그릴 수 있습니다.' },
+
+          { type: 'h', text: '2단계 — 막대만 그려 보기' },
+          { type: 'p', html: '축도 글자도 없이 <b>막대만</b> 그려 봅니다. 이 단계에서 확인할 것은 “막대의 높이가 데이터와 맞는가” 뿐입니다.' },
+          { type: 'code', title: '데이터 2단계. 캔버스에 막대 그리기', code: CH2,
+            desc: '<code>create_rectangle(x1, y1, x2, y2)</code> 는 왼쪽 위와 오른쪽 아래 두 점으로 사각형을 그립니다. <code>outline = ""</code> 로 테두리를 없애면 깔끔합니다. 막대 사이 간격은 <code>i * 46</code> 과 막대 폭 36 의 차이(10픽셀)로 생깁니다.' },
+          { type: 'callout', kind: 'tip', title: '왜 상수를 위에 모아 둘까', html: '<code>W, H, LEFT, BASE, CHART_H</code> 처럼 <b>화면 크기와 여백을 대문자 이름의 상수</b>로 맨 위에 모아 두면, 그래프 크기를 바꿀 때 한 곳만 고치면 됩니다. 코드 여기저기에 <code>340</code>, <code>260</code> 같은 숫자가 흩어져 있는 것을 <b>매직 넘버</b>라고 하는데, 나중에 무슨 뜻인지 알 수 없어 고치기 어렵습니다.' },
+
+          { type: 'h', text: '3단계 — 읽을 수 있는 그래프로 (완성)' },
+          { type: 'p', html: '막대만 있는 그림은 “대충 이런 모양” 만 알려 줍니다. 아래 다섯 가지를 더하면 <b>읽을 수 있는</b> 그래프가 됩니다.' },
+          { type: 'table', head: ['더할 것', '왜', '코드'], rows: [
+            ['제목', '무엇에 대한 그래프인지', '<code>create_text(W / 2, 26, text = …)</code>'],
+            ['세로 눈금 · 값', '막대의 크기를 숫자로 읽게', '<code>for k in range(0, 5)</code> 로 5칸'],
+            ['가로 라벨', '어느 달인지', '<code>create_text(x + 18, BASE + 16, …)</code>'],
+            ['평균선', '평균보다 높은 달을 한눈에', '빨간 <code>create_line</code>'],
+            ['최대값 강조', '가장 중요한 값을 먼저 보이게', '색을 다르게 (<code>#ff7043</code>)']
+          ] },
+          { type: 'code', title: '[프로젝트 4] 완성: 월별 판매량 막대그래프', code: CH3,
+            desc: '위쪽 메뉴에서 <b>아이스크림 ↔ 호빵</b>을 바꿔 보세요. <code>draw_chart()</code> 는 그릴 때마다 <code>canvas.delete(ALL)</code> 로 <b>먼저 지우고</b> 다시 그립니다 — 지우지 않으면 예전 막대 위에 새 막대가 겹쳐 그려집니다. [요약 저장] 을 누르면 <code>sales_summary.txt</code> 가 만들어집니다.' },
+          { type: 'code', title: '추가 예제. 요약을 파일로 저장하기 (화면 없이)', code: C_SUMMARY_FILE,
+            expect: '아이스크림 합계 5480 평균 456.7 최대 1040 최소 120\n호빵 합계 2450 평균 204.2 최대 460 최소 20',
+            desc: '두 품목이 정반대로 움직입니다 — 여름에는 아이스크림, 겨울에는 호빵이 많이 팔립니다. <b>데이터에서 이야기를 읽어 내는 것</b>이 그래프를 그리는 진짜 이유입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 그래프를 그릴 때 지켜야 할 것', html: '<ul><li><b>0 에서 시작하기</b> — 막대그래프의 세로축이 0 이 아닌 값에서 시작하면 차이가 실제보다 크게 보여 사람을 속입니다.</li><li><b>단위 적기</b> — 숫자만 있으면 개수인지 금액인지 알 수 없습니다.</li><li><b>색은 뜻이 있을 때만</b> — 모든 막대를 무지개색으로 칠하면 오히려 읽기 어렵습니다. 강조할 것 하나만 다른 색으로.</li><li><b>알맞은 그림 고르기</b> — 항목 비교는 막대, 시간에 따른 변화는 꺾은선, 비율은 원그래프.</li></ul>' },
+
+          { type: 'h', text: '프로젝트 마무리 ① 코드 정리와 모듈 나누기' },
+          { type: 'p', html: '프로그램이 동작한 뒤에는 <b>정리</b>를 합니다. 가장 효과가 큰 것은 <mark>계산하는 코드와 화면을 그리는 코드를 떼어 놓는 것</mark>입니다. 계산 부분을 따로 모듈(파일)로 빼면 다른 프로그램에서 그대로 가져다 쓸 수 있고, 화면 없이 시험할 수도 있습니다.' },
+          { type: 'code', title: '추가 예제. 계산 부분을 모듈로 분리하기', code: C_MODULE_SPLIT,
+            expect: "아이스크림 통계 : {'합계': 5480, '평균': 456.6666666666667, '최대': 1040, '최소': 120}\n화면을 그리는 코드는 main.py 에, 계산하는 코드는 salesdata.py 에 둔다",
+            desc: '<code>salesdata.py</code> 에는 tkinter 가 한 줄도 없습니다. 그래서 웹 프로그램에서도, 콘솔 프로그램에서도 똑같이 쓸 수 있습니다. 이렇게 <b>쓰임에 따라 파일을 나누는 것</b>을 모듈화라고 합니다.' },
+          { type: 'list', items: [
+            '<b>이름</b> — <code>a</code>, <code>tmp</code>, <code>data2</code> 대신 <code>values</code>, <code>avgY</code>, <code>load_sales</code> 처럼 뜻이 드러나게.',
+            '<b>함수 길이</b> — 한 화면(30줄 안팎)을 넘으면 나눌 곳을 찾습니다.',
+            '<b>매직 넘버</b> — 의미 있는 숫자는 대문자 상수로 올립니다.',
+            '<b>주석</b> — “무엇을 하는지” 가 아니라 <b>“왜 그렇게 했는지”</b> 를 적습니다. (<code>x += 1  # x 를 1 늘림</code> 은 쓸모없는 주석)',
+            '<b>죽은 코드 지우기</b> — 시험하느라 넣은 <code>print</code> 와 주석 처리한 옛 코드는 지웁니다.'
+          ] },
+          { type: 'h', text: '프로젝트 마무리 ② README 쓰기' },
+          { type: 'p', html: '만든 프로그램을 남에게 보여 줄 때는 <b>README</b> 라는 설명 파일을 함께 둡니다(보통 <code>README.md</code>). 읽는 사람이 궁금해하는 것은 딱 다섯 가지입니다 — <b>무엇을 / 왜 / 어떻게 실행 / 무엇을 할 수 있는지 / 앞으로 할 일</b>.' },
+          { type: 'callout', kind: 'info', title: 'README 예시 (판매량 그래프)', html: '<pre><code># 월별 판매량 막대그래프\n\nCSV 로 된 월별 판매 자료를 읽어 통계를 내고 막대그래프로 보여 주는\n작은 프로그램입니다. 파이썬 공부를 하며 만든 첫 데이터 시각화 예제입니다.\n\n## 실행 방법\n1. 파이썬 3.10 이상\n2. `python main.py`\n3. 같은 폴더에 `ch14/sales.csv` 가 있어야 합니다.\n\n## 기능\n- CSV 읽기, 합계 · 평균 · 최대 · 최소 계산\n- 막대그래프 (세로 눈금 · 평균선 · 최대값 강조)\n- 품목 선택, 요약 파일 저장\n\n## 파일 구성\n- `main.py` : 화면\n- `salesdata.py` : 데이터 읽기 · 통계\n\n## 앞으로 할 일\n- 꺾은선 그래프 추가\n- 그래프를 그림 파일로 저장</code></pre>' },
+          { type: 'list', items: [
+            '<b>첫 두 줄이 가장 중요합니다</b> — 무엇을 하는 프로그램인지 한 문장으로.',
+            '<b>실행 방법</b>은 처음 보는 사람이 그대로 따라 할 수 있게 씁니다(필요한 파일 · 설치 명령 포함).',
+            '<b>화면 사진</b>을 한 장 넣으면 설명 열 줄보다 낫습니다.',
+            '<b>앞으로 할 일</b>을 적어 두면 “아직 못 한 것” 이 아니라 <b>“계획이 있는 프로젝트”</b> 로 보입니다.',
+            '코드를 올릴 때는 개인 정보 · 비밀번호가 들어 있지 않은지 확인합니다.'
+          ] },
+          { type: 'h', text: '이 장을 마치며' },
+          { type: 'list', items: [
+            '네 프로젝트 모두 <b>요구 사항 → 기능 분해 → 단계별 개발 → 리팩터링 → 확장</b> 의 같은 순서로 만들었습니다.',
+            '화면을 그리는 코드와 계산하는 코드를 나누면, <b>화면 없이 시험</b>할 수 있어 버그를 찾기 쉬워집니다.',
+            '상태가 많아지면 딕셔너리나 클래스로 묶고, 같은 코드가 반복되면 표(딕셔너리)와 함수로 모읍니다.',
+            '예외 처리와 안내 메시지, 되돌리기와 저장은 <b>사용자를 위한 배려</b>이자 프로그램의 완성도입니다.',
+            '이제 필요한 것은 문법이 아니라 <b>만들고 싶은 것</b>입니다. 작게 시작해서 계속 키워 보세요.'
+          ] }
+        ],
+        practice: [
+          {
+            title: '실습 14-31. 두 품목의 월별 차이 구하기', level: 1,
+            desc: '<p><code>ch14/sales.csv</code> 를 읽어 달마다 <b>아이스크림 − 호빵</b> 을 계산하고, 차이가 가장 큰 달과 가장 작은 달을 출력하세요.</p><p>출력 예: <code>가장 큰 달 : 8월 : 1010</code></p>',
+            hint: '차이를 리스트로 만든 뒤 <code>max()</code> · <code>min()</code> 과 <code>index()</code> 로 몇 번째인지 찾습니다.',
+            starter: "import csv\n\nrows = []\nwith open('ch14/sales.csv', encoding = 'utf-8') as f :\n    reader = csv.reader(f)\n    head = next(reader)\n    for line in reader :\n        rows.append([int(v) for v in line])\n\ndiffs = []\n# TODO: 달마다 아이스크림 - 호빵 을 구해 diffs 에 넣기\n# TODO: 가장 큰 달 · 가장 작은 달 출력\n",
+            solution: "import csv\n\nrows = []\nwith open('ch14/sales.csv', encoding = 'utf-8') as f :\n    reader = csv.reader(f)\n    head = next(reader)\n    for line in reader :\n        rows.append([int(v) for v in line])\n\ndiffs = []\nfor r in rows :\n    diffs.append(r[1] - r[2])\n\nbig = max(diffs)\nsmall = min(diffs)\nprint('가장 큰 달  : %d월 : %d' % (rows[diffs.index(big)][0], big))\nprint('가장 작은 달 : %d월 : %d' % (rows[diffs.index(small)][0], small))\n",
+            expect: '가장 큰 달  : 8월 : 1010\n가장 작은 달 : 12월 : -320'
+          },
+          {
+            title: '실습 14-32. 막대 좌표 계산표 만들기', level: 1,
+            desc: '<p>그래프 높이 200, 바닥 <code>BASE_Y = 260</code>, 최대값 1000 일 때 값 0 · 250 · 500 · 1000 의 <b>막대 윗변 y 좌표</b>와 <b>막대 높이</b>를 출력하세요.</p>',
+            hint: '<code>top = BASE_Y - 값 / 최대값 * 높이</code>. 막대 높이는 <code>BASE_Y - top</code> 입니다.',
+            starter: "CHART_H = 200\nBASE_Y = 260\nVMAX = 1000\n\ndef bar_top(value) :\n    # TODO: 값을 y 좌표로 바꾸기\n    return 0\n\nfor v in [0, 250, 500, 1000] :\n    # TODO: '값 → y = …, 높이 = …' 형식으로 출력\n    pass\n",
+            solution: "CHART_H = 200\nBASE_Y = 260\nVMAX = 1000\n\ndef bar_top(value) :\n    return BASE_Y - value / VMAX * CHART_H\n\nfor v in [0, 250, 500, 1000] :\n    top = bar_top(v)\n    print('%4d → y = %.1f, 높이 = %.1f' % (v, top, BASE_Y - top))\n",
+            expect: '   0 → y = 260.0, 높이 = 0.0\n 250 → y = 210.0, 높이 = 50.0\n 500 → y = 160.0, 높이 = 100.0\n1000 → y = 60.0, 높이 = 200.0'
+          },
+          {
+            title: '실습 14-33. 꺾은선 그래프로 바꾸기', level: 2,
+            desc: '<p>2단계 코드(막대만 그리기)를 고쳐 <b>꺾은선 그래프</b>를 그리세요.</p><ul><li>달마다 점을 찍고(작은 원), 이웃한 점을 선으로 잇습니다</li><li>선 색은 파랑, 굵기는 3</li><li>가장 큰 값의 점은 빨간색으로 그립니다</li></ul>',
+            hint: '점의 좌표를 먼저 리스트에 모아 두고(<code>points.append((x, y))</code>), 그다음 <code>create_line(x1, y1, x2, y2, width = 3)</code> 으로 이으면 쉽습니다. 작은 원은 <code>create_oval(x - 4, y - 4, x + 4, y + 4)</code>.',
+            starter: CH2.replace('for i in range(len(values)) :\n    x = LEFT + i * 46\n    top = BASE - values[i] / vmax * CHART_H       # 값 → 화면 좌표\n    canvas.create_rectangle(x, top, x + 36, BASE, fill = "#4c8dff", outline = "")', 'points = []\nfor i in range(len(values)) :\n    x = LEFT + i * 46 + 18\n    y = BASE - values[i] / vmax * CHART_H\n    points.append((x, y))\n\n# TODO: 점을 선으로 잇고, 점마다 작은 원 그리기'),
+            solution: CH2.replace('window.title("2단계 : 막대만 그리기")', 'window.title("꺾은선 그래프")').replace('for i in range(len(values)) :\n    x = LEFT + i * 46\n    top = BASE - values[i] / vmax * CHART_H       # 값 → 화면 좌표\n    canvas.create_rectangle(x, top, x + 36, BASE, fill = "#4c8dff", outline = "")', 'points = []\nfor i in range(len(values)) :\n    x = LEFT + i * 46 + 18\n    y = BASE - values[i] / vmax * CHART_H\n    points.append((x, y))\n\nfor i in range(len(points) - 1) :                  # 이웃한 두 점을 잇는다\n    x1, y1 = points[i]\n    x2, y2 = points[i + 1]\n    canvas.create_line(x1, y1, x2, y2, fill = "#2f6fe0", width = 3)\n\nfor i in range(len(points)) :\n    x, y = points[i]\n    color = "#ff3b30" if values[i] == vmax else "#2f6fe0"\n    canvas.create_oval(x - 4, y - 4, x + 4, y + 4, fill = color, outline = "")')
+          },
+          {
+            title: '실습 14-34. 호빵 그래프를 함께 보기 (두 계열)', level: 2,
+            desc: '<p>완성 코드를 고쳐 <b>두 품목을 한 화면에</b> 그리세요.</p><ul><li>막대를 반으로 나눠 왼쪽은 아이스크림(파랑), 오른쪽은 호빵(주황)</li><li>두 계열의 <b>공통 최대값</b>을 기준으로 높이를 계산해야 비교가 됩니다</li><li>오른쪽 위에 색 설명(범례)을 글자로 표시합니다</li></ul>',
+            hint: '<code>vmax = max(max(ice), max(bread))</code> 로 공통 기준을 잡고, 막대 폭을 18 로 줄여 <code>x</code> 와 <code>x + 18</code> 두 개를 그립니다.',
+            starter: CH2.replace("values = [r[1] for r in rows]\nvmax = max(values)", "ice = [r[1] for r in rows]\nbread = [r[2] for r in rows]\nvmax = max(max(ice), max(bread))     # 공통 기준").replace('for i in range(len(values)) :\n    x = LEFT + i * 46\n    top = BASE - values[i] / vmax * CHART_H       # 값 → 화면 좌표\n    canvas.create_rectangle(x, top, x + 36, BASE, fill = "#4c8dff", outline = "")', '# TODO: 한 달에 막대 두 개(폭 18)씩 그리고 범례 표시'),
+            solution: CH2.replace('window.title("2단계 : 막대만 그리기")', 'window.title("아이스크림 vs 호빵")').replace("values = [r[1] for r in rows]\nvmax = max(values)", "ice = [r[1] for r in rows]\nbread = [r[2] for r in rows]\nvmax = max(max(ice), max(bread))     # 공통 기준으로 그려야 비교가 된다").replace('for i in range(len(values)) :\n    x = LEFT + i * 46\n    top = BASE - values[i] / vmax * CHART_H       # 값 → 화면 좌표\n    canvas.create_rectangle(x, top, x + 36, BASE, fill = "#4c8dff", outline = "")', 'for i in range(len(rows)) :\n    x = LEFT + i * 46\n    top1 = BASE - ice[i] / vmax * CHART_H\n    top2 = BASE - bread[i] / vmax * CHART_H\n    canvas.create_rectangle(x, top1, x + 18, BASE, fill = "#4c8dff", outline = "")\n    canvas.create_rectangle(x + 18, top2, x + 36, BASE, fill = "#ff9f43", outline = "")\n    canvas.create_text(x + 18, BASE + 14, text = "%d" % rows[i][0], font = (\'맑은고딕\', 9))\n\ncanvas.create_rectangle(W - 150, 20, W - 134, 34, fill = "#4c8dff", outline = "")\ncanvas.create_text(W - 90, 27, text = head[1], font = (\'맑은고딕\', 10))\ncanvas.create_rectangle(W - 150, 42, W - 134, 56, fill = "#ff9f43", outline = "")\ncanvas.create_text(W - 100, 49, text = head[2], font = (\'맑은고딕\', 10))')
+          },
+          {
+            title: '🚀 프로젝트 14-35. 내 기록으로 그래프 그리기 + README', level: 3,
+            desc: '<p>14-6 에서 만든 타자 연습의 기록 파일(<code>typing_result.txt</code>)을 읽어 <b>회차별 분당 타수</b>를 막대그래프로 그리는 프로그램을 만드세요.</p><ul><li><b>입력</b> : <code>날짜,걸린시간,타수,정확도</code> 형식의 줄들 (파일이 없으면 시험용 기록을 직접 만들어 쓴다)</li><li><b>출력</b> : 회차별 타수 막대그래프 + 평균선 + 최고 기록 강조</li><li><b>규칙</b> : 기록이 하나도 없으면 “아직 기록이 없습니다” 를 화면에 보여 주고 오류 없이 끝난다</li></ul><p>완성한 뒤 <b>README 를 다섯 줄 이상</b> 써서 무엇을 만들었는지, 어떻게 실행하는지 설명해 보세요.</p>',
+            hint: '기록 줄을 <code>split(\',\')</code> 로 나누고 타수 칸에서 숫자만 꺼냅니다(<code>\'121타\'</code> → <code>int(\'121타\'.replace(\'타\', \'\'))</code>). 그래프 그리는 함수는 실습 14-32 의 <code>bar_top</code> 을 그대로 씁니다.',
+            starter: "from tkinter import *\n\nRESULT_FILE = 'typing_result.txt'\nW, H, LEFT, BASE, CHART_H = 520, 320, 60, 260, 200\n\ndef load_records(fname) :\n    # TODO: 파일을 읽어 타수(정수) 리스트로. 파일이 없으면 빈 리스트\n    return []\n\nwindow = Tk()\nwindow.title('내 타자 기록')\ncanvas = Canvas(window, width = W, height = H, bg = 'white')\ncanvas.pack()\n\nrecords = load_records(RESULT_FILE)\n# TODO: 기록이 없으면 안내 글, 있으면 막대그래프와 평균선\n\nwindow.mainloop()\n",
+            solution: "from tkinter import *\n\nRESULT_FILE = 'typing_result.txt'\nW, H, LEFT, BASE, CHART_H = 520, 320, 60, 260, 200\n\ndef load_records(fname) :\n    records = []\n    try :\n        with open(fname, encoding = 'utf-8') as f :\n            for line in f :\n                part = line.strip().split(',')\n                if len(part) >= 3 :\n                    records.append(int(part[2].replace('타', '')))\n    except FileNotFoundError :\n        return []\n    return records\n\ndef make_sample() :                       # 기록이 없을 때 쓸 시험용 자료\n    with open(RESULT_FILE, 'w', encoding = 'utf-8') as f :\n        for when, spent, chars, acc in [('1회', 30.0, 180, 95.0), ('2회', 28.0, 210, 96.0),\n                                        ('3회', 25.0, 240, 98.0), ('4회', 26.0, 225, 97.0)] :\n            f.write('%s,%.1f초,%d타,%.1f%%\\n' % (when, spent, chars, acc))\n\ndef draw(records) :\n    if len(records) == 0 :\n        canvas.create_text(W / 2, H / 2, text = '아직 기록이 없습니다', font = ('맑은고딕', 14))\n        return\n    vmax = max(records)\n    avg = sum(records) / len(records)\n    canvas.create_text(W / 2, 24, text = '회차별 분당 타수', font = ('맑은고딕', 14, 'bold'))\n    canvas.create_line(LEFT, BASE, W - 20, BASE)\n    for i in range(len(records)) :\n        x = LEFT + i * 50\n        top = BASE - records[i] / vmax * CHART_H\n        color = '#ff7043' if records[i] == vmax else '#4c8dff'\n        canvas.create_rectangle(x, top, x + 34, BASE, fill = color, outline = '')\n        canvas.create_text(x + 17, top - 10, text = str(records[i]), font = ('맑은고딕', 9))\n        canvas.create_text(x + 17, BASE + 14, text = '%d회' % (i + 1), font = ('맑은고딕', 9))\n    avgY = BASE - avg / vmax * CHART_H\n    canvas.create_line(LEFT, avgY, W - 20, avgY, fill = 'red')\n    canvas.create_text(W - 24, avgY - 10, text = '평균 %.0f타' % avg, fill = 'red', anchor = E, font = ('맑은고딕', 10))\n\nwindow = Tk()\nwindow.title('내 타자 기록')\ncanvas = Canvas(window, width = W, height = H, bg = 'white')\ncanvas.pack()\n\nrecords = load_records(RESULT_FILE)\nif len(records) == 0 :          # 기록이 없으면 시험용 자료를 만들어 보여 준다\n    make_sample()\n    records = load_records(RESULT_FILE)\nprint('기록', len(records), '개 / 최고', max(records), '타')\ndraw(records)\n\nwindow.mainloop()\n",
+            expect: '기록 4 개 / 최고 240 타'
+          }
+        ],
+        quiz: [
+          { q: 'CSV 파일에서 읽은 <code>[\'1\', \'120\', \'430\']</code> 을 그대로 <code>max()</code> 에 넣으면?', options: ['430 이 나온다', '글자 순서로 비교해 <code>\'430\'</code> 이 나오지만 <code>\'9\'</code> 같은 값이 있으면 그것이 가장 커진다', '오류가 난다', '1 이 나온다'], answer: 1,
+            explain: '문자열은 사전 순으로 비교합니다. <code>\'9\' &gt; \'430\'</code> 이므로 숫자로 바꾸지 않으면 엉뚱한 결과가 나옵니다.' },
+          { q: '<code>next(reader)</code> 를 부르는 이유는?', options: ['파일을 닫으려고', '제목 줄(열 이름)을 먼저 꺼내 데이터와 분리하려고', '다음 파일을 읽으려고', '행 수를 세려고'], answer: 1,
+            explain: 'CSV 의 첫 줄은 보통 열 이름입니다. 먼저 꺼내 두면 나머지 줄은 모두 데이터로 다룰 수 있습니다.' },
+          { q: '바닥 <code>BASE = 340</code>, 그래프 높이 <code>CHART_H = 260</code>, 최대값 1040 일 때 값 520 의 막대 윗변 y 는?', options: ['210.0', '130.0', '520.0', '340.0'], answer: 0,
+            explain: '<code>340 - 520 / 1040 * 260 = 340 - 130 = 210.0</code> 입니다.' },
+          { q: '<code>draw_chart()</code> 의 첫 줄에 <code>canvas.delete(ALL)</code> 이 없으면?', options: ['아무 일도 없다', '예전 그래프 위에 새 그래프가 겹쳐 그려진다', '오류가 난다', '창이 닫힌다'], answer: 1,
+            explain: '캔버스에 그린 항목은 지우기 전까지 남아 있습니다. 다시 그리기 전에는 지우는 것이 규칙입니다.' },
+          { q: '막대그래프의 세로축을 0 이 아닌 값에서 시작하면 생기는 문제는?', options: ['그래프가 느려진다', '작은 차이가 실제보다 크게 보여 읽는 사람을 오해하게 만든다', '색이 이상해진다', '눈금을 그릴 수 없다'], answer: 1,
+            explain: '막대의 <b>길이</b>로 크기를 비교하기 때문에, 시작점을 올리면 길이의 비율이 실제 값의 비율과 달라집니다.' },
+          { q: 'README 에 꼭 들어가야 할 내용으로 가장 알맞지 <b>않은</b> 것은?', options: ['프로그램이 무엇을 하는지 한 문장 설명', '실행 방법과 필요한 파일', '기능 목록', '모든 함수의 전체 소스 코드'], answer: 3,
+            explain: 'README 는 소스 코드를 옮겨 적는 곳이 아니라 <b>읽는 사람이 빨리 이해하고 실행해 보게 돕는</b> 안내문입니다.' }
+        ],
+        slides: [
+          { layout: 'title', title: '[프로젝트 4] 데이터로 그래프 그리기', subtitle: 'Chapter 14 · 14-7 — CSV · Canvas · 프로젝트 마무리', badge: '14-7',
+            notes: '<p>마지막 교시입니다. 완성된 그래프 화면을 먼저 보여 주고, 오늘은 “데이터 → 그림” 이라는 새로운 종류의 프로그램을 만든다고 소개합니다.</p><p>시간: 2분</p>' },
+          { layout: 'bullets', title: '① 요구 사항', lead: '월별 판매 자료를 읽어 그래프로', bullets: [
+            'CSV 를 읽어 <b>숫자</b>로 바꾼다',
+            '합계 · 평균 · 최대 · 최소를 보여 준다',
+            '월별 막대그래프 (최대값은 다른 색)',
+            '눈금 · 값 · 월 이름 · 제목 · <b>평균선</b>',
+            '품목 선택 / 요약 파일 저장'
+          ], notes: '<p>요구 사항을 먼저 적는 습관을 다시 반복합니다. “평균선이 왜 필요할까?” 를 물어 보세요 — 어느 달이 평균보다 좋은지 한눈에 알기 위해서입니다.</p>' },
+          { layout: 'code', title: 'CSV 읽고 통계 내기', code: CH_LOAD.replace("print('열 이름 :', head)\nprint('행 수   :', len(rows))\nprint('첫 행   :', rows[0])\nprint('끝 행   :', rows[-1])\n\n", "print(head, len(rows), rows[0])\n"), points: ['<code>csv.reader</code> → 문자열 리스트', '<code>next()</code> 로 제목 줄 분리', '<code>int()</code> 로 바로 변환', '통계는 <code>sum · max · min</code>'],
+            notes: '<p>파일에서 읽은 값이 모두 문자열이라는 점을 꼭 실험으로 보여 주세요: <code>max([\'9\', \'1040\'])</code> 의 결과가 <code>\'9\'</code> 입니다.</p>' },
+          { layout: 'diagram', title: '③ 값을 화면 좌표로 (스케일 변환)', html: SVG_CHART, caption: 'top = BASE − 값 / 최대값 × 높이',
+            notes: '<p>오늘의 핵심 공식입니다. 화면의 y 가 아래로 커지기 때문에 <b>빼기</b>가 들어간다는 점을 칠판에 그려 설명하세요. 실습 14-32 로 손으로 계산해 보게 합니다.</p>' },
+          { layout: 'code', title: '2단계 — 막대만 그려 본다', code: CH2.replace("## 함수 선언 부분 ##\ndef load_sales(fname) :\n    rows = []\n    with open(fname, encoding = 'utf-8') as f :\n        reader = csv.reader(f)\n        head = next(reader)\n        for line in reader :\n            rows.append([int(v) for v in line])\n    return head, rows\n\n## 전역 변수 선언 부분 ##\n", '').replace('import csv\n', '').replace("head, rows = load_sales('ch14/sales.csv')\nvalues = [r[1] for r in rows]", 'values = [120, 150, 240, 380, 520, 760, 980, 1040, 620, 330, 200, 140]'),
+            points: ['축 · 글자 없이 막대만', '<code>create_rectangle(x1,y1,x2,y2)</code>', '간격 46 − 폭 36 = 10', '높이가 맞는지만 확인'],
+            notes: '<p>슬라이드용으로 CSV 읽기를 빼고 값을 직접 적었습니다. “한 번에 완성하지 않는다” 는 원칙을 눈으로 보여 주는 단계입니다.</p>' },
+          { layout: 'table', title: '3단계 — 읽을 수 있는 그래프로', head: ['더할 것', '왜 필요한가'], rows: [
+            ['제목', '무엇에 대한 그래프인지'],
+            ['세로 눈금 · 값', '막대 크기를 숫자로 읽게'],
+            ['가로 라벨(월)', '어느 시점인지'],
+            ['평균선', '평균보다 높은 달을 한눈에'],
+            ['최대값 강조', '가장 중요한 값을 먼저']
+          ], lead: '막대만 있는 그림은 “대충 이런 모양” 만 알려 준다',
+            notes: '<p>완성 코드를 실행해 두고 항목을 하나씩 가리키며 설명합니다. 품목을 바꿔 두 그래프가 정반대 모양인 것을 보여 주면 데이터에서 이야기를 읽는 경험이 됩니다.</p>' },
+          { layout: 'code', title: '다시 그리기 전에 지운다', code: "from tkinter import *\n\nwindow = Tk()\ncanvas = Canvas(window, width = 300, height = 160, bg = 'white')\ncanvas.pack()\ncount = {'n' : 0}\n\ndef redraw() :\n    canvas.delete(ALL)             # 이 줄이 없으면 겹쳐 그려진다\n    count['n'] += 1\n    canvas.create_rectangle(20, 140 - count['n'] * 20, 60, 140, fill = 'skyblue')\n    canvas.create_text(150, 20, text = '%d 번째 그리기' % count['n'])\n\nButton(window, text = '다시 그리기', command = redraw).pack()\nredraw()\nredraw()\nwindow.mainloop()", points: ['<code>canvas.delete(ALL)</code>', '지우지 않으면 누적', '“그리기 함수” 는 항상 처음부터'],
+            notes: '<p>delete(ALL) 을 주석 처리하고 버튼을 여러 번 눌러 겹치는 모습을 보여 주면 이유가 분명해집니다.</p>' },
+          { layout: 'two', title: '마무리 ① 모듈 나누기', left: { title: 'salesdata.py (계산)', bullets: ['CSV 읽기', '합계 · 평균 · 최대 · 최소', 'tkinter 가 한 줄도 없다', '화면 없이 시험 가능'] }, right: { title: 'main.py (화면)', bullets: ['창 · 캔버스 · 버튼', '그리기 · 사용자 입력', '계산은 모듈에 맡긴다', '다른 화면으로 교체 쉬움'] },
+            notes: '<p>본문의 모듈 분리 예제를 실행해 보여 줍니다. “계산 코드에 tkinter 가 섞여 있지 않은가?” 를 정리의 기준으로 삼으라고 알려 주세요.</p>' },
+          { layout: 'bullets', title: '마무리 ② 코드 정리 체크리스트', bullets: [
+            '뜻이 드러나는 <b>이름</b> (<code>tmp</code> · <code>data2</code> 금지)',
+            '함수는 한 화면(30줄) 안으로',
+            '흩어진 숫자 → <b>대문자 상수</b>로 (매직 넘버)',
+            '주석은 “무엇” 이 아니라 <b>“왜”</b>',
+            '시험용 <code>print</code> 와 주석 처리한 옛 코드 지우기'
+          ], notes: '<p>학생들이 만든 코드 하나를 화면에 띄워 함께 정리해 보면 가장 효과가 좋습니다. 정리 전후를 비교해 보여 주세요.</p>' },
+          { layout: 'bullets', title: '마무리 ③ README 쓰기', lead: '읽는 사람이 궁금한 다섯 가지', bullets: [
+            '<b>무엇을</b> 하는 프로그램인가 (첫 두 줄!)',
+            '<b>왜</b> 만들었는가',
+            '<b>어떻게 실행</b>하는가 (필요한 파일 · 명령)',
+            '<b>어떤 기능</b>이 있는가',
+            '<b>앞으로 할 일</b> — 계획이 있는 프로젝트로 보인다'
+          ], notes: '<p>본문의 README 예시를 함께 읽습니다. 화면 사진 한 장의 힘, 그리고 올리기 전에 개인 정보를 확인하는 습관도 알려 주세요.</p>' },
+          { layout: 'quiz', title: '확인 퀴즈', q: 'BASE = 340, 높이 260, 최대값 1040 일 때 값 520 의 막대 윗변 y 는?', options: ['210.0', '130.0', '520.0', '340.0'], answer: 0,
+            explain: '340 − 520 / 1040 × 260 = 340 − 130 = 210.0',
+            notes: '<p>계산 과정을 칠판에 한 줄씩 적어 가며 풀어 줍니다.</p>' },
+          { layout: 'practice', title: '실습 14-32. 막대 좌표 계산표', desc: '높이 200, BASE 260, 최대 1000 일 때 값 0 · 250 · 500 · 1000 의 y 와 막대 높이 출력',
+            starter: "CHART_H = 200\nBASE_Y = 260\nVMAX = 1000\n\ndef bar_top(value) :\n    # TODO\n    return 0\n\nprint(bar_top(500))\n",
+            solution: "CHART_H = 200\nBASE_Y = 260\nVMAX = 1000\n\ndef bar_top(value) :\n    return BASE_Y - value / VMAX * CHART_H\n\nfor v in [0, 250, 500, 1000] :\n    top = bar_top(v)\n    print('%4d → y = %.1f, 높이 = %.1f' % (v, top, BASE_Y - top))\n",
+            notes: '<p>5분. 계산이 익숙해지면 그리기는 쉽습니다. 다 한 학생에게는 실습 14-33(꺾은선)으로 넘어가게 하세요.</p>' },
+          { layout: 'summary', title: 'Chapter 14 정리', bullets: [
+            '외부 라이브러리 · 표준 라이브러리를 빌려 큰 프로그램을 만들었다',
+            '네 프로젝트 모두 <b>요구 사항 → 분해 → 단계별 개발 → 리팩터링 → 확장</b>',
+            '화면과 계산을 나누면 화면 없이 시험할 수 있다',
+            '상태는 묶고, 반복되는 코드는 표와 함수로 모은다',
+            '이제 필요한 것은 문법이 아니라 <b>만들고 싶은 것</b>'
+          ], notes: '<p>과정 전체를 마무리합니다. 각자 만들고 싶은 프로그램을 한 문장으로 적고, 요구 사항 5줄과 기능 분해를 해 보는 것을 마지막 과제로 내 주면 좋습니다.</p>' }
         ]
       }
     ]

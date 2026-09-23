@@ -258,6 +258,31 @@
   <text x="770" y="470" style="font-size:20px;fill:var(--muted)">(이 강좌의 기본 창: 640 × 520)</text>
 </svg>`;
 
+  /* 순차 실행 vs 이벤트 기반 */
+  const SVG_EVENT = `<svg viewBox="0 0 1280 560" width="100%" role="img" aria-label="순차 실행 프로그램과 이벤트 기반 프로그램의 흐름 비교">
+  <defs>${arrowDefs('c2ev', 'var(--muted)')}${arrowDefs('c2ev2', 'var(--danger)')}</defs>
+  <text x="300" y="44" text-anchor="middle" style="font-size:27px;font-weight:700;fill:var(--accent)">계산기 — 순차 실행</text>
+  <text x="900" y="44" text-anchor="middle" style="font-size:27px;font-weight:700;fill:var(--accent2)">그림판 — 이벤트 기반</text>
+  ${[['시작', 80], ['입력 input()', 160], ['계산', 240], ['출력 print()', 320], ['끝', 400]].map((b) =>
+      `<rect x="150" y="${b[1]}" width="300" height="56" rx="10" fill="var(--card)" stroke="var(--accent)" stroke-width="3"/>
+    <text x="300" y="${b[1] + 36}" text-anchor="middle" style="font-size:24px;fill:var(--fg)">${b[0]}</text>`).join('')}
+  ${[80, 160, 240, 320].map((y) => `<line x1="300" y1="${y + 56}" x2="300" y2="${y + 74}" stroke="var(--muted)" stroke-width="3" marker-end="url(#c2ev)"/>`).join('')}
+  <text x="300" y="500" text-anchor="middle" style="font-size:22px;fill:var(--muted)">위에서 아래로 한 번 실행하고 끝난다</text>
+  ${[['시작 · 함수 선언', 80], ['onscreenclick() 으로 등록', 160], ['done() — 기다리기', 250]].map((b) =>
+      `<rect x="700" y="${b[1]}" width="400" height="56" rx="10" fill="var(--card)" stroke="var(--accent2)" stroke-width="3"/>
+    <text x="900" y="${b[1] + 36}" text-anchor="middle" style="font-size:24px;fill:var(--fg)">${b[0]}</text>`).join('')}
+  <line x1="900" y1="136" x2="900" y2="154" stroke="var(--muted)" stroke-width="3" marker-end="url(#c2ev)"/>
+  <line x1="900" y1="216" x2="900" y2="244" stroke="var(--muted)" stroke-width="3" marker-end="url(#c2ev)"/>
+  <rect x="700" y="370" width="400" height="56" rx="10" fill="var(--card)" stroke="var(--danger)" stroke-width="3"/>
+  <text x="900" y="406" text-anchor="middle" style="font-size:24px;fill:var(--fg)">연결된 함수(콜백) 실행</text>
+  <path d="M1110,278 C1200,290 1200,380 1110,396" stroke="var(--danger)" stroke-width="4" fill="none" marker-end="url(#c2ev2)"/>
+  <path d="M690,396 C600,380 600,290 690,278" stroke="var(--danger)" stroke-width="4" fill="none" marker-end="url(#c2ev2)"/>
+  <text x="1135" y="330" text-anchor="middle" style="font-size:21px;fill:var(--danger)">클릭!</text>
+  <text x="640" y="330" text-anchor="middle" style="font-size:21px;fill:var(--danger)">복귀</text>
+  <text x="900" y="470" text-anchor="middle" style="font-size:22px;fill:var(--muted)">기다리다가 → 이벤트가 생기면 → 함수를 실행하고 → 다시 기다린다</text>
+  <text x="900" y="505" text-anchor="middle" style="font-size:22px;fill:var(--muted)">창의 ✕ 를 눌러야 프로그램이 끝난다</text>
+</svg>`;
+
   /* 색 견본 */
   const sw = (css) => `<span style="display:inline-block;width:1.1em;height:1.1em;border-radius:3px;vertical-align:middle;border:1px solid var(--line);background:${css}"></span>`;
 
@@ -333,13 +358,16 @@ turtle.done()`;
     no: '02',
     title: '미리 만드는 쓸 만한 프로그램',
     subtitle: '변수 · print() · input() · 파일 저장 · 마우스로 그리는 터틀 그래픽',
-    summary: '변수와 print() 로 사칙 연산 계산기를 만들고, 코드를 파일로 저장해 다시 실행하는 방법을 익힌 뒤 input() 으로 값을 입력받도록 확장합니다. 마지막으로 긴 프로그램의 구조(함수 · 변수 · 메인)를 배우고, 마우스 클릭으로 그림을 그리는 터틀 그래픽 프로그램을 완성합니다.',
+    summary: '변수와 print() 로 사칙 연산 계산기를 만들고, 코드를 파일로 저장해 다시 실행하는 방법을 익힌 뒤 input() 으로 값을 입력받도록 확장합니다. 마지막으로 긴 프로그램의 구조(함수 · 변수 · 메인)를 배우고, 마우스 클릭으로 그림을 그리는 터틀 그래픽 프로그램을 완성합니다. 각 교시마다 한 걸음 더 나아가 이름 짓기(PEP 8) · f-문자열 서식 · 오류 읽기와 디버깅 · 입력 검증 · 함수로 나누기 · 이벤트 기반 구조까지 다루고, 네 개의 미니 프로젝트로 마무리합니다.',
     goals: [
       '변수가 값을 담는 그릇이며 = 가 대입 연산자임을 설명할 수 있다',
       'print() 함수로 변수의 값과 글자를 함께 출력할 수 있다',
       '여러 줄의 코드를 파일(스크립트)로 작성 · 저장 · 실행 · 수정하는 순서를 설명할 수 있다',
       'input() 과 int() 로 키보드에서 숫자를 입력받아 계산하는 계산기 프로그램을 만들 수 있다',
-      '함수 선언 · 변수 선언 · 메인 코드로 나누어 긴 프로그램을 작성하고, 마우스 클릭으로 그림을 그리는 터틀 프로그램을 만들 수 있다'
+      '함수 선언 · 변수 선언 · 메인 코드로 나누어 긴 프로그램을 작성하고, 마우스 클릭으로 그림을 그리는 터틀 프로그램을 만들 수 있다',
+      '(심화) 좋은 이름 · 상수 · f-문자열 서식으로 읽기 좋은 코드와 보기 좋은 출력을 만들 수 있다',
+      '(심화) 오류 메시지를 읽고 print() 로 버그를 찾으며, 잘못된 입력을 다시 묻는 프로그램을 만들 수 있다',
+      '(심화) 프로그램을 입력 · 계산 · 출력 함수로 나누고, 콜백과 이벤트 루프로 동작하는 프로그램의 구조를 설명할 수 있다'
     ],
     sections: [
       /* ===================== ch02-1 ===================== */
@@ -352,9 +380,12 @@ turtle.done()`;
           '변수에 값을 대입하고 = 의 의미를 설명할 수 있다',
           '변수끼리 계산한 결과를 새 변수에 저장할 수 있다',
           'print() 로 여러 값을 쉼표로 이어 한 줄에 출력할 수 있다',
-          '+, -, *, / 로 사칙 연산을 하고 나누기 결과가 실수임을 안다'
+          '+, -, *, / 로 사칙 연산을 하고 나누기 결과가 실수임을 안다',
+          '(심화) 뜻이 드러나는 변수 이름과 대문자 상수를 PEP 8 스타일로 지을 수 있다',
+          '(심화) f-문자열로 자릿수 · 자리 맞춤을 지정해 결과를 보기 좋게 출력할 수 있다',
+          '(심화) += 로 값을 누적하는 변수를 쓸 수 있다'
         ],
-        flow: [['도입: 이 장에서 만들 프로그램', 5], ['변수와 대입 연산자', 10], ['더하기 · print() 출력', 12], ['빼기 · 곱하기 · 나누기', 10], ['퀴즈 · 실습', 13]],
+        flow: [['도입: 이 장에서 만들 프로그램', 5], ['변수와 대입 연산자', 8], ['더하기 · print() 출력', 10], ['빼기 · 곱하기 · 나누기', 8], ['한 걸음 더: 이름 · f-문자열 · 누적', 9], ['퀴즈 · 실습', 10]],
         content: [
           { type: 'h', text: '이 장에서 만들 프로그램' },
           { type: 'p', html: '1장에서 파이썬을 설치하고 간단한 코드를 실행해 보았습니다. 이번 장에서는 문법을 하나하나 깊게 파기보다, <b>실제로 쓸 수 있는 작은 프로그램 두 개</b>를 먼저 완성해 보면서 “프로그램이 어떻게 만들어지는지” 전체 흐름을 경험합니다. 여기서 잠깐 스치듯 만나는 변수 · 함수 · 반복문은 뒤의 장에서 자세히 다시 배웁니다.' },
@@ -434,7 +465,75 @@ print(a, "/", b, "=", result)`, expectError: true,
     result = a / b
              ~~^~~
 ZeroDivisionError: division by zero`,
-            desc: '오류 메시지는 <b>아래에서부터</b> 읽습니다. 마지막 줄이 오류의 종류와 이유, 그 위의 <code>line 3</code> 이 오류가 난 위치입니다.' }
+            desc: '오류 메시지는 <b>아래에서부터</b> 읽습니다. 마지막 줄이 오류의 종류와 이유, 그 위의 <code>line 3</code> 이 오류가 난 위치입니다.' },
+
+          { type: 'h', text: '한 걸음 더 ① — 좋은 이름이 좋은 코드를 만든다' },
+          { type: 'p', html: '변수 이름을 <code>a</code>, <code>b</code>, <code>c</code> 로 지어도 컴퓨터는 아무 불평을 하지 않습니다. 하지만 코드를 읽는 사람은 다릅니다. 프로그램은 <b>한 번 쓰고 여러 번 읽는</b> 글이고, 그 “여러 번” 중 대부분은 <b>몇 주 뒤의 나 자신</b>이 읽습니다. 같은 계산을 두 가지 이름으로 써 보면 차이가 분명해집니다.' },
+          { type: 'code', title: '추가 예제. 이름이 없는 코드 — 무엇을 계산하는 걸까?', code: `a = 12000
+b = 3
+c = a * b
+d = c * 0.1
+print(c + d)`,
+            expect: '39600.0',
+            desc: '결과는 맞지만, 6개월 뒤에 이 코드를 열면 <code>d</code> 가 배송비인지 세금인지 알 수 없습니다.' },
+          { type: 'code', title: '추가 예제. 같은 계산, 이름을 붙인 코드', code: `TAX_RATE = 0.1          # 부가세율 (바뀌지 않는 값 = 상수)
+price = 12000           # 물건 1개 값
+count = 3               # 개수
+total = price * count   # 상품 금액
+tax = total * TAX_RATE  # 부가세
+print("결제 금액 :", total + tax)`,
+            expect: '결제 금액 : 39600.0',
+            desc: '줄 수는 늘었지만 <b>주석이 없어도 읽히는</b> 코드가 되었습니다. 부가세율이 바뀌면 <code>TAX_RATE</code> 한 곳만 고치면 됩니다. 코드 안에 툭 튀어나온 <code>0.1</code> 같은 숫자를 <b>매직 넘버(magic number)</b>라고 하며, 이름 붙은 상수로 바꾸는 것이 좋습니다.' },
+          { type: 'table', head: ['아쉬운 이름', '왜 아쉬운가', '나은 이름'], rows: [
+            ['<code>a</code>, <code>b</code>, <code>x1</code>', '무엇을 담았는지 알 수 없음', '<code>price</code>, <code>count</code>, <code>total</code>'],
+            ['<code>data</code>, <code>value</code>, <code>temp</code>', '너무 뭉뚱그린 이름', '<code>user_name</code>, <code>score</code>, <code>celsius</code>'],
+            ['<code>l</code>, <code>O</code>, <code>I</code>', '숫자 1 · 0 과 헷갈림', '한 글자 이름을 피하기'],
+            ['<code>0.1</code> (이름 없는 숫자)', '뜻을 모르고 여러 곳에 흩어짐', '<code>TAX_RATE = 0.1</code>'],
+            ['<code>list</code>, <code>str</code>, <code>sum</code>', '파이썬이 이미 쓰는 이름을 가림', '<code>items</code>, <code>text</code>, <code>total</code>']
+          ], caption: '이름 짓기 — 짧게 쓰는 것보다 “읽으면 알 수 있게” 쓰는 것이 중요합니다' },
+          { type: 'callout', kind: 'more', title: '📘 PEP 8 — 파이썬 코드 스타일 안내서', html: '<b>PEP 8</b> 은 파이썬 공식 스타일 가이드입니다. 문법이 아니라 <b>약속</b>이지만, 거의 모든 파이썬 프로젝트가 따르므로 처음부터 익혀 두면 좋습니다.<ul><li><b>변수 · 함수</b>: 소문자와 밑줄 — <code>user_name</code>, <code>total_price</code> (스네이크 표기법)</li><li><b>상수</b>: 모두 대문자 — <code>TAX_RATE</code>, <code>MAX_SIZE</code> (“바꾸지 마세요”라는 신호일 뿐, 파이썬이 막아 주지는 않습니다)</li><li><b>연산자 앞뒤</b>는 한 칸씩: <code>a = 100</code>, <code>total = price * count</code></li><li>쉼표 <b>뒤에만</b> 한 칸: <code>print(a, b)</code> (<code>print( a , b )</code> ✕)</li><li>한 줄은 79자 이내, 들여쓰기는 <b>스페이스 4칸</b></li></ul>이 강좌의 예제 중에는 교재를 따라 <code>pSize</code>, <code>thisYear</code> 처럼 낙타 표기법(camelCase)을 쓴 것도 있습니다. 교재 코드를 그대로 비교할 수 있게 남겨 둔 것이며, <b>여러분이 새로 쓰는 코드는 PEP 8 의 <code>pen_size</code>, <code>this_year</code> 스타일</b>을 권합니다.' },
+
+          { type: 'h', text: '한 걸음 더 ② — f-문자열로 결과 다듬기' },
+          { type: 'p', html: '<code>print(a, "+", b, "=", result)</code> 는 쉼표마다 빈칸이 하나씩 들어가서 <code>100 원</code> 처럼 어색해질 때가 있습니다. <b>f-문자열(f-string)</b>을 쓰면 출력 모양을 문장 하나로 정확히 설계할 수 있습니다. 따옴표 앞에 <code>f</code> 를 붙이고, 값을 넣고 싶은 자리에 <code>{변수}</code> 를 씁니다. 중괄호 안에는 <code>{a + b}</code> 처럼 <b>계산식</b>도 넣을 수 있습니다.' },
+          { type: 'code', title: '추가 예제. f-문자열의 서식 — 자릿수와 자리 맞추기', code: `price = 12000
+count = 3
+total = price * count
+average = total / 7
+
+print(f"{total}원")
+print(f"{total:,}원")
+print(f"{average:.2f}")
+print(f"[{'사과':<6}]")
+print(f"[{total:>10,}]")
+print(f"{total = }")`,
+            expect: `36000원
+36,000원
+5142.86
+[사과    ]
+[    36,000]
+total = 36000`,
+            desc: '<code>:</code> 뒤가 <b>서식 지정</b>입니다. <code>,</code> 천 단위 쉼표, <code>.2f</code> 소수점 둘째 자리까지(반올림), <code>&lt;6</code> 왼쪽 맞춤 6칸, <code>&gt;10</code> 오른쪽 맞춤 10칸(<code>^</code> 는 가운데). 마지막 <code>{total = }</code> 는 <b>이름과 값을 함께</b> 출력해 주어 디버깅할 때 아주 편합니다.' },
+          { type: 'callout', kind: 'more', title: '📘 f-string · format() · % — 무엇을 쓸까', html: '파이썬에는 문자열에 값을 끼워 넣는 방법이 세 가지 있습니다.<pre><code>print("%d + %d = %d" % (a, b, a + b))        # 옛 방식 (C 언어 스타일)\nprint("{} + {} = {}".format(a, b, a + b))    # 파이썬 2.6 ~\nprint(f"{a} + {b} = {a + b}")                # 파이썬 3.6 ~ (권장)</code></pre>셋 다 동작하지만 <b>f-문자열이 가장 짧고, 값이 어디에 들어가는지 눈으로 바로 보여서</b> 요즘 코드는 대부분 f-문자열을 씁니다. 오래된 코드나 로그 출력에서 앞의 두 가지를 만날 수 있으니 모양만 알아 두세요.' },
+
+          { type: 'h', text: '한 걸음 더 ③ — 값을 쌓아 가는 변수' },
+          { type: 'p', html: '<code>total = total + price</code> 는 수학으로 보면 말이 안 되는 식이지만, 대입 연산자의 뜻(“오른쪽을 계산해 왼쪽에 넣어라”)을 생각하면 자연스럽습니다. <b>지금 total 에 들어 있는 값에 price 를 더해서 다시 total 에 넣어라</b>. 장바구니 합계처럼 값을 쌓아 갈 때 쓰는 아주 흔한 패턴입니다.' },
+          { type: 'code', title: '추가 예제. 장바구니 합계 쌓아 가기', code: `total = 0
+print("시작 :", total)
+
+total = total + 3000    # 우유
+print("우유 담은 뒤 :", total)
+
+total += 4500           # 빵 (total = total + 4500 의 짧은 표현)
+print("빵 담은 뒤 :", total)
+
+total += 2000           # 주스
+print("합계 :", total)`,
+            expect: `시작 : 0
+우유 담은 뒤 : 3000
+빵 담은 뒤 : 7500
+합계 : 9500`,
+            desc: '<code>total = 0</code> 처럼 <b>처음 값(초깃값)을 먼저 정해 두는 것</b>이 중요합니다. 없는 그릇에 더하려고 하면 <code>NameError</code> 가 납니다.' },
+          { type: 'callout', kind: 'more', title: '📘 += 같은 복합 대입 연산자', html: '<code>total += 5</code> 는 <code>total = total + 5</code> 와 같습니다. 같은 방식으로 <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>//=</code>, <code>%=</code>, <code>**=</code> 가 있습니다. 변수 이름을 두 번 쓰지 않으니 <b>오타가 줄고 읽기도 쉽습니다</b>(<code>total = totla + 5</code> 같은 실수를 막아 줍니다). 참고로 파이썬에는 <code>total++</code> 같은 증가 연산자가 <b>없습니다</b>. C 나 자바를 먼저 배운 사람이 자주 틀리는 부분입니다.' }
         ],
         practice: [
           {
@@ -485,7 +584,32 @@ print("둘레 :", around)
 둘레 : 34`
           },
           {
-            title: '실습 2-3. 분을 시간과 분으로 바꾸기',
+            title: '실습 2-3. 물건값 계산 — 이름을 잘 붙여 보기',
+            level: 1,
+            desc: '<p>한 개에 1200원인 사과를 8개 삽니다. 부가세율은 10%입니다. 아래 세 줄이 출력되도록 프로그램을 완성하세요.</p><pre>상품 금액 : 9600\n부가세 : 960.0\n결제 금액 : 10560.0</pre><p>단, <b>부가세율은 대문자 상수 <code>TAX_RATE</code></b> 로, 나머지 값도 뜻이 드러나는 이름으로 만드세요.</p>',
+            hint: '<code>TAX_RATE = 0.1</code>, <code>price</code>, <code>count</code>, <code>total</code>, <code>tax</code> 다섯 개의 이름이면 충분합니다. 상품 금액 = 값 × 개수, 부가세 = 상품 금액 × 세율.',
+            starter: `TAX_RATE = 0.1
+price = 1200
+count = 8
+# TODO: 상품 금액(total) 과 부가세(tax) 계산
+
+# TODO: 세 줄 출력
+`,
+            solution: `TAX_RATE = 0.1
+price = 1200
+count = 8
+total = price * count
+tax = total * TAX_RATE
+print("상품 금액 :", total)
+print("부가세 :", tax)
+print("결제 금액 :", total + tax)
+`,
+            expect: `상품 금액 : 9600
+부가세 : 960.0
+결제 금액 : 10560.0`
+          },
+          {
+            title: '실습 2-4. 분을 시간과 분으로 바꾸기',
             level: 2,
             desc: '<p>변수 <code>minutes</code> 에 100 이 들어 있을 때, 몫 연산자 <code>//</code> 와 나머지 연산자 <code>%</code> 를 사용해 아래처럼 출력하세요.</p><pre>100 분은 1 시간 40 분</pre>',
             hint: '1시간 = 60분. <code>minutes // 60</code> 은 시간, <code>minutes % 60</code> 은 남은 분입니다.',
@@ -500,6 +624,81 @@ rest = minutes % 60
 print(minutes, "분은", hour, "시간", rest, "분")
 `,
             expect: '100 분은 1 시간 40 분'
+          },
+          {
+            title: '실습 2-5. 영수증처럼 줄 맞춰 출력하기',
+            level: 2,
+            desc: '<p>f-문자열의 자리 맞춤(<code>&lt;</code>, <code>&gt;</code>)과 천 단위 쉼표(<code>,</code>)를 사용해 아래 모양으로 출력하세요.</p><pre>아메리카노     2개    9,000원\n카페라떼      1개    5,000원\n------------------------\n합계             14,000원</pre>',
+            hint: '이름은 <code>{name:&lt;8}</code>, 개수는 <code>{count:&gt;3}</code>, 금액은 <code>{money:&gt;8,}</code> 으로 맞춥니다. 줄은 <code>"-" * 24</code> 로 만들 수 있습니다(글자를 24번 반복).',
+            starter: `name1, price1, count1 = "아메리카노", 4500, 2
+name2, price2, count2 = "카페라떼", 5000, 1
+# TODO: 품목별 금액(sum1, sum2) 과 합계(total) 계산
+
+# TODO: f-문자열로 줄을 맞춰 출력
+`,
+            solution: `name1, price1, count1 = "아메리카노", 4500, 2
+name2, price2, count2 = "카페라떼", 5000, 1
+sum1 = price1 * count1
+sum2 = price2 * count2
+total = sum1 + sum2
+print(f"{name1:<8}{count1:>3}개 {sum1:>8,}원")
+print(f"{name2:<8}{count2:>3}개 {sum2:>8,}원")
+print("-" * 24)
+print(f"{'합계':<8}{'':>5}{total:>8,}원")
+`,
+            expect: `아메리카노     2개    9,000원
+카페라떼      1개    5,000원
+------------------------
+합계             14,000원`
+          },
+          {
+            title: '🚀 프로젝트 2-1. 여행 경비 정산서',
+            level: 3,
+            desc: '<p>친구들과 떠날 여행의 경비를 계산해 <b>정산서</b>를 출력하는 프로그램을 만드세요.</p><p><b>요구 사항</b></p><ol><li>1인당 비용을 <b>상수</b>로 준비한다: 교통비 <code>TRANSPORT = 45000</code>, 숙박비 <code>HOTEL = 80000</code>, 식비 <code>FOOD = 35000</code></li><li>인원 수는 변수 <code>people = 4</code> 로 둔다 (이 값만 바꾸면 전체 정산서가 다시 계산되어야 한다)</li><li>항목별 <b>전체 금액</b>(1인 비용 × 인원)과 <b>합계</b>, <b>1인당 금액</b>을 계산한다</li><li>f-문자열로 천 단위 쉼표와 자리 맞춤을 써서 아래 모양으로 출력한다</li></ol><pre>============================\n       여행 경비 정산서\n============================\n교통비          180,000원\n숙박비          320,000원\n식비           140,000원\n----------------------------\n합계           640,000원\n1인당          160,000원</pre><p><b>더 해 보기</b> — ① 인원을 7명으로 바꿔 보세요(숫자 한 개만 고치면 되나요?). ② 1인당 금액을 만원 단위로도 함께 출력해 보세요(<code>{value / 10000:.1f}만원</code>). ③ 02-3 교시를 배운 뒤 인원 수를 <code>input()</code> 으로 입력받도록 바꿔 보세요.</p>',
+            hint: '<code>"=" * 28</code> 로 구분선을 만들고, 항목 줄은 <code>f"{\'교통비\':&lt;8}{TRANSPORT * people:&gt;12,}원"</code> 처럼 이름은 왼쪽, 금액은 오른쪽으로 맞춥니다. 제목은 <code>f"{\'여행 경비 정산서\':^24}"</code> 로 가운데 정렬.',
+            starter: `## 값 준비 ##
+TRANSPORT = 45000   # 1인 교통비
+HOTEL = 80000       # 1인 숙박비
+FOOD = 35000        # 1인 식비
+people = 4
+
+## 계산 ##
+# TODO: 1인당 합계(per_person) 와 전체 합계(total) 계산
+
+## 출력 ##
+print("=" * 28)
+# TODO: 제목과 항목별 금액, 합계, 1인당 금액 출력
+`,
+            solution: `## 값 준비 ##
+TRANSPORT = 45000   # 1인 교통비
+HOTEL = 80000       # 1인 숙박비
+FOOD = 35000        # 1인 식비
+people = 4
+
+## 계산 ##
+per_person = TRANSPORT + HOTEL + FOOD
+total = per_person * people
+
+## 출력 ##
+print("=" * 28)
+print(f"{'여행 경비 정산서':^24}")
+print("=" * 28)
+print(f"{'교통비':<8}{TRANSPORT * people:>12,}원")
+print(f"{'숙박비':<8}{HOTEL * people:>12,}원")
+print(f"{'식비':<8}{FOOD * people:>12,}원")
+print("-" * 28)
+print(f"{'합계':<8}{total:>12,}원")
+print(f"{'1인당':<8}{per_person:>12,}원")
+`,
+            expect: `============================
+       여행 경비 정산서
+============================
+교통비          180,000원
+숙박비          320,000원
+식비           140,000원
+----------------------------
+합계           640,000원
+1인당          160,000원`
           }
         ],
         quiz: [
@@ -507,7 +706,8 @@ print(minutes, "분은", hour, "시간", rest, "분")
           { q: '다음 코드의 실행 결과는?<pre><code>a = 100\nb = 50\nresult = a + b\nprint(a, \'+\', b, \'=\', result)</code></pre>', options: ['a + b = result', '100+50=150', '100 + 50 = 150', '150'], answer: 2, explain: '변수는 값으로, 따옴표 안은 글자 그대로 출력되고 쉼표 사이에는 빈칸이 한 칸씩 들어갑니다.' },
           { q: '다음 코드를 실행한 뒤 변수 <code>a</code> 의 값은?<pre><code>a = 100\nb = 50\nresult = a - b</code></pre>', options: ['50', '100', '150', '0'], answer: 1, explain: '값을 꺼내 계산해도 원래 변수의 값은 변하지 않습니다. a 는 그대로 100 입니다.' },
           { q: '<code>print(100 / 50)</code> 의 출력 결과는?', options: ['2', '2.0', '0.5', '오류'], answer: 1, explain: '파이썬의 <code>/</code> 는 나누어떨어져도 항상 실수를 돌려줍니다.' },
-          { q: '다음 중 <b>print() 처럼 이름 뒤에 괄호가 붙어 어떤 기능을 수행하는 것</b>을 무엇이라 하는가?', options: ['변수', '연산자', '함수', '주석'], answer: 2, explain: '미리 만들어진(또는 직접 만든) 기능을 함수라고 하며, 이름 뒤에 괄호를 붙여 사용합니다.' }
+          { q: '다음 코드는 실행하면 오류가 납니다. <b>몇 행</b>을 고쳐야 하는가?<pre><code>1: price = 1000\n2: count = 3\n3: total = price * count\n4: print("합계 :", Total)</code></pre>', options: ['1행', '2행', '3행', '4행'], answer: 3, explain: '변수 이름은 대소문자를 구분하므로 <code>Total</code> 이라는 변수는 없습니다. <code>NameError: name \'Total\' is not defined</code> 가 나며, 4행의 <code>Total</code> 을 <code>total</code> 로 고치면 됩니다.' },
+          { q: '<code>total = 36000</code> 일 때 <code>print(f"{total:,}원")</code> 의 출력은?', options: ['36000원', '36,000원', '{total:,}원', '오류'], answer: 1, explain: 'f-문자열의 서식 <code>:,</code> 는 천 단위마다 쉼표를 넣어 줍니다.' }
         ],
         slides: [
           { layout: 'title', title: '계산기의 기본 기능 — 변수와 print()', subtitle: 'Chapter 02 · Section 01~02 — 미리 만드는 쓸 만한 프로그램', badge: '02-1',
@@ -534,13 +734,20 @@ print(minutes, "분은", hour, "시간", rest, "분")
             notes: '<p><b>[5분]</b> 그림 2-8. 키보드에 × ÷ 가 없으니 * / 를 쓴다고 설명합니다.</p><p>발문: “100 / 50 은 왜 2 가 아니라 2.0 일까요?” → 파이썬의 / 는 항상 실수. 정수 몫은 // (4장). 시간이 되면 <code>7 // 2</code>, <code>7 % 2</code> 도 셸에서 보여 주세요.</p>' },
           { layout: 'table', title: '사칙 연산 기호', head: ['연산', '기호', '예', '결과'], rows: [['더하기', '+', '100 + 50', '150'], ['빼기', '-', '100 - 50', '50'], ['곱하기', '*', '100 * 50', '5000'], ['나누기', '/', '100 / 50', '2.0'], ['(몫)', '//', '7 // 2', '3'], ['(나머지)', '%', '7 % 2', '1']],
             lead: '+ - * / 에 몫 // · 나머지 % 까지',
-            notes: '<p><b>[2분]</b> 아래 두 줄(//, %)은 강의자료 밖의 보충입니다. 실습 2-3 에서 사용합니다.</p><p>0 으로 나누면 ZeroDivisionError 가 난다는 것도 짧게 언급하세요.</p>' },
+            notes: '<p><b>[2분]</b> 아래 두 줄(//, %)은 강의자료 밖의 보충입니다. 실습 2-4 에서 사용합니다.</p><p>0 으로 나누면 ZeroDivisionError 가 난다는 것도 짧게 언급하세요.</p>' },
+          { layout: 'two', title: '한 걸음 더 ① — 이름이 코드를 설명한다',
+            left: { title: '이름이 없는 코드', code: 'a = 12000\nb = 3\nc = a * b\nd = c * 0.1\nprint(c + d)' },
+            right: { title: '이름을 붙인 코드', code: 'TAX_RATE = 0.1\nprice = 12000\ncount = 3\ntotal = price * count\ntax = total * TAX_RATE\nprint("결제 금액 :", total + tax)' },
+            notes: '<p><b>[4분]</b> 두 코드의 결과는 같습니다(39600.0). “6개월 뒤에 어느 쪽을 열고 싶은가요?”라고 물어보세요.</p><p>핵심 용어 둘: <b>매직 넘버</b>(뜻 모를 0.1) → 이름 붙은 <b>상수</b>(대문자 TAX_RATE). PEP 8 은 변수 · 함수는 <code>snake_case</code>, 상수는 <code>UPPER_CASE</code> 를 권합니다.</p><p>교재 코드에 나오는 <code>pSize</code>, <code>thisYear</code> 는 낙타 표기법이며, 교재 비교를 위해 남겨 두었다고 안내하세요.</p>' },
+          { layout: 'code', title: '한 걸음 더 ② — f-문자열로 다듬기', code: 'price = 12000\ncount = 3\ntotal = price * count\naverage = total / 7\n\nprint(f"{total}원")\nprint(f"{total:,}원")\nprint(f"{average:.2f}")\nprint(f"[{\'사과\':<6}]")\nprint(f"[{total:>10,}]")\nprint(f"{total = }")',
+            points: ['<code>f"…{변수}…"</code> — 자리에 값이 들어감', '<code>:,</code> 천 단위 쉼표 · <code>:.2f</code> 소수 둘째 자리', '<code>:&lt;6</code> 왼쪽 · <code>:&gt;10</code> 오른쪽 · <code>:^10</code> 가운데', '<code>{total = }</code> — 이름과 값을 함께(디버깅)'],
+            notes: '<p><b>[4분]</b> 실행해서 줄이 나란히 맞는 모습을 보여 주면 효과가 큽니다. 중괄호 안에 <code>{a + b}</code> 처럼 계산식도 들어간다는 점을 꼭 말하세요.</p><p>%-서식 · format() 도 있지만 요즘은 f-문자열이 표준이라고 한 줄로 정리합니다. 실습 2-5(영수증)와 프로젝트 2-1(정산서)에서 바로 씁니다.</p>' },
           { layout: 'quiz', title: '확인 문제', q: '다음 코드의 출력은?<pre><code>a = 100\nb = 50\nresult = a + b\nprint(a, \'+\', b, \'=\', result)</code></pre>', options: ['a + b = result', '100+50=150', '100 + 50 = 150', '150'], answer: 2, explain: '변수는 값으로, 따옴표 안은 그대로, 쉼표 사이는 빈칸 한 칸.',
             notes: '<p><b>[2분]</b> 손을 들어 보기 번호를 고르게 한 뒤 정답을 공개합니다. 2번을 고른 학생에게 “빈칸은 어디서 생길까요?”라고 되물어 쉼표의 역할을 다시 짚습니다.</p>' },
           { layout: 'practice', title: '실습 2-1. 다른 숫자로 사칙 연산하기', desc: '<p>a 에 7, b 에 2 를 넣고 사칙 연산 결과를 계산식과 함께 출력하세요.</p><pre>7 + 2 = 9\n7 - 2 = 5\n7 * 2 = 14\n7 / 2 = 3.5</pre>',
             starter: 'a = 7\nb = 2\n# TODO: 사칙 연산 결과 출력\n',
             solution: 'a = 7\nb = 2\nresult = a + b\nprint(a, "+", b, "=", result)\nresult = a - b\nprint(a, "-", b, "=", result)\nresult = a * b\nprint(a, "*", b, "=", result)\nresult = a / b\nprint(a, "/", b, "=", result)\n',
-            notes: '<p><b>[8분]</b> 빠른 학생에게는 실습 2-2(직사각형), 2-3(// 와 %)을 이어서 풀게 합니다.</p><p>순회하며 확인할 점: 곱하기에 x 를 쓰는 실수, 따옴표 짝이 맞지 않는 실수.</p>' },
+            notes: '<p><b>[8분]</b> 빠른 학생에게는 실습 2-2(직사각형) → 2-3(상수와 이름) → 2-4(// 와 %) → 2-5(f-문자열 영수증) 순서로 이어서 풀게 하고, 더 빠른 학생은 🚀 프로젝트 2-1(여행 경비 정산서)에 도전시키세요.</p><p>순회하며 확인할 점: 곱하기에 x 를 쓰는 실수, 따옴표 짝이 맞지 않는 실수.</p>' },
           { layout: 'summary', title: '정리', bullets: ['변수 = 값을 담는 이름 붙은 그릇', '<code>=</code> 는 대입 연산자 (오른쪽 → 왼쪽)', '<code>print(a, \'+\', b, \'=\', result)</code> — 쉼표로 여러 값 출력', '사칙 연산: <code>+ - * /</code>, <code>/</code> 의 결과는 실수', '함수 = 이름 뒤에 괄호가 붙는 미리 만든 기능'],
             notes: '<p><b>[1분]</b> 다음 교시 예고: “셸에서 입력한 코드는 끄면 사라집니다. 어떻게 보관할까요?” → 파일로 저장(스크립트 모드).</p>' }
         ]
@@ -556,9 +763,12 @@ print(minutes, "분은", hour, "시간", rest, "분")
           '여러 줄의 코드를 편집기(스크립트 모드)에 작성하고 실행할 수 있다',
           '저장한 코드를 다시 열어 수정하고 다시 실행할 수 있다',
           '긴 프로그램을 코딩하는 순서(코딩 → 저장 → 실행 → 수정)를 설명할 수 있다',
-          '오류 메시지에서 오류의 종류와 위치를 찾을 수 있다'
+          '오류 메시지에서 오류의 종류와 위치를 찾을 수 있다',
+          '(심화) SyntaxError · NameError · TypeError 등 오류 이름으로 원인을 좁힐 수 있다',
+          '(심화) print() 로 중간값을 확인하며 오류 없는 버그를 찾을 수 있다',
+          '(심화) 반복되는 코드와 값을 정리하는 리팩터링의 필요성을 설명할 수 있다'
         ],
-        flow: [['복습 · 대화형 모드의 한계', 8], ['스크립트 모드: Code02-01', 12], ['파일 열어 수정 · 다시 실행', 8], ['긴 프로그램 코딩 순서 · 오류 읽기', 10], ['퀴즈 · 실습', 12]],
+        flow: [['복습 · 대화형 모드의 한계', 6], ['스크립트 모드: Code02-01', 10], ['파일 열어 수정 · 다시 실행', 7], ['긴 프로그램 코딩 순서 · 오류 읽기', 8], ['한 걸음 더: 오류 종류 · 디버깅 · 리팩터링', 9], ['퀴즈 · 실습', 10]],
         content: [
           { type: 'h', text: '대화형 모드를 끝내면?' },
           { type: 'p', html: '앞 교시에서 셸(대화형 모드)에 입력한 계산 코드는 잘 동작했습니다. 그런데 IDLE 을 종료했다가 다시 켜서 나누기만 다시 해 보면 어떻게 될까요?' },
@@ -633,11 +843,81 @@ prnt(a, "+", b, "=", result)`, expectError: true,
     prnt(a, "+", b, "=", result)
     ^^^^
 NameError: name 'prnt' is not defined. Did you mean: 'print'?`,
-            desc: '최신 파이썬은 <code>Did you mean: \'print\'?</code> 처럼 <b>고칠 방법까지 제안</b>해 줍니다. <code>4행</code>의 <code>prnt</code> 를 <code>print</code> 로 고치면 해결됩니다.' }
+            desc: '최신 파이썬은 <code>Did you mean: \'print\'?</code> 처럼 <b>고칠 방법까지 제안</b>해 줍니다. <code>4행</code>의 <code>prnt</code> 를 <code>print</code> 로 고치면 해결됩니다.' },
+
+          { type: 'h', text: '한 걸음 더 ① — 자주 만나는 오류 이름들' },
+          { type: 'p', html: '오류 메시지의 <b>종류 이름</b>만 알아도 어디를 봐야 할지 반쯤 알 수 있습니다. 지금까지 만난 오류와 앞으로 자주 만날 오류를 정리해 둡니다.' },
+          { type: 'table', head: ['오류 이름', '뜻', '흔한 원인', '어디를 볼까'], rows: [
+            ['<code>SyntaxError</code>', '문법이 틀림', '괄호 · 따옴표 짝이 안 맞음, 콜론(:) 빠짐', '<b>표시된 줄과 그 바로 위 줄</b>'],
+            ['<code>NameError</code>', '그런 이름이 없음', '오타, 대소문자 다름, 아직 만들지 않은 변수', '이름의 철자'],
+            ['<code>TypeError</code>', '종류가 안 맞는 값끼리 연산', '문자열 − 문자열, <code>int()</code> 를 빼먹음', '값이 숫자인지 글자인지'],
+            ['<code>ValueError</code>', '종류는 맞는데 값이 이상함', '<code>int("abc")</code>', '입력한 값'],
+            ['<code>ZeroDivisionError</code>', '0 으로 나눔', '나누는 수가 0', '나누기 앞의 값'],
+            ['<code>IndentationError</code>', '들여쓰기가 틀림', '스페이스와 탭이 섞임, 칸 수가 다름', '들여쓴 줄 전체']
+          ], caption: '오류 이름은 “무엇이 잘못됐는지”를 알려 주는 첫 단서입니다' },
+          { type: 'callout', kind: 'tip', title: 'SyntaxError 는 조금 다르다', html: '다른 오류는 프로그램이 <b>실행되다가</b> 나지만, <code>SyntaxError</code> 는 <b>실행이 시작되기도 전에</b> 납니다. 파이썬이 코드를 읽다가 “이 문장은 무슨 말인지 모르겠다”고 멈추는 것이죠. 그래서 앞부분의 <code>print()</code> 도 하나도 출력되지 않습니다. 또 파이썬은 <b>이상한 곳을 뒤늦게 눈치채는</b> 경우가 많아서, 표시된 줄이 멀쩡해 보이면 <b>그 바로 위 줄</b>을 살펴보세요.' },
+          { type: 'code', title: '추가 예제. 괄호를 닫지 않으면 (SyntaxError)', code: `a = 100
+b = 50
+print(a + b
+print("끝")`, expectError: true,
+            expect: `  File "main.py", line 3
+    print(a + b
+         ^
+SyntaxError: '(' was never closed`,
+            desc: '<code>3행</code>의 괄호가 닫히지 않아 파이썬은 4행까지 한 문장으로 읽다가 포기합니다. 앞의 두 줄도 실행되지 않은 채 프로그램이 끝났다는 점에 주목하세요.' },
+
+          { type: 'h', text: '한 걸음 더 ② — print() 로 디버깅하기' },
+          { type: 'p', html: '오류가 <b>나지 않는데</b> 결과가 이상할 때가 더 어렵습니다. 파이썬은 아무 말도 해 주지 않으니까요. 이럴 때 가장 빠르고 확실한 방법은 <b>중간값을 print() 로 찍어 보는 것</b>입니다. 전문 개발자도 매일 쓰는 방법입니다.' },
+          { type: 'code', title: '추가 예제. 평균이 이상하다 — 중간값을 찍어 원인 찾기', code: `kor = 90
+eng = 85
+math = 77
+
+avg = kor + eng + math / 3
+print("avg =", avg)                    # 이상하다! 84 가 아니다
+
+print("확인 - 세 점수의 합 :", kor + eng + math)
+print("확인 - math / 3 :", math / 3)   # 범인 발견: 수학 점수만 3으로 나눴다
+
+avg = (kor + eng + math) / 3           # 괄호로 묶어 합계를 먼저 계산
+print("고친 avg =", avg)`,
+            expect: `avg = 200.66666666666666
+확인 - 세 점수의 합 : 252
+확인 - math / 3 : 25.666666666666668
+고친 avg = 84.0`,
+            desc: '<code>*</code> 와 <code>/</code> 는 <code>+</code> 보다 <b>먼저</b> 계산됩니다(수학과 같습니다). 그래서 <code>kor + eng + math / 3</code> 은 <code>kor + eng + (math / 3)</code> 이 됩니다. <b>괄호로 계산 순서를 분명히</b> 해 주는 것이 안전합니다.' },
+          { type: 'callout', kind: 'more', title: '📘 버그를 찾는 순서', html: '<ol><li><b>오류 메시지를 끝까지 읽는다</b> — 종류 · 줄 번호 · 제안(Did you mean)</li><li><b>중간값을 출력한다</b> — <code>print(f"{total = }")</code> 처럼 이름과 값을 함께 찍으면 헷갈리지 않습니다.</li><li><b>값의 종류를 확인한다</b> — <code>print(type(a))</code>. 숫자인 줄 알았는데 문자열인 경우가 아주 많습니다.</li><li><b>작게 쪼갠다</b> — 긴 한 줄을 여러 줄로 나눠 어디서 틀어지는지 봅니다.</li><li><b>확인용 print 는 지운다</b> — 다 고친 뒤 정리합니다. 나중에는 <code>logging</code> 모듈이나 디버거(중단점)를 쓰지만, 시작은 언제나 print 입니다.</li></ol>' },
+
+          { type: 'h', text: '한 걸음 더 ③ — 반복되는 코드 줄이기' },
+          { type: 'p', html: 'Code02-01 을 다시 보면 <b>“계산해서 result 에 넣고, print 로 출력한다”</b>는 두 줄이 네 번 반복됩니다. 지금은 8줄이라 괜찮지만, 연산이 20가지라면 40줄이 되고, 출력 모양을 바꾸려면 20군데를 고쳐야 합니다. 동작은 그대로 두고 구조만 손보는 일을 <b>리팩터링(refactoring)</b>이라고 합니다.' },
+          { type: 'code', title: '추가 예제. result 를 거치지 않고 바로 출력하기', code: `a = 100
+b = 50
+print(a, "+", b, "=", a + b)
+print(a, "-", b, "=", a - b)
+print(a, "*", b, "=", a * b)
+print(a, "/", b, "=", a / b)`,
+            expect: `100 + 50 = 150
+100 - 50 = 50
+100 * 50 = 5000
+100 / 50 = 2.0`,
+            desc: '결과는 Code02-01 과 똑같은데 줄 수는 절반입니다. <code>print()</code> 의 괄호 안에서도 계산할 수 있기 때문이죠. 다만 계산 결과를 <b>나중에 또 써야 한다면</b> 변수에 담아 두는 편이 낫습니다. 무조건 짧은 코드가 아니라 <b>읽기 쉽고 고치기 쉬운 코드</b>가 목표입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 DRY 원칙 — 같은 것을 두 번 쓰지 않기', html: '<b>DRY(Don\'t Repeat Yourself, 반복하지 마라)</b> 는 프로그래밍의 오래된 원칙입니다. 같은 코드가 두세 번 넘게 보이면 대개 셋 중 하나로 정리할 수 있습니다.<ul><li>같은 <b>값</b>이 반복 → <b>변수 · 상수</b>로 뽑기 (예: <code>3</code> → <code>count = 3</code>)</li><li>같은 <b>줄</b>이 값만 바꿔 반복 → <b>반복문</b> (6장 <code>for</code>)</li><li>같은 <b>덩어리</b>가 여러 곳에서 반복 → <b>함수</b> (이 장 02-4 교시, 9장)</li></ul>왜 그럴까요? 고칠 곳이 한 군데로 줄기 때문입니다. 반복된 코드는 “고치다 만 곳”이 생기기 쉽고, 그것이 곧 버그가 됩니다.' },
+          { type: 'code', title: '추가 예제. 같은 값을 한 곳에서 관리하기', code: `kor, eng, math = 90, 85, 77
+
+count = 3                    # 과목 수를 한 곳에서 관리
+total = kor + eng + math     # 합계도 한 번만 계산
+
+print("합계 :", total)
+print("평균 :", total / count)
+print("가장 높은 점수 :", max(kor, eng, math))`,
+            expect: `합계 : 252
+평균 : 84.0
+가장 높은 점수 : 90`,
+            desc: '과목이 하나 늘어도 <code>count</code> 와 <code>total</code> 만 고치면 됩니다. <code>max()</code> 는 여러 값 중 가장 큰 값을 돌려주는 파이썬 기본 함수입니다 (<code>min()</code>, <code>abs()</code>, <code>round()</code> 도 자주 씁니다).' },
+          { type: 'callout', kind: 'more', title: '📘 IDLE 말고 다른 방법으로 실행하기', html: '<code>.py</code> 파일은 명령 프롬프트(터미널)에서 <code>python Code02-01.py</code> 라고 입력해도 실행됩니다. 실제 현장에서는 이 방식이 가장 흔합니다. 편집기도 IDLE 외에 <b>VS Code</b>, <b>PyCharm</b> 같은 도구를 많이 쓰는데, 오타를 실시간으로 잡아 주고 자동 완성 · 디버거를 제공합니다. 지금은 IDLE(또는 이 강좌의 웹 편집기)로 충분하지만, 코드가 길어지면 한 번 써 보세요.' }
         ],
         practice: [
           {
-            title: '실습 2-4. Code02-01 고쳐서 다시 실행하기',
+            title: '실습 2-6. Code02-01 고쳐서 다시 실행하기',
             level: 1,
             desc: '<p>Code02-01 에서 <code>a</code> 를 <b>17</b>, <code>b</code> 를 <b>5</b> 로 바꾸고, 맨 아래에 <b>몫(//)</b>과 <b>나머지(%)</b>를 출력하는 줄을 추가하세요.</p><pre>17 + 5 = 22\n17 - 5 = 12\n17 * 5 = 85\n17 / 5 = 3.4\n17 // 5 = 3\n17 % 5 = 2</pre>',
             hint: '앞의 네 가지와 똑같은 모양으로 <code>result = a // b</code>, <code>print(a, "//", b, "=", result)</code> 를 추가합니다.',
@@ -676,7 +956,49 @@ print(a, "%", b, "=", result)
 17 % 5 = 2`
           },
           {
-            title: '실습 2-5. 오류 고치기',
+            title: '실습 2-7. 7단 출력하기',
+            level: 1,
+            desc: '<p>편집기에 여러 줄을 작성해 7단의 1 ~ 5 까지를 출력하세요. 단 숫자는 변수 <code>dan</code> 에 넣고, 출력은 f-문자열로 만듭니다.</p><pre>7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35</pre><p>다 만들었으면 <code>dan</code> 을 <b>9</b> 로 바꿔 한 줄만 고쳐도 전체가 9단으로 바뀌는지 확인하세요.</p>',
+            hint: '<code>print(f"{dan} x 1 = {dan * 1}")</code> 처럼 중괄호 안에 계산식을 바로 쓸 수 있습니다. 같은 모양으로 5줄.',
+            starter: `dan = 7
+# TODO: f-문자열로 7 x 1 ~ 7 x 5 를 출력
+`,
+            solution: `dan = 7
+print(f"{dan} x 1 = {dan * 1}")
+print(f"{dan} x 2 = {dan * 2}")
+print(f"{dan} x 3 = {dan * 3}")
+print(f"{dan} x 4 = {dan * 4}")
+print(f"{dan} x 5 = {dan * 5}")
+`,
+            expect: `7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35`
+          },
+          {
+            title: '실습 2-8. 평균이 이상해요 — print 로 원인 찾기',
+            level: 2,
+            desc: '<p>아래 코드는 오류 없이 실행되지만 평균이 <b>200.66…</b> 으로 나옵니다. 중간값을 <code>print()</code> 로 찍어 원인을 찾고, <b>평균 : 84.0</b> 이 나오도록 고치세요.</p>',
+            hint: '<code>kor + eng + math</code> 를 따로 출력해 보고, <code>math / 3</code> 도 출력해 보세요. <code>/</code> 는 <code>+</code> 보다 먼저 계산됩니다 — <b>괄호</b>가 필요합니다.',
+            starter: `kor = 90
+eng = 85
+math = 77
+avg = kor + eng + math / 3
+# TODO: 중간값을 print 로 확인하고 위 줄을 고치기
+print("평균 :", avg)
+`,
+            solution: `kor = 90
+eng = 85
+math = 77
+total = kor + eng + math
+avg = total / 3
+print("평균 :", avg)
+`,
+            expect: '평균 : 84.0'
+          },
+          {
+            title: '실습 2-9. 오류 고치기',
             level: 2,
             desc: '<p>아래 코드는 실행하면 오류가 납니다. 오류 메시지를 읽고 <b>두 군데</b>를 고쳐 다음처럼 출력되게 하세요.</p><pre>100 + 50 = 150\n100 * 50 = 5000</pre>',
             hint: '오류 메시지의 마지막 줄과 줄 번호를 보세요. 하나를 고치고 다시 실행하면 다음 오류가 보입니다. 대소문자도 확인!',
@@ -696,6 +1018,41 @@ print(a, "*", b, "=", result)
 `,
             expect: `100 + 50 = 150
 100 * 50 = 5000`
+          },
+          {
+            title: '실습 2-10. 버그 잡기 도전 — 오류 4개',
+            level: 3,
+            desc: '<p>세 사람의 평균 나이를 구하는 프로그램에 <b>오류가 4군데</b> 숨어 있습니다. 실행 → 오류 메시지 읽기 → 한 군데 고치기 → 다시 실행을 반복해 모두 잡아내세요.</p><p>목표 출력</p><pre>평균 나이 : 25.0</pre><p><b>힌트가 되는 오류 이름</b>: <code>NameError</code>(2번), <code>TypeError</code>(1번), <code>ZeroDivisionError</code>(1번)</p><p><b>더 해 보기</b> — 다 고친 뒤, 사람이 한 명 더 늘어도 고칠 곳이 적어지도록 <code>count</code> 변수를 만들어 보세요.</p>',
+            hint: '① 변수 이름의 <b>대소문자</b>를 확인하세요(파이썬은 <code>thisYear</code> 와 <code>thisyear</code> 를 다르게 봅니다). ② 따옴표로 감싼 값은 숫자가 아니라 글자입니다. ③ 나누는 수가 0 이면 안 됩니다 — 사람 수는 몇 명인가요?',
+            starter: `# 세 사람의 평균 나이 구하기 (오류 4개를 찾아 고치세요)
+thisYear = 2026
+birth1 = 2001
+birth2 = 1998
+birth3 = 2004
+
+age1 = thisYear - birth1
+age2 = thisyear - birth2
+age3 = thisYear - "2004"
+
+total = age1 + age2 + age3
+average = total / 0
+print("평균 나이 :", Average)
+`,
+            solution: `# 세 사람의 평균 나이 구하기 (오류를 모두 고친 코드)
+thisYear = 2026
+birth1 = 2001
+birth2 = 1998
+birth3 = 2004
+
+age1 = thisYear - birth1
+age2 = thisYear - birth2
+age3 = thisYear - birth3
+
+total = age1 + age2 + age3
+average = total / 3
+print("평균 나이 :", average)
+`,
+            expect: '평균 나이 : 25.0'
           }
         ],
         quiz: [
@@ -703,7 +1060,8 @@ print(a, "*", b, "=", result)
           { q: 'IDLE 에서 스크립트 모드의 코드를 실행하는 단축키는? (이 강좌에서는 Ctrl+Enter)', options: ['F1', 'F5', 'Ctrl+S', 'Ctrl+N'], answer: 1, explain: '[Run]-[Run Module] 의 단축키는 F5 입니다. Ctrl+S 는 저장, Ctrl+N 은 새 파일입니다.' },
           { q: '스크립트 모드에 대한 설명으로 <b>틀린</b> 것은?', options: ['여러 줄의 코드를 입력해 두고 한꺼번에 실행한다', '코드를 .py 파일로 저장해 다시 열 수 있다', '한 줄을 입력할 때마다 바로 실행된다', '값을 보려면 print() 로 출력해야 한다'], answer: 2, explain: '한 줄씩 바로 실행되는 것은 대화형 모드입니다. 스크립트 모드는 입력 중에는 실행되지 않습니다.' },
           { q: '다음 오류 메시지에서 문제가 있는 줄은?<pre><code>  File "main.py", line 4, in &lt;module&gt;\n    prnt(result)\nNameError: name \'prnt\' is not defined</code></pre>', options: ['1행', '2행', '4행', '알 수 없다'], answer: 2, explain: '<code>line 4</code> 가 오류 위치입니다. print 를 prnt 로 잘못 쓴 오타입니다.' },
-          { q: '긴 프로그램을 코딩하는 순서로 알맞은 것은?', options: ['실행 → 코딩 → 저장', '코딩 → 저장 → 실행 및 결과 확인', '저장 → 실행 → 코딩', '코딩 → 실행 → 파일 열기'], answer: 1, explain: '코딩 → 저장 → 실행 및 결과 확인, 결과가 틀리면 다시 코딩 단계로 돌아갑니다.' }
+          { q: '긴 프로그램을 코딩하는 순서로 알맞은 것은?', options: ['실행 → 코딩 → 저장', '코딩 → 저장 → 실행 및 결과 확인', '저장 → 실행 → 코딩', '코딩 → 실행 → 파일 열기'], answer: 1, explain: '코딩 → 저장 → 실행 및 결과 확인, 결과가 틀리면 다시 코딩 단계로 돌아갑니다.' },
+          { q: '다음 코드의 출력은?<pre><code>a = 10\nb = 20\nc = 30\nprint(a + b + c / 3)</code></pre>', options: ['20.0', '40.0', '60', '오류'], answer: 1, explain: '<code>/</code> 가 <code>+</code> 보다 먼저 계산되어 <code>10 + 20 + 10.0</code> = 40.0 입니다. 평균을 구하려면 <code>(a + b + c) / 3</code> 처럼 괄호가 필요합니다.' }
         ],
         slides: [
           { layout: 'title', title: '계산기 프로그램 저장 — 스크립트 모드', subtitle: 'Chapter 02 · Section 03', badge: '02-2',
@@ -729,12 +1087,23 @@ print(a, "*", b, "=", result)
           { layout: 'code', title: '오류 메시지 읽는 법', code: 'a = 100\nb = 50\nresult = a + b\nprnt(a, "+", b, "=", result)', expectError: true,
             points: ['<b>아래에서 위로</b> 읽기', '마지막 줄: 오류 종류 · 이유', '<code>line 4</code>: 오류 위치', '<code>Did you mean: \'print\'?</code> 제안'],
             notes: '<p><b>[3분]</b> 일부러 오류를 내고 함께 읽습니다. “빨간 글씨는 컴퓨터가 보내는 힌트 편지”라고 말해 두려움을 줄여 주세요.</p><p>고친 뒤 다시 실행해 정상 결과를 확인합니다.</p>' },
+          { layout: 'table', title: '한 걸음 더 ① — 자주 만나는 오류', head: ['오류 이름', '뜻', '어디를 볼까'],
+            rows: [['SyntaxError', '문법이 틀림 (괄호 · 따옴표 · 콜론)', '표시된 줄과 <b>그 위 줄</b>'], ['NameError', '그런 이름 없음 (오타 · 대소문자)', '이름의 철자'], ['TypeError', '종류가 안 맞는 값끼리 연산', '숫자인가 글자인가'], ['ValueError', '값이 이상함 (int("abc"))', '입력한 값'], ['ZeroDivisionError', '0 으로 나눔', '나누는 수'], ['IndentationError', '들여쓰기가 틀림', '들여쓴 줄 전체']],
+            lead: '오류 이름 = 무엇이 잘못됐는지 알려 주는 첫 단서',
+            notes: '<p><b>[4분]</b> 모두 외울 필요는 없고 “이름을 보면 어디를 볼지 정해진다”는 감각만 주면 됩니다.</p><p>SyntaxError 만 성격이 다릅니다: 실행 <b>전</b>에 나므로 앞부분 print 도 출력되지 않습니다. 괄호를 닫지 않은 코드를 즉석에서 실행해 보여 주세요.</p>' },
+          { layout: 'code', title: '한 걸음 더 ② — print 로 버그 찾기', code: 'kor = 90\neng = 85\nmath = 77\n\navg = kor + eng + math / 3\nprint("avg =", avg)\n\nprint("확인 - 합 :", kor + eng + math)\nprint("확인 - math / 3 :", math / 3)\n\navg = (kor + eng + math) / 3\nprint("고친 avg =", avg)',
+            points: ['오류는 없는데 <b>결과가 이상한</b> 경우', '중간값을 찍어 범인을 좁힌다', '<code>/</code> 가 <code>+</code> 보다 먼저 계산됨', '<b>괄호</b>로 순서를 분명히'],
+            notes: '<p><b>[5분]</b> 먼저 “84 가 나와야 하는데 200 이 나왔다”는 상황을 보여 주고, 학생들에게 어디를 확인해 볼지 물어보세요.</p><p>디버깅 순서 5단계를 정리합니다: 메시지 읽기 → 중간값 출력 → <code>type()</code> 확인 → 작게 쪼개기 → 확인용 print 지우기. <code>print(f"{total = }")</code> 서식을 알려 주면 좋아합니다.</p><p>실습 2-8 이 바로 이 문제입니다.</p>' },
+          { layout: 'two', title: '한 걸음 더 ③ — 반복 줄이기 (리팩터링)',
+            left: { title: '두 줄씩 네 번 (Code02-01)', code: 'a = 100\nb = 50\nresult = a + b\nprint(a, "+", b, "=", result)\nresult = a - b\nprint(a, "-", b, "=", result)' },
+            right: { title: 'print 안에서 바로 계산', code: 'a = 100\nb = 50\nprint(a, "+", b, "=", a + b)\nprint(a, "-", b, "=", a - b)\nprint(a, "*", b, "=", a * b)\nprint(a, "/", b, "=", a / b)' },
+            notes: '<p><b>[4분]</b> 결과는 같고 줄 수는 절반입니다. 단, 결과를 나중에 또 쓴다면 변수에 담는 쪽이 낫다는 균형도 꼭 말해 주세요 — <b>짧은 코드가 아니라 고치기 쉬운 코드</b>가 목표입니다.</p><p>DRY 원칙: 같은 <b>값</b>이 반복되면 변수 · 상수로, 같은 <b>줄</b>이면 반복문(6장), 같은 <b>덩어리</b>면 함수(02-4 교시)로. 이 세 가지가 앞으로 배울 문법의 이유이기도 합니다.</p>' },
           { layout: 'quiz', title: '확인 문제', q: '스크립트 모드에 대한 설명으로 <b>틀린</b> 것은?', options: ['여러 줄을 입력해 두고 한꺼번에 실행한다', '.py 파일로 저장해 다시 열 수 있다', '한 줄을 입력할 때마다 바로 실행된다', '값을 보려면 print() 로 출력해야 한다'], answer: 2, explain: '한 줄씩 바로 실행되는 것은 대화형 모드(셸)입니다.',
             notes: '<p><b>[2분]</b> 대화형 모드와 스크립트 모드의 차이를 한 번 더 정리합니다.</p>' },
-          { layout: 'practice', title: '실습 2-5. 오류 고치기', desc: '<p>오류 메시지를 읽고 두 군데를 고쳐 <code>100 + 50 = 150</code>, <code>100 * 50 = 5000</code> 이 출력되게 하세요.</p>',
+          { layout: 'practice', title: '실습 2-9. 오류 고치기', desc: '<p>오류 메시지를 읽고 두 군데를 고쳐 <code>100 + 50 = 150</code>, <code>100 * 50 = 5000</code> 이 출력되게 하세요.</p>',
             starter: 'a = 100\nb = 50\nresult = a + b\nprint(a, "+", b, "=", Result)\nresult = a * b\nprnt(a, "*", b, "=", result)\n',
             solution: 'a = 100\nb = 50\nresult = a + b\nprint(a, "+", b, "=", result)\nresult = a * b\nprint(a, "*", b, "=", result)\n',
-            notes: '<p><b>[8분]</b> 오류는 한 번에 하나씩만 보입니다(첫 오류에서 멈춤). 하나 고치고 → 다시 실행 → 다음 오류, 이 과정 자체가 “긴 프로그램 코딩 순서”의 실습입니다.</p><p>빠른 학생: 실습 2-4(몫 · 나머지 추가).</p>' },
+            notes: '<p><b>[8분]</b> 오류는 한 번에 하나씩만 보입니다(첫 오류에서 멈춤). 하나 고치고 → 다시 실행 → 다음 오류, 이 과정 자체가 “긴 프로그램 코딩 순서”의 실습입니다.</p><p>순서 추천: 실습 2-6(몫 · 나머지 추가) → 2-7(7단) → 2-8(평균 버그) → 2-9(오류 고치기). 빠른 학생은 실습 2-10(오류 4개 잡기)에 도전시키세요.</p>' },
           { layout: 'summary', title: '정리', bullets: ['대화형 모드의 변수는 종료하면 <b>사라진다</b>', '긴 코드는 <b>스크립트 모드</b>로 작성해 .py 파일로 저장', 'IDLE: New File → Save → F5 / 이 강좌: 편집기 → ▶ 실행', '코딩 → 저장 → 실행 → (실패하면) 다시 코딩', '오류 메시지는 <b>아래에서 위로</b> 읽는다'],
             notes: '<p><b>[1분]</b> 다음 교시: 실행할 때마다 숫자를 키보드로 입력받는 계산기(input 함수).</p>' }
         ]
@@ -749,9 +1118,12 @@ print(a, "*", b, "=", result)
           'input() 함수로 키보드에서 값을 입력받을 수 있다',
           'input() 이 돌려주는 값은 문자열이라는 것을 설명할 수 있다',
           'int() 로 문자열을 정수로 바꿔 계산할 수 있다',
-          '안내 문구가 있는 입력으로 [프로그램 1] 간단 계산기를 완성할 수 있다'
+          '안내 문구가 있는 입력으로 [프로그램 1] 간단 계산기를 완성할 수 있다',
+          '(심화) f-문자열 서식으로 계산 결과의 자릿수를 다듬을 수 있다',
+          '(심화) split() 으로 한 줄에 여러 값을 입력받을 수 있다',
+          '(심화) 잘못된 입력을 걸러 다시 묻는 재입력 루프를 만들 수 있다'
         ],
-        flow: [['도입: 고정된 값의 한계', 5], ['input() 과 문자열 문제 (Code02-02)', 12], ['int() 변환 (Code02-03)', 10], ['[프로그램 1] 완성 (Code02-04)', 10], ['퀴즈 · 실습', 13]],
+        flow: [['도입: 고정된 값의 한계', 4], ['input() 과 문자열 문제 (Code02-02)', 10], ['int() 변환 (Code02-03)', 8], ['[프로그램 1] 완성 (Code02-04)', 8], ['한 걸음 더: 서식 · split · 입력 검증', 10], ['퀴즈 · 실습 · 프로젝트', 10]],
         content: [
           { type: 'h', text: '직접 입력한 숫자로 계산하기' },
           { type: 'p', html: '지금까지의 계산기는 100 과 50(또는 300 과 200)만 계산합니다. 다른 숫자를 계산하려면 매번 코드를 고쳐야 하죠. 이번에는 <b>실행할 때 키보드로 두 숫자를 입력</b>받아 계산하도록 바꿔 봅시다.' },
@@ -837,11 +1209,114 @@ print(a, "/", b, "=", a / b)`, stdin: '2.5\n4\n',
           { type: 'code', title: '[프로그램 1] 완성: Code02-04.py 간단 계산기', code: CODE02_04, stdin: '300\n200\n', expect: CODE02_04_OUT,
             desc: '<code>1~2행</code>: 안내 문구를 보여 주고, 입력한 글자를 정수로 바꿔 a, b 에 넣습니다. 입력한 값은 안내 문구 바로 뒤에 표시됩니다. <code>3~10행</code>은 Code02-01 과 똑같습니다.' },
           { type: 'callout', kind: 'tip', title: '입력이 있는 예제 실행하기', html: '▶ 실행을 누르면 콘솔 아래 입력칸이 깜빡입니다. 숫자를 입력하고 <kbd>Enter</kbd> 를 누르세요. 여러 가지 숫자로 여러 번 실행해 보는 것이 좋습니다. 빠르게 확인하려면 <b>예시 입력으로 실행</b>을 누르세요. 안내 문구 끝에 <code>" : "</code> 처럼 빈칸을 넣어 두면 입력한 숫자가 문구에 붙지 않아 보기 좋습니다.' },
-          { type: 'callout', kind: 'more', title: '📘 요즘 스타일로 쓴 계산기', html: '같은 계산기를 f-문자열로 쓰면 결과 변수 없이도 깔끔하게 만들 수 있습니다.<pre><code>a = int(input("첫 번째 숫자를 입력하세요 : "))\nb = int(input("두 번째 숫자를 입력하세요 : "))\nprint(f"{a} + {b} = {a + b}")\nprint(f"{a} - {b} = {a - b}")\nprint(f"{a} * {b} = {a * b}")\nprint(f"{a} / {b} = {a / b}")</code></pre>교재 방식(result 변수 재사용)과 결과는 같습니다. 어느 쪽이든 읽기 쉬운 방식을 고르면 됩니다.' }
+          { type: 'callout', kind: 'more', title: '📘 요즘 스타일로 쓴 계산기', html: '같은 계산기를 f-문자열로 쓰면 결과 변수 없이도 깔끔하게 만들 수 있습니다.<pre><code>a = int(input("첫 번째 숫자를 입력하세요 : "))\nb = int(input("두 번째 숫자를 입력하세요 : "))\nprint(f"{a} + {b} = {a + b}")\nprint(f"{a} - {b} = {a - b}")\nprint(f"{a} * {b} = {a * b}")\nprint(f"{a} / {b} = {a / b}")</code></pre>교재 방식(result 변수 재사용)과 결과는 같습니다. 어느 쪽이든 읽기 쉬운 방식을 고르면 됩니다.' },
+
+          { type: 'h', text: '한 걸음 더 ① — 계산 결과를 보기 좋게 다듬기' },
+          { type: 'p', html: '나누기 결과가 <code>1.6666666666666667</code> 처럼 길게 나오면 읽기 불편합니다. f-문자열의 서식 <code>:.2f</code> 를 쓰면 <b>소수점 둘째 자리까지 반올림</b>해서 보여 줄 수 있습니다. 화면에 보이는 모양만 바뀌고 변수에 든 값은 그대로라는 점이 중요합니다.' },
+          { type: 'code', title: '추가 예제. f-문자열로 다듬은 계산기', code: `a = int(input("첫 번째 숫자를 입력하세요 : "))
+b = int(input("두 번째 숫자를 입력하세요 : "))
+
+print(f"{a} + {b} = {a + b}")
+print(f"{a} - {b} = {a - b}")
+print(f"{a} * {b} = {a * b}")
+print(f"{a} / {b} = {a / b:.2f}")
+print(f"{a} // {b} = {a // b} … 나머지 {a % b}")`, stdin: '7\n3\n',
+            expect: `첫 번째 숫자를 입력하세요 : 7
+두 번째 숫자를 입력하세요 : 3
+7 + 3 = 10
+7 - 3 = 4
+7 * 3 = 21
+7 / 3 = 2.33
+7 // 3 = 2 … 나머지 1`,
+            desc: '<code>{a / b:.2f}</code> 에서 콜론 앞은 <b>값</b>, 뒤는 <b>서식</b>입니다. 실제 값은 2.333… 그대로이고 출력만 2.33 으로 보입니다.' },
+
+          { type: 'h', text: '한 걸음 더 ② — 두 수를 한 줄에 입력받기' },
+          { type: 'p', html: '입력을 두 번 받는 대신 <code>10 20</code> 처럼 한 줄에 받고 싶을 때가 있습니다. 문자열의 <code>split()</code> 은 <b>빈칸을 기준으로 잘라 여러 조각으로 나눠</b> 줍니다.' },
+          { type: 'code', title: '추가 예제. split() 으로 한 줄에 두 수 입력받기', code: `data = input("두 수를 빈칸으로 나누어 입력 : ")
+first, second = data.split()
+
+print("자른 결과 :", first, second)
+print("아직은 글자 :", type(first))
+
+a = int(first)
+b = int(second)
+print(f"{a} + {b} = {a + b}")`, stdin: '10 20\n',
+            expect: `두 수를 빈칸으로 나누어 입력 : 10 20
+자른 결과 : 10 20
+아직은 글자 : <class 'str'>
+10 + 20 = 30`,
+            desc: '<code>first, second = data.split()</code> 처럼 왼쪽에 이름을 두 개 두면 잘린 두 조각이 순서대로 들어갑니다(언패킹). 잘린 조각도 여전히 <b>문자열</b>이므로 계산하려면 <code>int()</code> 가 필요합니다.' },
+          { type: 'callout', kind: 'more', title: '📘 map() 으로 한 번에 정수로 바꾸기', html: '<code>a, b = map(int, input().split())</code> 한 줄이면 “입력 → 빈칸으로 자르기 → 각 조각을 int 로 변환 → a, b 에 나눠 담기”가 모두 끝납니다. 온라인 코딩 테스트 풀이에서 가장 많이 보이는 관용구입니다. <code>map()</code> 은 “모든 조각에 같은 함수를 적용하라”는 뜻으로, 7장 리스트를 배운 뒤 다시 만납니다. 지금은 <b>이런 짧은 표현이 있다</b> 정도만 기억해 두세요. 참고로 입력 개수가 안 맞으면 <code>ValueError: not enough values to unpack</code> 이 납니다.' },
+
+          { type: 'h', text: '한 걸음 더 ③ — 잘못된 입력에 대비하기' },
+          { type: 'p', html: '<code>int(input())</code> 은 사용자가 <b>정확히 정수를 입력한다</b>는 가정 위에 서 있습니다. 하지만 실제 사용자는 <code>abc</code> 를 넣기도 하고, 실수로 엔터만 누르기도 하고, <code>3.5</code> 를 넣기도 합니다. 그때마다 프로그램이 오류로 죽어 버린다면 좋은 프로그램이라고 할 수 없습니다. 방법은 두 가지입니다.' },
+          { type: 'list', ordered: true, items: [
+            '<b>미리 확인하기</b> — 입력받은 글자가 숫자 모양인지 <code>isdigit()</code> 으로 검사하고, 아니면 다시 물어봅니다.',
+            '<b>일단 해 보고 실패하면 받아 내기</b> — <code>try ~ except</code> 로 오류를 붙잡습니다 (13장에서 자세히 배웁니다).'
+          ] },
+          { type: 'code', title: '추가 예제. 정수를 넣을 때까지 다시 물어보기 (재입력 루프)', code: `## 변수 선언 부분 ##
+data = ""
+
+## 메인 코드 부분 ##
+while True :
+    data = input("정수를 입력하세요 : ")
+    if data.isdigit() :
+        break
+    print("  → 정수가 아닙니다. 다시 입력해 주세요.")
+
+num = int(data)
+print("입력한 수의 2배 :", num * 2)`, stdin: 'abc\n3.5\n21\n',
+            expect: `정수를 입력하세요 : abc
+  → 정수가 아닙니다. 다시 입력해 주세요.
+정수를 입력하세요 : 3.5
+  → 정수가 아닙니다. 다시 입력해 주세요.
+정수를 입력하세요 : 21
+입력한 수의 2배 : 42`,
+            desc: '<code>while True :</code> 는 “계속 반복하라”, <code>break</code> 는 “반복을 빠져나가라”는 뜻입니다(6장). 올바른 값을 받을 때까지 묻고, 받으면 빠져나오는 이 모양은 <b>입력을 다루는 프로그램의 기본 형태</b>입니다. <code>"abc".isdigit()</code> 은 False, <code>"21".isdigit()</code> 은 True 를 돌려줍니다.' },
+          { type: 'callout', kind: 'warn', title: 'isdigit() 이 놓치는 것', html: '<code>"-5".isdigit()</code> 은 <b>False</b> 입니다(빼기 기호 때문). <code>"3.5"</code>, <code>""</code>(그냥 엔터)도 False 입니다. 즉 isdigit() 은 “0 이상의 정수 글자”만 True 입니다. 음수나 소수까지 받아야 한다면 아래의 <code>try ~ except</code> 가 더 알맞습니다.' },
+          { type: 'callout', kind: 'more', title: '📘 try ~ except 로 더 단단하게 만들기', html: '<code>try :</code> 블록을 실행하다가 오류(예외)가 나면 프로그램이 죽는 대신 <code>except :</code> 블록으로 넘어갑니다. <code>int()</code> 가 실패할 때 나는 오류 이름이 <code>ValueError</code> 이므로 그것만 콕 집어 잡아냅니다. 음수 · 실수까지 자연스럽게 처리되는 것이 장점입니다. 자세한 내용은 13장에서 배웁니다.' },
+          { type: 'code', title: '추가 예제. try ~ except 로 받아 내기', code: `## 변수 선언 부분 ##
+num = 0
+
+## 메인 코드 부분 ##
+while True :
+    try :
+        num = int(input("정수를 입력하세요 : "))
+        break
+    except ValueError :
+        print("  → 정수만 입력할 수 있습니다.")
+
+print("입력한 수의 제곱 :", num ** 2)`, stdin: 'abc\n\n-7\n',
+            expect: `정수를 입력하세요 : abc
+  → 정수만 입력할 수 있습니다.
+정수를 입력하세요 :
+  → 정수만 입력할 수 있습니다.
+정수를 입력하세요 : -7
+입력한 수의 제곱 : 49`,
+            desc: '<code>-7</code> 처럼 음수도 그대로 받아들입니다. 빈 입력(엔터만)도 안전하게 걸러집니다.' },
+          { type: 'callout', kind: 'more', title: '📘 0 으로 나누기를 미리 막기', html: '계산기에 두 번째 숫자로 0 을 넣으면 <code>ZeroDivisionError</code> 로 멈춥니다. 나누기 전에 <code>if b != 0 :</code> 로 확인하고, 0 이면 “0 으로는 나눌 수 없습니다”라고 안내하면 프로그램이 죽지 않습니다. 조건문 <code>if</code> 는 5장에서 배우지만, <b>“위험한 계산 앞에는 확인 한 줄”</b> 이라는 감각은 지금부터 가져도 좋습니다. 이런 준비를 <b>방어적 프로그래밍(defensive programming)</b> 이라고 부릅니다.' },
+          { type: 'code', title: '추가 예제. 0 으로 나누기를 피하는 계산기', code: `a = int(input("첫 번째 숫자를 입력하세요 : "))
+b = int(input("두 번째 숫자를 입력하세요 : "))
+
+print(f"{a} + {b} = {a + b}")
+print(f"{a} - {b} = {a - b}")
+print(f"{a} * {b} = {a * b}")
+
+if b != 0 :
+    print(f"{a} / {b} = {a / b:.2f}")
+else :
+    print("0 으로는 나눌 수 없습니다.")`, stdin: '10\n0\n',
+            expect: `첫 번째 숫자를 입력하세요 : 10
+두 번째 숫자를 입력하세요 : 0
+10 + 0 = 10
+10 - 0 = 10
+10 * 0 = 0
+0 으로는 나눌 수 없습니다.`,
+            desc: '<code>!=</code> 는 “같지 않다”는 뜻입니다. 예시 입력을 <code>10</code>, <code>4</code> 로 바꿔 다시 실행해 보세요.' }
         ],
         practice: [
           {
-            title: '실습 2-6. 나이 계산기',
+            title: '실습 2-11. 나이 계산기',
             level: 1,
             desc: '<p>태어난 해를 입력받아 올해(2026년) 나이를 출력하세요. (올해 연도는 변수 <code>thisYear = 2026</code> 으로 준비합니다)</p><pre>태어난 해를 입력하세요 : 2010\n2026 년에 16 살입니다.</pre>',
             hint: '<code>int(input("…"))</code> 로 입력받고, <code>thisYear - 태어난해</code> 를 계산합니다.',
@@ -860,7 +1335,29 @@ print(thisYear, "년에", age, "살입니다.")
 2026 년에 16 살입니다.`
           },
           {
-            title: '실습 2-7. 세 과목 합계와 평균',
+            title: '실습 2-12. 원의 넓이와 둘레',
+            level: 1,
+            desc: '<p>반지름을 <b>실수</b>로 입력받아 원의 넓이와 둘레를 <b>소수점 둘째 자리까지</b> 출력하세요. 원주율은 대문자 상수 <code>PI = 3.14159</code> 로 준비합니다.</p><pre>반지름 : 7.5\n넓이 : 176.71\n둘레 : 47.12</pre>',
+            hint: '넓이 = PI × 반지름 × 반지름, 둘레 = 2 × PI × 반지름. 출력은 <code>print(f"넓이 : {area:.2f}")</code> 처럼 f-문자열의 <code>:.2f</code> 를 씁니다.',
+            starter: `PI = 3.14159
+# TODO: 반지름을 실수로 입력받기
+r = 0.0
+# TODO: 넓이(area) 와 둘레(around) 를 계산해 소수점 둘째 자리까지 출력
+`,
+            solution: `PI = 3.14159
+r = float(input("반지름 : "))
+area = PI * r * r
+around = 2 * PI * r
+print(f"넓이 : {area:.2f}")
+print(f"둘레 : {around:.2f}")
+`,
+            stdin: '7.5\n',
+            expect: `반지름 : 7.5
+넓이 : 176.71
+둘레 : 47.12`
+          },
+          {
+            title: '실습 2-13. 세 과목 합계와 평균',
             level: 2,
             desc: '<p>국어 · 영어 · 수학 점수를 입력받아 합계와 평균을 출력하세요.</p><pre>국어 점수 : 90\n영어 점수 : 85\n수학 점수 : 77\n합계 : 252\n평균 : 84.0</pre>',
             hint: '세 번 입력받아 정수로 바꾸고, 평균 = 합계 / 3 입니다. <code>/</code> 의 결과는 실수입니다.',
@@ -886,7 +1383,7 @@ print("평균 :", avg)
 평균 : 84.0`
           },
           {
-            title: '실습 2-8. 섭씨 → 화씨 변환기',
+            title: '실습 2-14. 섭씨 → 화씨 변환기',
             level: 2,
             desc: '<p>섭씨 온도를 <b>실수</b>로 입력받아 화씨 온도로 바꿔 출력하세요. 공식: 화씨 = 섭씨 × 9 / 5 + 32</p><pre>섭씨 온도 : 36.5\n섭씨 36.5 도는 화씨 97.7 도</pre>',
             hint: '소수점이 있는 값을 입력받으므로 <code>int()</code> 가 아니라 <code>float()</code> 을 씁니다.',
@@ -901,6 +1398,89 @@ print("섭씨", c, "도는 화씨", f, "도")
             stdin: '36.5\n',
             expect: `섭씨 온도 : 36.5
 섭씨 36.5 도는 화씨 97.7 도`
+          },
+          {
+            title: '실습 2-15. 올바른 값을 넣을 때까지 다시 묻기',
+            level: 2,
+            desc: '<p>태어난 해를 입력받아 나이를 알려 주는 프로그램을 만들되, <b>정수가 아닌 값을 입력하면 다시 묻도록</b> 하세요.</p><pre>태어난 해 : 이천년\n  → 정수 네 자리로 입력해 주세요.\n태어난 해 : 20o5\n  → 정수 네 자리로 입력해 주세요.\n태어난 해 : 2005\n2026 년에 21 살입니다.</pre>',
+            hint: '<code>while True :</code> 안에서 <code>input()</code> 으로 받고, <code>isdigit()</code> 이 True 이면 <code>break</code> 로 빠져나옵니다. 아니면 안내 문구를 출력하고 다시 반복합니다.',
+            starter: `THIS_YEAR = 2026
+data = ""
+
+while True :
+    data = input("태어난 해 : ")
+    # TODO: 정수 모양이면 break, 아니면 안내 문구 출력
+    break
+
+# TODO: 나이를 계산해 출력
+`,
+            solution: `THIS_YEAR = 2026
+data = ""
+
+while True :
+    data = input("태어난 해 : ")
+    if data.isdigit() :
+        break
+    print("  → 정수 네 자리로 입력해 주세요.")
+
+birth = int(data)
+age = THIS_YEAR - birth
+print(THIS_YEAR, "년에", age, "살입니다.")
+`,
+            stdin: '이천년\n20o5\n2005\n',
+            expect: `태어난 해 : 이천년
+  → 정수 네 자리로 입력해 주세요.
+태어난 해 : 20o5
+  → 정수 네 자리로 입력해 주세요.
+태어난 해 : 2005
+2026 년에 21 살입니다.`
+          },
+          {
+            title: '🚀 프로젝트 2-2. 단위 변환기',
+            level: 3,
+            desc: '<p>메뉴를 골라 단위를 바꿔 주는 <b>단위 변환기</b>를 만드세요.</p><p><b>요구 사항</b></p><ol><li>실행하면 메뉴를 보여 준다: <code>1) cm → inch   2) kg → lb   3) °C → °F</code></li><li>번호를 입력받는다 (문자열 그대로 비교하면 <code>int()</code> 변환 오류를 피할 수 있다)</li><li>고른 번호에 맞는 값을 <b>실수</b>로 입력받아 변환하고, <b>소수점 둘째 자리까지</b> 출력한다</li><li>변환에 쓰는 값은 상수로 둔다: <code>CM_PER_INCH = 2.54</code>, <code>LB_PER_KG = 2.20462</code></li><li>1 ~ 3 이 아닌 번호를 입력하면 <code>1 ~ 3 중에서 고르세요.</code> 라고 안내하고 끝낸다</li></ol><p>예시 실행 장면</p><pre>1) cm → inch   2) kg → lb   3) °C → °F\n번호를 고르세요 : 2\n무게(kg) : 70\n70.0kg = 154.32lb</pre><p><b>더 해 보기</b> — ① 변환이 끝난 뒤 “계속할까요?”를 물어 반복하도록 <code>while</code> 을 붙여 보세요. ② 반대 방향 변환(inch → cm)도 메뉴에 넣어 보세요. ③ 02-4 교시를 배운 뒤 각 변환을 <b>함수</b>로 분리해 보세요.</p>',
+            hint: '여러 갈래로 나뉘는 처리는 <code>if 조건 :</code> / <code>elif 조건 :</code> / <code>else :</code> 로 씁니다(5장에서 자세히 배웁니다). 입력한 번호는 문자열이므로 <code>if menu == "1" :</code> 처럼 따옴표를 붙여 비교하세요.',
+            starter: `CM_PER_INCH = 2.54
+LB_PER_KG = 2.20462
+
+print("1) cm → inch   2) kg → lb   3) °C → °F")
+menu = input("번호를 고르세요 : ")
+
+if menu == "1" :
+    cm = float(input("길이(cm) : "))
+    # TODO: inch 로 바꿔 출력
+elif menu == "2" :
+    # TODO: kg 을 입력받아 lb 로 바꿔 출력
+    pass
+elif menu == "3" :
+    # TODO: 섭씨를 입력받아 화씨로 바꿔 출력
+    pass
+else :
+    print("1 ~ 3 중에서 고르세요.")
+`,
+            solution: `CM_PER_INCH = 2.54
+LB_PER_KG = 2.20462
+
+print("1) cm → inch   2) kg → lb   3) °C → °F")
+menu = input("번호를 고르세요 : ")
+
+if menu == "1" :
+    cm = float(input("길이(cm) : "))
+    print(f"{cm}cm = {cm / CM_PER_INCH:.2f}inch")
+elif menu == "2" :
+    kg = float(input("무게(kg) : "))
+    print(f"{kg}kg = {kg * LB_PER_KG:.2f}lb")
+elif menu == "3" :
+    c = float(input("온도(°C) : "))
+    print(f"{c}°C = {c * 9 / 5 + 32:.2f}°F")
+else :
+    print("1 ~ 3 중에서 고르세요.")
+`,
+            stdin: '2\n70\n',
+            expect: `1) cm → inch   2) kg → lb   3) °C → °F
+번호를 고르세요 : 2
+무게(kg) : 70
+70.0kg = 154.32lb`
           }
         ],
         quiz: [
@@ -908,7 +1488,8 @@ print("섭씨", c, "도는 화씨", f, "도")
           { q: '다음 코드에서 100 과 50 을 입력했을 때 출력은?<pre><code>a = input()\nb = input()\nprint(a + b)</code></pre>', options: ['150', '10050', '100 50', '오류'], answer: 1, explain: '문자열끼리 + 하면 이어 붙이므로 "10050" 이 됩니다.' },
           { q: '<code>int(100.123)</code> 의 결과는?', options: ['100', '100.1', '101', '오류'], answer: 0, explain: 'int() 는 실수의 소수점 아래를 버리고 정수로 만듭니다.' },
           { q: '<code>a = int(input("숫자 : "))</code> 가 실행되는 순서로 알맞은 것은?', options: ['int() → input() → a 에 대입', 'input() → int() → a 에 대입', 'a 에 대입 → input() → int()', '동시에 실행된다'], answer: 1, explain: '안쪽 괄호부터: input() 이 글자를 받고 → int() 가 정수로 바꾸고 → a 에 대입합니다.' },
-          { q: '<code>int("3.5")</code> 를 실행하면?', options: ['3', '4', '3.5', 'ValueError 오류'], answer: 3, explain: 'int() 는 정수 모양의 문자열만 바꿀 수 있습니다. "3.5" 는 float() 으로 바꿔야 합니다.' }
+          { q: '<code>int("3.5")</code> 를 실행하면?', options: ['3', '4', '3.5', 'ValueError 오류'], answer: 3, explain: 'int() 는 정수 모양의 문자열만 바꿀 수 있습니다. "3.5" 는 float() 으로 바꿔야 합니다.' },
+          { q: '다음 코드의 출력은?<pre><code>data = "10 20"\na, b = data.split()\nprint(a + b)</code></pre>', options: ['30', '1020', '10 20', '오류'], answer: 1, explain: '<code>split()</code> 으로 자른 조각도 <b>문자열</b>이므로 <code>+</code> 는 이어 붙이기가 됩니다. 계산하려면 <code>int(a) + int(b)</code> 로 바꿔야 합니다.' }
         ],
         slides: [
           { layout: 'title', title: '계산기 프로그램 확장 — input() 과 int()', subtitle: 'Chapter 02 · Section 04', badge: '02-3',
@@ -933,13 +1514,26 @@ print("섭씨", c, "도는 화씨", f, "도")
           { layout: 'two', title: 'int() 와 float()',
             left: { title: 'int() — 정수로', bullets: ['<code>int("100")</code> → 100', '<code>int(100.9)</code> → 100', '<code>int("3.5")</code> → <b>오류</b>'] },
             right: { title: 'float() — 실수로', bullets: ['<code>float("3.5")</code> → 3.5', '<code>float("100")</code> → 100.0', '소수점 계산기에 사용'] },
-            notes: '<p><b>[2분]</b> 강의자료 밖의 보충입니다. 실습 2-8(섭씨 → 화씨)에서 float() 을 사용합니다.</p>' },
+            notes: '<p><b>[2분]</b> 강의자료 밖의 보충입니다. 실습 2-12(원의 넓이) · 2-14(섭씨 → 화씨)에서 float() 을 사용합니다.</p>' },
+          { layout: 'code', title: '한 걸음 더 ① — f-문자열로 다듬기', code: 'a = int(input("첫 번째 숫자를 입력하세요 : "))\nb = int(input("두 번째 숫자를 입력하세요 : "))\n\nprint(f"{a} + {b} = {a + b}")\nprint(f"{a} - {b} = {a - b}")\nprint(f"{a} * {b} = {a * b}")\nprint(f"{a} / {b} = {a / b:.2f}")\nprint(f"{a} // {b} = {a // b} … 나머지 {a % b}")', stdin: '7\n3\n',
+            points: ['<code>{a / b:.2f}</code> — 소수 둘째 자리까지', '콜론 앞은 <b>값</b>, 뒤는 <b>서식</b>', '값 자체는 그대로, <b>보이는 모양만</b> 바뀜', 'result 변수 없이도 깔끔'],
+            notes: '<p><b>[4분]</b> 7 / 3 = 2.3333333333333335 를 먼저 보여 준 뒤 <code>:.2f</code> 를 붙여 비교하면 효과가 큽니다.</p><p>주의: 반올림해서 <b>보여 줄</b> 뿐 변수의 값은 그대로입니다. 값 자체를 바꾸려면 <code>round()</code> 를 씁니다.</p>' },
+          { layout: 'code', title: '한 걸음 더 ② — 한 줄에 두 수 입력받기', code: 'data = input("두 수를 빈칸으로 나누어 입력 : ")\nfirst, second = data.split()\n\nprint("자른 결과 :", first, second)\nprint("아직은 글자 :", type(first))\n\na = int(first)\nb = int(second)\nprint(f"{a} + {b} = {a + b}")', stdin: '10 20\n',
+            points: ['<code>split()</code> — 빈칸으로 잘라 나눔', '왼쪽에 이름 두 개 = 언패킹', '잘린 조각도 여전히 <b>문자열</b>', '짧게: <code>a, b = map(int, input().split())</code>'],
+            notes: '<p><b>[4분]</b> 입력을 두 번 받는 것과 한 줄에 받는 것 중 어느 쪽이 편한지 물어보세요. 코딩 테스트에서는 한 줄 입력이 표준입니다.</p><p>map() 은 7장 이후에 다시 나오므로 “이런 짧은 표현이 있다” 정도로만 소개합니다. 개수가 안 맞으면 ValueError(not enough values to unpack).</p>' },
+          { layout: 'code', title: '한 걸음 더 ③ — 올바른 값을 받을 때까지', code: 'data = ""\n\nwhile True :\n    data = input("정수를 입력하세요 : ")\n    if data.isdigit() :\n        break\n    print("  → 정수가 아닙니다. 다시 입력해 주세요.")\n\nnum = int(data)\nprint("입력한 수의 2배 :", num * 2)', stdin: 'abc\n3.5\n21\n',
+            points: ['<code>while True</code> + <code>break</code> = 재입력 루프', '<code>isdigit()</code> 으로 숫자 모양인지 확인', '음수 · 소수는 <code>try ~ except</code> 로 (13장)', '실제 프로그램의 기본 형태'],
+            notes: '<p><b>[5분]</b> “사용자는 반드시 이상한 값을 넣는다”는 말을 강조하세요. 프로그램을 죽지 않게 만드는 것이 곧 실력입니다.</p><p>while · break · if 는 각각 6장 · 5장에서 배우므로 여기서는 <b>모양만</b> 익히게 합니다. <code>"-5".isdigit()</code> 이 False 라는 점, 그래서 try ~ except 가 더 넓게 쓰인다는 점을 덧붙이세요.</p>' },
           { layout: 'quiz', title: '확인 문제', q: '100 과 50 을 입력했을 때 출력은?<pre><code>a = input()\nb = input()\nprint(a + b)</code></pre>', options: ['150', '10050', '100 50', '오류'], answer: 1, explain: 'input() 은 문자열을 돌려주므로 + 는 이어 붙이기가 됩니다.',
             notes: '<p><b>[2분]</b> 정답 공개 후 “150 이 나오게 하려면 어디를 고쳐야 할까요?” → <code>int(input())</code>.</p>' },
-          { layout: 'practice', title: '실습 2-7. 세 과목 합계와 평균', desc: '<p>국어 · 영어 · 수학 점수를 입력받아 합계와 평균을 출력하세요.</p><pre>국어 점수 : 90\n영어 점수 : 85\n수학 점수 : 77\n합계 : 252\n평균 : 84.0</pre>',
+          { layout: 'practice', title: '실습 2-13. 세 과목 합계와 평균', desc: '<p>국어 · 영어 · 수학 점수를 입력받아 합계와 평균을 출력하세요.</p><pre>국어 점수 : 90\n영어 점수 : 85\n수학 점수 : 77\n합계 : 252\n평균 : 84.0</pre>',
             starter: 'kor = 0\neng = 0\nmath = 0\n# TODO: 입력받아 합계와 평균 출력\n',
             solution: 'kor = int(input("국어 점수 : "))\neng = int(input("영어 점수 : "))\nmath = int(input("수학 점수 : "))\ntotal = kor + eng + math\navg = total / 3\nprint("합계 :", total)\nprint("평균 :", avg)\n', stdin: '90\n85\n77\n',
-            notes: '<p><b>[10분]</b> 쉬운 실습 2-6(나이 계산기)부터 시작해도 좋습니다. 빠른 학생은 2-8(float 사용).</p><p>순회 포인트: int() 를 빼먹어 합계가 “908577”이 되는 학생 → 오늘 배운 내용을 스스로 발견하는 좋은 기회입니다.</p>' },
+            notes: '<p><b>[10분]</b> 쉬운 실습 2-11(나이 계산기) · 2-12(원의 넓이)부터 시작해도 좋습니다. 빠른 학생은 2-14(float) → 2-15(재입력 루프) → 🚀 프로젝트 2-2.</p><p>순회 포인트: int() 를 빼먹어 합계가 “908577”이 되는 학생 → 오늘 배운 내용을 스스로 발견하는 좋은 기회입니다.</p>' },
+          { layout: 'practice', title: '🚀 프로젝트 2-2. 단위 변환기', desc: '<p>메뉴 번호를 골라 단위를 바꿔 주는 변환기를 만드세요.</p><ul><li>1) cm → inch &nbsp; 2) kg → lb &nbsp; 3) °C → °F</li><li>값은 <b>실수</b>로 입력받고 결과는 소수점 둘째 자리까지</li><li>변환 값은 상수로 (<code>CM_PER_INCH = 2.54</code> …)</li><li>1 ~ 3 이 아니면 안내 문구</li></ul>',
+            starter: 'CM_PER_INCH = 2.54\nLB_PER_KG = 2.20462\n\nprint("1) cm → inch   2) kg → lb   3) °C → °F")\nmenu = input("번호를 고르세요 : ")\n\nif menu == "1" :\n    cm = float(input("길이(cm) : "))\n    # TODO: inch 로 바꿔 출력\nelse :\n    print("1 ~ 3 중에서 고르세요.")\n',
+            solution: 'CM_PER_INCH = 2.54\nLB_PER_KG = 2.20462\n\nprint("1) cm → inch   2) kg → lb   3) °C → °F")\nmenu = input("번호를 고르세요 : ")\n\nif menu == "1" :\n    cm = float(input("길이(cm) : "))\n    print(f"{cm}cm = {cm / CM_PER_INCH:.2f}inch")\nelif menu == "2" :\n    kg = float(input("무게(kg) : "))\n    print(f"{kg}kg = {kg * LB_PER_KG:.2f}lb")\nelif menu == "3" :\n    c = float(input("온도(°C) : "))\n    print(f"{c}°C = {c * 9 / 5 + 32:.2f}°F")\nelse :\n    print("1 ~ 3 중에서 고르세요.")\n', stdin: '2\n70\n',
+            notes: '<p><b>[12분 · 남는 시간은 과제]</b> 이 장 첫 번째 미니 프로젝트입니다. <code>if ~ elif ~ else</code> 는 5장 내용이지만 <b>모양을 보고 따라 쓰는</b> 것만으로 충분합니다.</p><p>지도 포인트: ① 메뉴 번호를 <code>int()</code> 로 바꾸지 않고 문자열로 비교하면 잘못된 입력에도 죽지 않습니다. ② 2.54 같은 숫자를 코드 안에 흩뿌리지 말고 상수로.</p><p>확장 아이디어(while 로 반복, 반대 방향 변환, 함수로 분리)를 칠판에 적어 두고 원하는 학생이 이어 가게 하세요.</p>' },
           { layout: 'summary', title: '정리', bullets: ['<code>input()</code> — 키보드 입력을 받아 옴 (항상 <b>문자열</b>)', '문자열 + 문자열 = 이어 붙이기, 빼기는 오류', '<code>int()</code> — 정수로 변환, <code>float()</code> — 실수로 변환', '<code>int(input("안내 문구"))</code> — 안쪽부터 실행', '<b>[프로그램 1] 간단 계산기 완성</b>'],
             notes: '<p><b>[1분]</b> 다음 교시: 긴 프로그램을 구조적으로 짜는 방법과 거북이 그래픽.</p>' }
         ]
@@ -954,9 +1548,12 @@ print("섭씨", c, "도는 화씨", f, "도")
           '긴 프로그램을 함수 선언 · 변수 선언 · 메인 코드 세 부분으로 나누는 이유를 설명할 수 있다',
           '# 주석, 작은따옴표 3개 여러 줄 주석, \\ 줄 이어 쓰기를 사용할 수 있다',
           'def 로 함수를 만들고 global 로 전역 변수를 바꿀 수 있다',
-          '거북이로 정사각형을 그리는 프로그램을 세 부분 구조로 바꿀 수 있다'
+          '거북이로 정사각형을 그리는 프로그램을 세 부분 구조로 바꿀 수 있다',
+          '(심화) 프로그램을 입력 · 계산 · 출력 함수로 나누고 return 으로 값을 주고받을 수 있다',
+          '(심화) docstring 으로 함수 설명을 남기고 좋은 주석을 구분할 수 있다',
+          '(심화) 터틀 좌표계 · 창 크기를 이해하고 도형을 그리는 함수를 만들어 재사용할 수 있다'
         ],
-        flow: [['도입: 긴 프로그램의 틀', 5], ['주석과 줄 이어 쓰기', 8], ['함수 선언 · 변수 선언 · 메인', 15], ['터틀 정사각형 Code02-05 → 02-06', 10], ['퀴즈 · 실습', 12]],
+        flow: [['도입: 긴 프로그램의 틀', 4], ['주석과 줄 이어 쓰기', 6], ['함수 선언 · 변수 선언 · 메인', 12], ['터틀 정사각형 Code02-05 → 02-06', 8], ['한 걸음 더: 함수로 나누기 · 좌표 · 재사용', 10], ['퀴즈 · 실습', 10]],
         content: [
           { type: 'h', text: '긴 프로그램은 세 부분으로' },
           { type: 'p', html: '이제 두 번째 프로그램인 <b>터틀 그래픽 그림판</b>을 만듭니다. 계산기보다 길고 복잡하므로 먼저 <b>프로그램의 틀</b>을 잡고 시작하겠습니다. 이 책은 긴 프로그램을 다음 세 부분으로 나누어 작성합니다.' },
@@ -1090,11 +1687,177 @@ for i in range(0, 4) :
     t2.left(90)
 
 turtle.done()`,
-            desc: '빨간 거북이는 오른쪽으로 돌며 작은 사각형을, 파란 거북이는 왼쪽으로 돌며 큰 사각형을 그립니다.' }
+            desc: '빨간 거북이는 오른쪽으로 돌며 작은 사각형을, 파란 거북이는 왼쪽으로 돌며 큰 사각형을 그립니다.' },
+
+          { type: 'h', text: '한 걸음 더 ① — 입력 · 계산 · 출력을 함수로 나누기' },
+          { type: 'p', html: '“함수 선언 · 변수 선언 · 메인”이라는 틀은 <b>어디에 무엇을 쓸지</b>를 정해 줍니다. 그렇다면 <b>함수는 어떻게 나눌까요?</b> 가장 기본이 되는 기준은 프로그램의 세 동작 — <b>입력 → 계산 → 출력</b> — 입니다. 02-3 교시의 계산기를 이 기준으로 나눠 보겠습니다.' },
+          { type: 'list', items: [
+            '<b>입력 함수</b>: 사용자에게 묻고 값을 돌려준다 — 입력 방식을 바꿔도 여기만 고치면 된다',
+            '<b>계산 함수</b>: 값을 받아 결과를 돌려준다 — 화면이 없어도 <b>따로 시험해 볼 수 있다</b>',
+            '<b>출력 함수</b>: 결과를 보기 좋게 보여 준다 — 출력 모양을 바꿔도 계산은 건드리지 않는다'
+          ] },
+          { type: 'code', title: '추가 예제. 계산기를 세 함수로 나누기', code: `## 함수 선언 부분 ##
+def getNumbers() :
+    """두 정수를 입력받아 돌려준다."""
+    a = int(input("첫 번째 숫자를 입력하세요 : "))
+    b = int(input("두 번째 숫자를 입력하세요 : "))
+    return a, b
+
+def calcAll(a, b) :
+    """네 가지 계산 결과를 한꺼번에 돌려준다."""
+    return a + b, a - b, a * b, a / b
+
+def showResult(a, b, results) :
+    """계산 결과를 계산식과 함께 출력한다."""
+    plus, minus, times, divide = results
+    print(f"{a} + {b} = {plus}")
+    print(f"{a} - {b} = {minus}")
+    print(f"{a} * {b} = {times}")
+    print(f"{a} / {b} = {divide}")
+
+## 변수 선언 부분 ##
+numA, numB = 0, 0
+
+## 메인 코드 부분 ##
+numA, numB = getNumbers()
+showResult(numA, numB, calcAll(numA, numB))`, stdin: '300\n200\n',
+            expect: `첫 번째 숫자를 입력하세요 : 300
+두 번째 숫자를 입력하세요 : 200
+300 + 200 = 500
+300 - 200 = 100
+300 * 200 = 60000
+300 / 200 = 1.5`,
+            desc: '<code>return</code> 은 함수가 <b>결과를 돌려주고 끝내는</b> 명령입니다. <code>return a, b</code> 처럼 쉼표로 여러 값을 돌려줄 수 있고, 받는 쪽에서 <code>numA, numB = …</code> 로 나눠 받습니다. 메인 코드가 <b>단 두 줄</b>로 줄어 프로그램의 큰 흐름이 한눈에 보입니다.' },
+          { type: 'callout', kind: 'more', title: '📘 global 대신 return 을 쓰는 이유', html: '앞에서는 <code>global</code> 로 전역 변수를 바꿨지만, 위 예제는 값을 <b>돌려주고 받는</b> 방식을 썼습니다. 둘 다 동작하지만 <code>return</code> 쪽이 대체로 더 안전합니다.<ul><li>함수가 <b>바깥 세상을 몰래 바꾸지 않으므로</b>, 그 함수만 따로 떼어 시험해 볼 수 있습니다.</li><li>어떤 값이 오고 가는지 <b>함수 이름과 괄호만 봐도</b> 알 수 있습니다.</li><li>전역 변수가 많아지면 “누가 이 값을 바꿨지?”를 추적하기 어려워집니다 — 프로그램이 커질수록 심해집니다.</li></ul>그래서 <code>global</code> 은 GUI 콜백처럼 <b>값을 돌려줄 곳이 없을 때</b>(이 장의 그림판이 그렇습니다) 주로 씁니다. 함수와 반환값은 9장에서 자세히 배웁니다.' },
+
+          { type: 'h', text: '한 걸음 더 ② — 주석과 docstring' },
+          { type: 'p', html: '위 예제에서 함수 첫 줄에 넣은 <code>"""…"""</code> 를 <b>독스트링(docstring)</b>이라고 합니다. 겉모습은 여러 줄 문자열이지만 파이썬이 <b>함수의 설명서</b>로 기억해 두었다가, <code>help()</code> 나 편집기의 도움말로 보여 줍니다. 그냥 주석과 달리 <b>프로그램이 읽을 수 있는 설명</b>인 셈이죠.' },
+          { type: 'code', title: '추가 예제. docstring 은 프로그램도 읽을 수 있다', code: `def rectArea(width, height) :
+    """직사각형의 넓이를 돌려준다.
+
+    width, height : 변의 길이 (0 보다 큰 수)
+    """
+    return width * height
+
+print(rectArea(12, 5))
+print("--- 설명서 보기 ---")
+print(rectArea.__doc__)`,
+            expect: `60
+--- 설명서 보기 ---
+직사각형의 넓이를 돌려준다.
+
+width, height : 변의 길이 (0 보다 큰 수)`,
+            desc: '함수 이름 뒤에 <code>.__doc__</code> 를 붙이면 독스트링을 꺼내 볼 수 있습니다. (파이썬 3.13 부터는 독스트링의 <b>공통 들여쓰기를 자동으로 없애</b> 주어서, 위처럼 들여쓴 설명도 왼쪽에 붙어 출력됩니다.) <code>print(len.__doc__)</code> 처럼 <b>파이썬 기본 함수의 설명</b>도 같은 방법으로 볼 수 있습니다.' },
+          { type: 'callout', kind: 'more', title: '📘 좋은 주석 · 나쁜 주석', html: '<ul><li><b>나쁜 주석</b>: <code>total = total + 1  # total 에 1 을 더한다</code> — 코드를 그대로 옮겨 적은 주석은 쓸모가 없고, 코드를 고치면 거짓말이 됩니다.</li><li><b>좋은 주석</b>: <code>score = score + 10  # 보너스 점수는 정책상 10점 고정</code> — 코드만 봐서는 알 수 없는 <b>“왜”</b>를 적습니다.</li><li><b>docstring</b>: 함수가 <b>무엇을</b> 하는지, 무엇을 받고 무엇을 돌려주는지 한두 줄로 적습니다. 첫 줄은 마침표로 끝나는 한 문장이 관례입니다(PEP 257).</li><li>주석을 많이 달아야 할 만큼 어렵다면, 대개는 <b>이름을 고치거나 함수로 쪼개는 것</b>이 더 나은 답입니다.</li></ul>' },
+
+          { type: 'h', text: '한 걸음 더 ③ — 터틀의 좌표계와 창 크기' },
+          { type: 'p', html: '거북이는 <b>창 한가운데(0, 0)</b> 에서 <b>오른쪽</b>을 보고 시작합니다. 오른쪽이 +x, <b>위쪽이 +y</b> 입니다(컴퓨터 화면 좌표는 보통 아래쪽이 +y 라서 헷갈리기 쉽습니다). 창 크기는 <code>turtle.setup(너비, 높이)</code> 로 정하며, 이 강좌의 기본 창은 <b>640 × 520</b> 입니다. 따라서 x 는 대략 -320 ~ 320, y 는 -260 ~ 260 범위가 보입니다.' },
+          { type: 'table', head: ['함수', '하는 일'], rows: [
+            ['<code>turtle.setup(600, 400)</code>', '창 크기를 너비 600, 높이 400 으로'],
+            ['<code>turtle.window_width()</code> · <code>window_height()</code>', '지금 창의 너비 · 높이를 알려 준다'],
+            ['<code>turtle.position()</code> · <code>xcor()</code> · <code>ycor()</code>', '거북이의 현재 좌표'],
+            ['<code>turtle.heading()</code>', '거북이가 보는 방향(0 = 오른쪽, 90 = 위쪽)'],
+            ['<code>turtle.home()</code>', '(0, 0) 으로 돌아가고 방향도 처음으로'],
+            ['<code>turtle.write(글자)</code>', '현재 위치에 글자를 쓴다']
+          ], caption: '위치와 창을 다루는 turtle 함수' },
+          { type: 'code', title: '추가 예제. 좌표를 확인하며 움직이기', code: `import turtle
+
+turtle.setup(600, 400)
+turtle.title('좌표 확인')
+print("창 너비 :", turtle.window_width())
+print("창 높이 :", turtle.window_height())
+
+turtle.shape('turtle')
+print("시작 위치 :", turtle.position(), "방향 :", turtle.heading())
+
+turtle.penup()
+turtle.goto(-250, 150)
+turtle.pendown()
+turtle.write("여기는 (-250, 150)")
+print("이동 후 :", turtle.position())
+
+turtle.setheading(90)
+turtle.forward(50)
+print("위로 50 :", turtle.position(), "방향 :", turtle.heading())
+
+turtle.home()
+print("home() 뒤 :", turtle.position())
+turtle.done()`,
+            expect: `창 너비 : 600
+창 높이 : 400
+시작 위치 : (0.00,0.00) 방향 : 0.0
+이동 후 : (-250.00,150.00)
+위로 50 : (-250.00,200.00) 방향 : 90.0
+home() 뒤 : (0.00,0.00)`,
+            desc: '<code>position()</code> 이 돌려주는 값은 좌표 한 쌍입니다. 화면에 그리기 전에 <b>숫자로 확인</b>하면 “왜 엉뚱한 곳에 그려지지?”를 훨씬 빨리 해결할 수 있습니다.' },
+
+          { type: 'h', text: '한 걸음 더 ④ — 그림을 함수로 만들어 재사용하기' },
+          { type: 'p', html: '정삼각형, 정사각형, 정육각형을 그리는 코드는 <b>반복 횟수와 회전 각도만</b> 다릅니다. 이렇게 “같은 모양, 다른 값”이 보이면 <b>함수로 묶고 값을 매개변수로 받는</b> 것이 정답입니다. 정n각형은 한 바퀴(360도)를 n 번에 나눠 도니까 회전 각도는 <code>360 / n</code> 입니다.' },
+          { type: 'code', title: '추가 예제. 정다각형 함수 하나로 여러 도형 그리기', code: `import turtle
+
+## 함수 선언 부분 ##
+def drawPolygon(t, n, size) :
+    """거북이 t 로 한 변이 size 인 정n각형을 그린다."""
+    for i in range(0, n) :
+        t.forward(size)
+        t.left(360 / n)
+
+def moveTo(t, x, y) :
+    """선을 그리지 않고 (x, y) 로 옮긴다."""
+    t.penup()
+    t.goto(x, y)
+    t.pendown()
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+myT = turtle.Turtle()
+myT.shape('turtle')
+myT.speed(0)
+
+moveTo(myT, -240, 0)
+drawPolygon(myT, 3, 90)
+moveTo(myT, -80, 0)
+drawPolygon(myT, 4, 80)
+moveTo(myT, 80, 0)
+drawPolygon(myT, 6, 60)
+moveTo(myT, 220, 0)
+drawPolygon(myT, 12, 30)
+
+myT.hideturtle()
+turtle.done()`,
+            desc: '함수 하나로 삼각형 · 사각형 · 육각형 · 십이각형을 모두 그렸습니다. <code>drawPolygon(myT, 30, 12)</code> 처럼 변의 수를 늘리면 원에 가까워집니다. <b>거북이를 매개변수 <code>t</code> 로 받는</b> 것도 중요한 습관입니다 — 어떤 거북이에게든 같은 그림을 시킬 수 있으니까요.' },
+          { type: 'callout', kind: 'more', title: '📘 같은 함수를 조금씩 바꿔 쓰기 — 기본값 매개변수', html: '<code>def drawPolygon(t, n, size=50) :</code> 처럼 매개변수에 <b>기본값</b>을 주면 <code>drawPolygon(myT, 5)</code> 처럼 일부를 생략해 호출할 수 있습니다. 또 <code>drawPolygon(myT, n=5, size=100)</code> 처럼 <b>이름을 붙여</b> 넘기면 순서를 외우지 않아도 되고 코드도 읽기 쉬워집니다. 자세한 내용은 9장에서 배웁니다.' },
+
+          { type: 'h', text: '한 걸음 더 ⑤ — tracer() 와 update() 로 빠르게 그리기' },
+          { type: 'p', html: '거북이는 한 획을 그을 때마다 화면을 다시 그립니다. 덕분에 움직임이 보여서 배우기 좋지만, 선이 수백 개가 되면 <b>답답할 만큼 느려집니다</b>. 이럴 때는 <code>turtle.tracer(0)</code> 으로 <b>화면 갱신을 잠시 끄고</b>, 다 그린 뒤 <code>turtle.update()</code> 로 한 번에 보여 주면 됩니다.' },
+          { type: 'code', title: '추가 예제. 화면 갱신을 멈추고 한 번에 그리기', code: `import turtle
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+turtle.setup(640, 520)
+turtle.tracer(0)          # 0 = 화면 갱신 끄기 (그리는 과정을 보여 주지 않음)
+
+myT = turtle.Turtle()
+myT.hideturtle()
+myT.pensize(2)
+
+for i in range(0, 72) :
+    myT.pencolor((i / 72, 0.4, 1 - i / 72))
+    myT.forward(150)
+    myT.left(95)
+
+turtle.update()           # 지금까지 그린 것을 한 번에 화면에 반영
+turtle.done()`,
+            desc: '<code>tracer(0)</code> 줄을 지우고 실행해 보면 차이를 확실히 느낄 수 있습니다. <code>tracer(10)</code> 처럼 숫자를 주면 “10번 움직일 때마다 한 번 갱신”이 되어 속도와 재미를 절충할 수 있습니다. <b>update() 를 깜빡하면 화면이 텅 빈 채로 남으니</b> 주의하세요.' },
+          { type: 'callout', kind: 'more', title: '📘 그리기를 빠르게 하는 세 가지', html: '<ul><li><code>turtle.speed(0)</code> — 거북이 이동 속도를 최고로 (0 이 “애니메이션 없음”, 1 이 가장 느림, 10 이 빠름)</li><li><code>turtle.hideturtle()</code> — 거북이 그림을 숨기면 다시 그릴 것이 줄어듭니다</li><li><code>tracer(0)</code> + <code>update()</code> — 가장 효과가 큽니다. 게임이나 애니메이션에서는 “한 장면을 다 그린 뒤 한 번에 보여 주기”가 기본이며, 이것을 <b>더블 버퍼링(double buffering)</b> 이라고 부릅니다.</li></ul>' }
         ],
         practice: [
           {
-            title: '실습 2-9. 정삼각형 그리기',
+            title: '실습 2-16. 정삼각형 그리기',
             level: 1,
             desc: '<p>Code02-06 의 틀을 그대로 사용해서 한 변이 200 인 <b>정삼각형</b>을 그리세요.</p>',
             hint: '정삼각형은 3번 반복하고, 한 번에 <b>120도</b>씩 돌아야 합니다 (바깥쪽으로 도는 각도). <code>range(0, 3)</code>',
@@ -1132,7 +1895,34 @@ turtle.done()
 `
           },
           {
-            title: '실습 2-10. 호출 횟수 세기',
+            title: '실습 2-17. 인사 함수 만들기',
+            level: 1,
+            desc: '<p>이름을 매개변수로 받아 인사말을 출력하는 함수 <code>greet(name)</code> 을 만들고, 메인 코드에서 두 번 호출하세요. 함수 첫 줄에는 <b>독스트링</b>으로 설명을 적습니다.</p><pre>홍길동 님, 반갑습니다!\n파이썬 님, 반갑습니다!\ngreet 의 설명 : 이름을 받아 인사말을 출력한다.</pre>',
+            hint: '<code>def greet(name) :</code> 아래를 4칸 들여쓰고 <code>print(f"{name} 님, 반갑습니다!")</code>. 독스트링은 <code>"""설명"""</code> 한 줄이면 충분하고, <code>greet.__doc__</code> 로 꺼내 볼 수 있습니다.',
+            starter: `## 함수 선언 부분 ##
+def greet(name) :
+    # TODO: 독스트링과 인사말 출력
+    pass
+
+## 메인 코드 부분 ##
+# TODO: greet() 를 두 번 호출하고 설명도 출력
+`,
+            solution: `## 함수 선언 부분 ##
+def greet(name) :
+    """이름을 받아 인사말을 출력한다."""
+    print(f"{name} 님, 반갑습니다!")
+
+## 메인 코드 부분 ##
+greet("홍길동")
+greet("파이썬")
+print("greet 의 설명 :", greet.__doc__)
+`,
+            expect: `홍길동 님, 반갑습니다!
+파이썬 님, 반갑습니다!
+greet 의 설명 : 이름을 받아 인사말을 출력한다.`
+          },
+          {
+            title: '실습 2-18. 호출 횟수 세기',
             level: 2,
             desc: '<p>함수 <code>hello()</code> 를 호출할 때마다 <code>안녕하세요!</code> 를 출력하고, 전역 변수 <code>count</code> 를 1씩 늘리세요. 메인 코드에서 3번 호출한 뒤 호출 횟수를 출력합니다.</p><pre>안녕하세요!\n안녕하세요!\n안녕하세요!\n호출 횟수 : 3</pre>',
             hint: '함수 안에서 전역 변수의 값을 바꾸려면 <code>global count</code> 가 필요합니다.',
@@ -1169,6 +1959,162 @@ print("호출 횟수 :", count)
 안녕하세요!
 안녕하세요!
 호출 횟수 : 3`
+          },
+          {
+            title: '실습 2-19. 계단 모양으로 정사각형 3개',
+            level: 2,
+            desc: '<p>한 변의 길이를 매개변수로 받아 정사각형을 그리는 함수 <code>drawSquare(t, size)</code> 를 만들고, 이 함수 하나로 크기가 <b>50, 100, 150</b> 인 정사각형 세 개를 서로 겹치지 않게 그리세요.</p><p>선을 그리지 않고 이동하는 <code>moveTo(t, x, y)</code> 함수도 함께 만들면 메인 코드가 깔끔해집니다.</p>',
+            hint: '<code>drawSquare</code> 안에서 <code>for i in range(0, 4) :</code> 로 <code>t.forward(size)</code> 와 <code>t.right(90)</code> 을 반복합니다. 이동은 <code>t.penup()</code> → <code>t.goto(x, y)</code> → <code>t.pendown()</code> 순서.',
+            starter: `import turtle
+
+## 함수 선언 부분 ##
+def drawSquare(t, size) :
+    """한 변이 size 인 정사각형을 그린다."""
+    # TODO: for 로 4번 반복
+    pass
+
+def moveTo(t, x, y) :
+    """선을 그리지 않고 (x, y) 로 옮긴다."""
+    # TODO: penup - goto - pendown
+    pass
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+myT = turtle.Turtle()
+myT.shape('turtle')
+myT.speed(0)
+
+# TODO: moveTo 와 drawSquare 로 크기 50, 100, 150 의 정사각형 그리기
+
+turtle.done()
+`,
+            solution: `import turtle
+
+## 함수 선언 부분 ##
+def drawSquare(t, size) :
+    """한 변이 size 인 정사각형을 그린다."""
+    for i in range(0, 4) :
+        t.forward(size)
+        t.right(90)
+
+def moveTo(t, x, y) :
+    """선을 그리지 않고 (x, y) 로 옮긴다."""
+    t.penup()
+    t.goto(x, y)
+    t.pendown()
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+myT = turtle.Turtle()
+myT.shape('turtle')
+myT.speed(0)
+
+moveTo(myT, -260, 0)
+drawSquare(myT, 50)
+moveTo(myT, -180, 0)
+drawSquare(myT, 100)
+moveTo(myT, -50, 0)
+drawSquare(myT, 150)
+
+myT.hideturtle()
+turtle.done()
+`
+          },
+          {
+            title: '🚀 프로젝트 2-3. 거북이 도형 그리기 도구',
+            level: 3,
+            desc: '<p>도형을 그리는 <b>나만의 함수 묶음</b>을 만들어, 한 화면에 여러 도형을 나란히 그리는 프로그램을 만드세요.</p><p><b>요구 사항</b></p><ol><li><code>drawPolygon(t, n, size, color)</code> — 한 변이 <code>size</code> 인 정n각형을 <code>color</code> 로 <b>안까지 채워</b> 그린다 (<code>begin_fill()</code> … <code>end_fill()</code>)</li><li><code>moveTo(t, x, y)</code> — 선을 그리지 않고 (x, y) 로 이동한다</li><li><code>label(t, x, y, text)</code> — (x, y) 에 글자를 쓴다</li><li>메인 코드에서 <b>삼각형 · 사각형 · 오각형 · 육각형</b>을 가로로 나란히 그리고, 각 도형 아래에 <code>3각형</code> 처럼 이름을 쓴다</li><li><code>tracer(0)</code> … <code>update()</code> 로 <b>한 번에</b> 그려 기다리지 않게 한다</li><li>마지막에 거북이를 숨기고 <code>turtle.done()</code> 으로 창을 유지한다</li></ol><p><b>더 해 보기</b> — ① 색 목록을 만들어 <code>random.choice()</code> 로 고르게 해 보세요. ② 같은 자리에 크기를 조금씩 줄여 가며 여러 번 그려 나선 무늬를 만들어 보세요. ③ 02-5 교시를 배운 뒤 <b>클릭한 자리에</b> 도형이 그려지도록 바꿔 보세요.</p>',
+            hint: '정n각형의 회전 각도는 <code>360 / n</code> 입니다. 색 채우기는 <code>t.fillcolor(color)</code> → <code>t.begin_fill()</code> → (도형 그리기) → <code>t.end_fill()</code> 순서입니다. 글자는 <code>t.write(text, align=\'center\')</code> 로 가운데 정렬할 수 있습니다.',
+            starter: `import turtle
+
+## 함수 선언 부분 ##
+def moveTo(t, x, y) :
+    """선을 그리지 않고 (x, y) 로 옮긴다."""
+    t.penup()
+    t.goto(x, y)
+    t.pendown()
+
+def drawPolygon(t, n, size, color) :
+    """한 변이 size 인 정n각형을 color 로 채워 그린다."""
+    # TODO: fillcolor - begin_fill - for 반복 - end_fill
+    pass
+
+def label(t, x, y, text) :
+    """(x, y) 위치에 글자를 쓴다."""
+    # TODO: moveTo 로 이동한 뒤 write
+    pass
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+turtle.setup(640, 520)
+turtle.tracer(0)
+myT = turtle.Turtle()
+myT.speed(0)
+
+# TODO: 3 ~ 6 각형을 나란히 그리고 이름 붙이기
+
+myT.hideturtle()
+turtle.update()
+turtle.done()
+`,
+            solution: `import turtle
+
+## 함수 선언 부분 ##
+def moveTo(t, x, y) :
+    """선을 그리지 않고 (x, y) 로 옮긴다."""
+    t.penup()
+    t.goto(x, y)
+    t.pendown()
+
+def drawPolygon(t, n, size, color) :
+    """한 변이 size 인 정n각형을 color 로 채워 그린다."""
+    t.fillcolor(color)
+    t.begin_fill()
+    for i in range(0, n) :
+        t.forward(size)
+        t.left(360 / n)
+    t.end_fill()
+
+def label(t, x, y, text) :
+    """(x, y) 위치에 글자를 쓴다."""
+    moveTo(t, x, y)
+    t.write(text, align='center')
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+turtle.setup(640, 520)
+turtle.tracer(0)
+myT = turtle.Turtle()
+myT.speed(0)
+
+moveTo(myT, -270, 0)
+drawPolygon(myT, 3, 90, 'tomato')
+label(myT, -225, -40, '3각형')
+
+moveTo(myT, -130, 0)
+drawPolygon(myT, 4, 80, 'gold')
+label(myT, -90, -40, '4각형')
+
+moveTo(myT, 10, 0)
+drawPolygon(myT, 5, 65, 'skyblue')
+label(myT, 60, -40, '5각형')
+
+moveTo(myT, 150, 0)
+drawPolygon(myT, 6, 55, 'mediumseagreen')
+label(myT, 200, -40, '6각형')
+
+myT.hideturtle()
+turtle.update()
+turtle.done()
+`
           }
         ],
         quiz: [
@@ -1176,7 +2122,8 @@ print("호출 횟수 :", count)
           { q: '다음 코드의 출력은?<pre><code>data = \'파이\' + \\\n       \'썬\'\nprint(data)</code></pre>', options: ['파이', '파이썬', '파이 썬', '오류'], answer: 1, explain: '줄 끝의 \\ 는 다음 줄과 이어서 한 줄로 인식하게 합니다. 문자열끼리 + 는 이어 붙이기입니다.' },
           { q: '다음 코드의 출력은?<pre><code>def plus() :\n    global total\n    total = total + 10\n\ntotal = 5\nplus()\nplus()\nprint(total)</code></pre>', options: ['5', '15', '25', '오류'], answer: 2, explain: 'plus() 를 두 번 호출해 5 + 10 + 10 = 25 가 됩니다.' },
           { q: '긴 프로그램의 세 부분 중 “프로그램 전체에서 쓸 변수를 초깃값과 함께 준비하는 곳”은?', options: ['함수 선언 부분', '변수 선언 부분', '메인 코드 부분', 'import 부분'], answer: 1, explain: '전역 변수를 미리 준비하는 곳이 변수 선언 부분입니다.' },
-          { q: '파이썬의 변수 선언에 대한 설명으로 옳은 것은?', options: ['C 처럼 int a; 로 반드시 먼저 선언해야 한다', '값을 대입하는 순간 변수가 자동으로 만들어진다', '변수는 한 번 만들면 값을 바꿀 수 없다', '변수는 함수 안에서만 만들 수 있다'], answer: 1, explain: '파이썬은 선언 없이 대입하는 순간 변수가 생깁니다. 다만 변수 선언 부분에 초깃값을 넣어 두는 것이 바람직합니다.' }
+          { q: '파이썬의 변수 선언에 대한 설명으로 옳은 것은?', options: ['C 처럼 int a; 로 반드시 먼저 선언해야 한다', '값을 대입하는 순간 변수가 자동으로 만들어진다', '변수는 한 번 만들면 값을 바꿀 수 없다', '변수는 함수 안에서만 만들 수 있다'], answer: 1, explain: '파이썬은 선언 없이 대입하는 순간 변수가 생깁니다. 다만 변수 선언 부분에 초깃값을 넣어 두는 것이 바람직합니다.' },
+          { q: '다음 코드의 출력은?<pre><code>def calc(a, b) :\n    return a + b, a * b\n\nx, y = calc(3, 4)\nprint(x, y)</code></pre>', options: ['3 4', '7 12', '(7, 12)', '오류'], answer: 1, explain: '<code>return</code> 으로 두 값을 돌려주면 받는 쪽에서 <code>x, y</code> 로 나눠 받을 수 있습니다. <code>global</code> 없이 값을 주고받는 더 안전한 방법입니다.' }
         ],
         slides: [
           { layout: 'title', title: '긴 프로그램의 구조 — 주석 · 함수 · 전역 변수', subtitle: 'Chapter 02 · Section 05 (1)', badge: '02-4',
@@ -1203,12 +2150,25 @@ print("호출 횟수 :", count)
           { layout: 'code', title: 'Code02-06.py — 프로그램 틀 형태로', code: "import turtle\n\n## 함수 선언 부분 ##\n\n## 변수 선언 부분 ##\nmyT = None\n\n## 메인 코드 부분 ##\nmyT = turtle.Turtle()\nmyT.shape('turtle')\n\nfor i in range(0, 4) :\n    myT.forward(200)\n    myT.right(90)\n\nturtle.done()",
             points: ['<code>None</code> = 아직 없음', '<code>turtle.Turtle()</code> 로 거북이 생성', 'for 로 4번 반복 (6장)', '교재 <code>myT.done()</code> → <code>turtle.done()</code>'],
             notes: '<p><b>[4분]</b> 교재의 마지막 줄 <code>myT.done()</code> 은 실제 파이썬에서 AttributeError 가 납니다(Turtle 객체에는 done 이 없음). 모듈 함수 <code>turtle.done()</code> 으로 고쳐서 쓰도록 안내하세요.</p><p>for 는 “들여쓴 줄을 4번 반복”이라고만 설명하고 넘어갑니다.</p>' },
+          { layout: 'code', title: '한 걸음 더 ① — 입력 · 계산 · 출력 나누기', code: 'def getNumbers() :\n    """두 정수를 입력받아 돌려준다."""\n    a = int(input("첫 번째 숫자 : "))\n    b = int(input("두 번째 숫자 : "))\n    return a, b\n\ndef calcAll(a, b) :\n    """네 가지 계산 결과를 돌려준다."""\n    return a + b, a - b, a * b, a / b\n\ndef showResult(a, b, results) :\n    """결과를 계산식과 함께 출력한다."""\n    plus, minus, times, divide = results\n    print(f"{a} + {b} = {plus}")\n    print(f"{a} - {b} = {minus}")\n    print(f"{a} * {b} = {times}")\n    print(f"{a} / {b} = {divide}")\n\nnumA, numB = getNumbers()\nshowResult(numA, numB, calcAll(numA, numB))', stdin: '300\n200\n',
+            points: ['프로그램의 세 동작 = <b>입력 · 계산 · 출력</b>', '<code>return</code> 으로 결과를 <b>돌려줌</b>', '<code>return a, b</code> — 여러 값도 한 번에', '메인 코드가 <b>두 줄</b>로 줄었다'],
+            notes: '<p><b>[6분]</b> 02-3 교시의 계산기와 같은 프로그램입니다. “무엇이 좋아졌나요?”라고 물어보세요 — 출력 모양을 바꿀 때 showResult 만 고치면 됩니다.</p><p><b>global vs return</b>: 계산 함수는 바깥을 건드리지 않으므로 따로 시험해 볼 수 있습니다. global 은 GUI 콜백처럼 값을 돌려줄 곳이 없을 때 주로 씁니다(다음 교시의 그림판).</p>' },
+          { layout: 'two', title: '한 걸음 더 ② — 주석과 docstring',
+            left: { title: '주석 — 사람만 읽는다', html: '<pre><code>score = score + 10\n# 보너스는 정책상 10점 고정</code></pre><p><b>“왜”</b>를 적는다</p><p>코드를 그대로 옮겨 적은 주석은<br>고치면 곧 거짓말이 된다</p>' },
+            right: { title: 'docstring — 프로그램도 읽는다', code: 'def rectArea(width, height) :\n    """직사각형의 넓이를 돌려준다."""\n    return width * height\n\nprint(rectArea(12, 5))\nprint(rectArea.__doc__)' },
+            notes: '<p><b>[4분]</b> 독스트링은 함수 <b>첫 줄</b>에 오는 <code>"""…"""</code> 입니다. <code>help(함수)</code>, <code>함수.__doc__</code>, 편집기 도움말이 모두 이것을 보여 줍니다.</p><p>첫 줄은 “무엇을 하는지” 한 문장(PEP 257). 주석이 많이 필요하다면 이름을 고치거나 함수로 쪼개라는 신호라는 말도 덧붙이세요.</p>' },
+          { layout: 'code', title: '한 걸음 더 ③ — 좌표계와 창 크기', code: "import turtle\n\nturtle.setup(600, 400)\nprint(\"창 너비 :\", turtle.window_width())\nturtle.shape('turtle')\nprint(\"시작 :\", turtle.position(), turtle.heading())\n\nturtle.penup()\nturtle.goto(-250, 150)\nturtle.pendown()\nturtle.write(\"여기는 (-250, 150)\")\nprint(\"이동 후 :\", turtle.position())\n\nturtle.home()\nprint(\"home() 뒤 :\", turtle.position())\nturtle.done()",
+            points: ['창 <b>한가운데가 (0, 0)</b>', '오른쪽 +x, <b>위쪽 +y</b> (화면 좌표와 반대)', '<code>setup(600, 400)</code> — 창 크기', '기본 창은 <b>640 × 520</b>'],
+            notes: '<p><b>[4분]</b> 좌표를 print 로 확인하는 습관을 보여 주는 슬라이드입니다. “왜 엉뚱한 곳에 그려지지?” 를 가장 빨리 해결하는 방법입니다.</p><p>학생 질문 대비: heading 0 = 오른쪽, 90 = 위쪽. home() 은 위치와 방향을 모두 처음으로 되돌립니다.</p>' },
+          { layout: 'code', title: '한 걸음 더 ④ — 그림을 함수로 재사용', code: "import turtle\n\ndef drawPolygon(t, n, size) :\n    \"\"\"한 변이 size 인 정n각형을 그린다.\"\"\"\n    for i in range(0, n) :\n        t.forward(size)\n        t.left(360 / n)\n\ndef moveTo(t, x, y) :\n    t.penup()\n    t.goto(x, y)\n    t.pendown()\n\nmyT = turtle.Turtle()\nturtle.tracer(0)\n\nmoveTo(myT, -200, 0)\ndrawPolygon(myT, 3, 90)\nmoveTo(myT, -40, 0)\ndrawPolygon(myT, 6, 60)\n\nmyT.hideturtle()\nturtle.update()\nturtle.done()",
+            points: ['삼각형 · 사각형 · 육각형 = <b>값만 다름</b>', '회전 각도는 <code>360 / n</code>', '거북이 <code>t</code> 도 매개변수로 받기', '<code>tracer(0)</code> … <code>update()</code> 로 한 번에'],
+            notes: '<p><b>[5분]</b> “같은 모양, 다른 값”이 보이면 함수로 묶는다 — 이 장에서 가장 중요한 메시지 중 하나입니다.</p><p><code>tracer(0)</code> 은 화면 갱신을 끄고 <code>update()</code> 에서 한 번에 보여 줍니다. tracer 줄을 지우고 다시 실행해 속도 차이를 직접 보여 주세요. update() 를 빠뜨리면 화면이 빈 채로 남습니다.</p><p>실습 2-19 와 🚀 프로젝트 2-3 이 이 내용입니다.</p>' },
           { layout: 'quiz', title: '확인 문제', q: '출력은?<pre><code>def plus() :\n    global total\n    total = total + 10\n\ntotal = 5\nplus()\nplus()\nprint(total)</code></pre>', options: ['5', '15', '25', '오류'], answer: 2, explain: '두 번 호출: 5 → 15 → 25.',
             notes: '<p><b>[2분]</b> “global 줄을 지우면 어떻게 될까요?” 추가 질문으로 UnboundLocalError 를 복습합니다.</p>' },
-          { layout: 'practice', title: '실습 2-9. 정삼각형 그리기', desc: '<p>Code02-06 의 틀로 한 변이 200 인 정삼각형을 그리세요. (힌트: 3번, 120도)</p>',
+          { layout: 'practice', title: '실습 2-16. 정삼각형 그리기', desc: '<p>Code02-06 의 틀로 한 변이 200 인 정삼각형을 그리세요. (힌트: 3번, 120도)</p>',
             starter: "import turtle\n\n## 변수 선언 부분 ##\nmyT = None\n\n## 메인 코드 부분 ##\nmyT = turtle.Turtle()\nmyT.shape('turtle')\n\n# TODO: 정삼각형 그리기\n\nturtle.done()\n",
             solution: "import turtle\n\n## 변수 선언 부분 ##\nmyT = None\n\n## 메인 코드 부분 ##\nmyT = turtle.Turtle()\nmyT.shape('turtle')\n\nfor i in range(0, 3) :\n    myT.forward(200)\n    myT.left(120)\n\nturtle.done()\n",
-            notes: '<p><b>[8분]</b> 60도로 돌리는 학생이 많습니다(안쪽 각). 거북이는 “바깥쪽으로 도는 각”만큼 돌아야 하므로 120도. 직접 실행해 보고 스스로 찾게 하세요.</p><p>빠른 학생: 실습 2-10(global 로 호출 횟수 세기), 또는 오각형(72도) 도전.</p>' },
+            notes: '<p><b>[8분]</b> 60도로 돌리는 학생이 많습니다(안쪽 각). 거북이는 “바깥쪽으로 도는 각”만큼 돌아야 하므로 120도. 직접 실행해 보고 스스로 찾게 하세요.</p><p>다음 순서: 실습 2-17(함수 만들기 · docstring) → 2-18(global 로 호출 횟수) → 2-19(정사각형 3개). 빠른 학생은 🚀 프로젝트 2-3(도형 그리기 도구).</p>' },
           { layout: 'summary', title: '정리', bullets: ['긴 프로그램 = 함수 선언 · 변수 선언 · 메인 코드', '<code>#</code> 한 줄 주석, <code>\'\'\'</code> 여러 줄 주석, <code>\\</code> 줄 이어 쓰기', '<code>def 함수명(매개변수) :</code> + 들여쓰기, <code>global</code>', '파이썬 변수는 대입하는 순간 생성', 'turtle: shape · forward · right · done'],
             notes: '<p><b>[1분]</b> 다음 교시: 이 틀에 마우스 클릭 기능을 채워 [프로그램 2] 그림판을 완성합니다.</p>' }
         ]
@@ -1223,9 +2183,12 @@ print("호출 횟수 :", count)
           '마우스 버튼별 기능을 계획하고 필요한 변수를 준비할 수 있다',
           'onscreenclick() 으로 마우스 클릭에 함수를 연결할 수 있다',
           'random 모듈로 임의의 색과 크기를 만들 수 있다',
-          '세 부분 구조로 [프로그램 2] 터틀 그래픽 그림판을 완성할 수 있다'
+          '세 부분 구조로 [프로그램 2] 터틀 그래픽 그림판을 완성할 수 있다',
+          '(심화) 콜백 · 이벤트 루프로 이어지는 이벤트 기반 프로그램의 구조를 설명할 수 있다',
+          '(심화) random 의 여러 함수와 seed 의 쓸모를 알고 알맞게 골라 쓸 수 있다',
+          '(심화) onkey · listen · ontimer · textinput 으로 키보드와 대화상자를 다룰 수 있다'
         ],
-        flow: [['기능 계획 · 변수 준비', 8], ['기능 1 · 2 구현 (클릭 → 함수)', 12], ['기능 3 구현 (random)', 8], ['Code02-07 완성 · 표 2-1', 8], ['SELF STUDY · 퀴즈', 14]],
+        flow: [['기능 계획 · 변수 준비', 6], ['기능 1 · 2 구현 (클릭 → 함수)', 10], ['기능 3 구현 (random)', 6], ['Code02-07 완성 · 표 2-1', 7], ['한 걸음 더: 이벤트 구조 · random · 키보드', 9], ['SELF STUDY · 프로젝트 · 퀴즈', 12]],
         content: [
           { type: 'h', text: '구현할 기능 계획' },
           { type: 'p', html: '마우스로 창을 클릭하면 거북이가 따라오며 그림을 그리는 프로그램을 만듭니다. 마우스 버튼 세 개에 각각 다른 기능을 맡깁니다.' },
@@ -1367,9 +2330,209 @@ turtle.done()`,
             expect: `거북이 크기 : 6
 거북이 크기 : 9
 새 펜 색 : 0.09 0.58 0.91`,
-            desc: '검은 선 → (가운데 클릭) → 새 색의 선 → (선 없이 이동) → (가운데 클릭) → 또 다른 색의 선이 그려집니다. <code>round(값, 2)</code> 는 소수점 둘째 자리까지 반올림합니다.' }
+            desc: '검은 선 → (가운데 클릭) → 새 색의 선 → (선 없이 이동) → (가운데 클릭) → 또 다른 색의 선이 그려집니다. <code>round(값, 2)</code> 는 소수점 둘째 자리까지 반올림합니다.' },
+
+          { type: 'h', text: '한 걸음 더 ① — 이벤트 기반 프로그램의 구조' },
+          { type: 'p', html: '계산기와 그림판은 <b>프로그램이 흘러가는 방식 자체</b>가 다릅니다. 계산기는 위에서 아래로 한 번 실행되고 끝나지만, 그림판은 <code>done()</code> 에서 멈춰 <b>사용자가 무언가 하기를 기다립니다</b>. 이 기다림 속에서 클릭 · 키 입력 같은 <b>이벤트(event)</b>가 생기면, 파이썬이 우리가 등록해 둔 함수를 대신 호출해 줍니다.' },
+          { type: 'figure', html: SVG_EVENT, caption: '순차 실행(계산기)과 이벤트 기반(그림판)의 차이 — 창을 닫을 때까지 “기다림 ↔ 함수 실행”이 반복된다' },
+          { type: 'list', ordered: true, items: [
+            '<b>등록</b> — <code>onscreenclick(screenLeftClick, 1)</code> 처럼 “이 일이 생기면 이 함수를 불러 달라”고 미리 알려 둡니다. 이때 넘기는 함수를 <b>콜백(callback) 함수</b>라고 합니다.',
+            '<b>대기</b> — <code>done()</code>(또는 <code>mainloop()</code>)에 들어가면 프로그램은 그 줄에서 멈춘 채 이벤트를 기다립니다. 이것을 <b>이벤트 루프(event loop)</b>라고 합니다.',
+            '<b>호출</b> — 클릭이 일어나면 파이썬이 <b>좌표를 넣어</b> 콜백을 호출합니다. 콜백이 끝나면 다시 대기 상태로 돌아갑니다.',
+            '<b>종료</b> — 창을 닫아야 이벤트 루프가 끝나고 <code>done()</code> 다음 줄로 넘어갑니다.'
+          ] },
+          { type: 'callout', kind: 'more', title: '📘 done() · mainloop() · exitonclick()', html: '<ul><li><code>turtle.done()</code> 과 <code>turtle.mainloop()</code> 는 <b>같은 일</b>을 합니다(이름만 다릅니다). tkinter · pygame 등 창을 쓰는 모든 도구에 비슷한 함수가 있습니다.</li><li><code>turtle.exitonclick()</code> 은 “아무 데나 클릭하면 창을 닫는다”는 뜻이라, 클릭으로 그림을 그리는 이 프로그램과는 <b>궁합이 맞지 않습니다</b>.</li><li>콜백 안에서 <b>오래 걸리는 일</b>(긴 반복문, <code>time.sleep()</code>)을 하면 그동안 창이 멈춘 것처럼 보입니다. 이벤트 루프가 그 시간 동안 다른 이벤트를 받지 못하기 때문입니다. 애니메이션은 <code>ontimer()</code> 로 조금씩 나눠서 처리합니다.</li></ul>' },
+          { type: 'code', title: '추가 예제. ontimer() 로 스스로 움직이는 거북이', code: `import turtle
+
+## 함수 선언 부분 ##
+def moveStep() :
+    """한 칸 움직이고, 8번이 안 됐으면 자기 자신을 다시 예약한다."""
+    global count
+    turtle.forward(40)
+    turtle.left(45)
+    count = count + 1
+    if count < 8 :
+        turtle.ontimer(moveStep, 200)
+
+## 변수 선언 부분 ##
+count = 0
+
+## 메인 코드 부분 ##
+turtle.title('타이머로 움직이기')
+turtle.shape('turtle')
+turtle.ontimer(moveStep, 200)   # 0.2초 뒤에 moveStep 을 한 번 호출
+turtle.done()`,
+            desc: '<code>ontimer(함수, 밀리초)</code> 는 “정해진 시간 뒤에 이 함수를 한 번 불러 달라”고 예약합니다. 함수 끝에서 자기 자신을 다시 예약하면 <b>반복 애니메이션</b>이 됩니다. <code>while</code> 로 계속 도는 대신 이렇게 나눠서 처리해야 그동안에도 클릭 같은 다른 이벤트를 받을 수 있습니다.' },
+
+          { type: 'h', text: '한 걸음 더 ② — random 모듈 제대로 쓰기' },
+          { type: 'p', html: '그림판은 색과 크기를 무작위로 정합니다. <code>random</code> 모듈에는 이 밖에도 쓸모 있는 함수가 많습니다. 자주 쓰는 것만 한 번에 확인해 봅시다.' },
+          { type: 'table', head: ['함수', '돌려주는 것', '예'], rows: [
+            ['<code>random.random()</code>', '0.0 이상 1.0 <b>미만</b>의 실수', 'RGB 색 값'],
+            ['<code>random.randrange(1, 10)</code>', '1 ~ 9 의 정수 (끝 미포함)', '거북이 크기'],
+            ['<code>random.randint(1, 10)</code>', '1 ~ 10 의 정수 (끝 <b>포함</b>)', '주사위 눈'],
+            ['<code>random.uniform(0, 1)</code>', '범위 안의 실수', '임의의 각도 · 속도'],
+            ['<code>random.choice(목록)</code>', '목록에서 하나를 고름', '색 팔레트에서 색 고르기'],
+            ['<code>random.sample(범위, 개수)</code>', '겹치지 않게 여러 개', '로또 번호 6개'],
+            ['<code>random.shuffle(목록)</code>', '목록의 순서를 섞음 (돌려주지 않음)', '카드 섞기']
+          ], caption: '자주 쓰는 random 함수 — 끝 숫자를 포함하는지 아닌지가 서로 다릅니다' },
+          { type: 'code', title: '추가 예제. random 함수 모아 보기 (seed 로 결과 고정)', code: `import random
+
+random.seed(5)                      # 씨앗을 고정하면 실행할 때마다 같은 결과
+
+print("0.0 ~ 1.0 실수 :", random.random())
+print("1 ~ 9 정수 :", random.randrange(1, 10))
+print("1 ~ 10 정수 :", random.randint(1, 10))
+print("색 하나 고르기 :", random.choice(['red', 'green', 'blue']))
+print("로또 번호 :", random.sample(range(1, 46), 6))
+
+colors = ['red', 'green', 'blue']
+random.shuffle(colors)
+print("섞은 결과 :", colors)`,
+            expect: `0.0 ~ 1.0 실수 : 0.6229016948897019
+1 ~ 9 정수 : 6
+1 ~ 10 정수 : 9
+색 하나 고르기 : red
+로또 번호 : [30, 16, 42, 4, 11, 8]
+섞은 결과 : ['red', 'blue', 'green']`,
+            desc: '<code>random.seed(5)</code> 줄을 지우고 실행하면 매번 다른 결과가 나옵니다. <code>shuffle()</code> 은 목록 <b>자체를 섞고</b> 아무것도 돌려주지 않으므로 <code>colors = random.shuffle(colors)</code> 라고 쓰면 안 됩니다(None 이 들어갑니다).' },
+          { type: 'callout', kind: 'more', title: '📘 난수의 씨앗(seed)과 “진짜 무작위”', html: '컴퓨터가 만드는 난수는 사실 <b>계산으로 만들어 낸 가짜 난수(의사 난수)</b>입니다. 시작값인 <b>씨앗(seed)</b> 이 같으면 언제나 같은 순서로 나오죠. 그래서 <code>random.seed(5)</code> 를 쓰면 <b>결과를 재현</b>할 수 있습니다 — 게임 버그를 다시 만들어 보거나, 수업에서 같은 화면을 보여 줄 때 아주 유용합니다. 씨앗을 정하지 않으면 현재 시각 등을 이용해 매번 다른 값에서 시작합니다.<br>주의: <code>random</code> 은 <b>비밀번호나 보안용으로 쓰면 안 됩니다</b>. 그럴 때는 <code>secrets</code> 모듈을 씁니다.' },
+          { type: 'code', title: '추가 예제. 임의의 색 점 200개 — tracer 로 한 번에', code: `import turtle
+import random
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+turtle.setup(640, 520)
+turtle.tracer(0)
+
+myT = turtle.Turtle()
+myT.hideturtle()
+myT.penup()
+
+for i in range(0, 200) :
+    x = random.randrange(-300, 301)
+    y = random.randrange(-240, 241)
+    size = random.randrange(8, 40)
+    myT.goto(x, y)
+    myT.dot(size, (random.random(), random.random(), random.random()))
+
+turtle.update()
+turtle.done()`,
+            desc: '<code>tracer(0)</code> 이 없으면 점 200개가 하나씩 찍히느라 한참 걸립니다. <code>dot(지름, 색)</code> 은 현재 위치에 점을 찍습니다. 실행할 때마다 다른 그림이 나오니 여러 번 실행해 보세요.' },
+
+          { type: 'h', text: '한 걸음 더 ③ — 키보드와 대화상자까지 쓰기' },
+          { type: 'p', html: '마우스 말고 <b>키보드</b>도 이벤트를 만듭니다. <code>turtle.onkey(함수, \'키이름\')</code> 으로 등록하고, 마지막에 <code>turtle.listen()</code> 을 부르면 창이 키 입력을 받기 시작합니다(<code>listen()</code> 을 빠뜨리면 아무 반응이 없습니다). 키에 연결하는 함수는 좌표를 받지 않으므로 <b>매개변수가 없습니다</b>.' },
+          { type: 'table', head: ['등록', '언제 호출되나', '콜백의 매개변수'], rows: [
+            ['<code>onscreenclick(함수, 1)</code>', '창을 마우스로 클릭할 때', '<code>(x, y)</code> 클릭 좌표'],
+            ['<code>onkey(함수, \'c\')</code>', 'c 키를 눌렀다 뗄 때', '없음'],
+            ['<code>onkeypress(함수, \'Up\')</code>', '↑ 키를 누르는 순간', '없음'],
+            ['<code>ontimer(함수, 500)</code>', '0.5초 뒤 한 번', '없음']
+          ], caption: '이벤트를 등록하는 함수들 — 모두 “함수 이름만” 넘긴다는 점이 같습니다' },
+          { type: 'code', title: '추가 예제. 이름을 묻고 키보드로 조작하기', code: `import turtle
+
+## 함수 선언 부분 ##
+def keyClear() :
+    """그림을 모두 지운다."""
+    turtle.clear()
+    print("지웠습니다.")
+
+def keyUp() :
+    """위로 50 이동한다."""
+    turtle.setheading(90)
+    turtle.forward(50)
+
+## 메인 코드 부분 ##
+turtle.setup(600, 400)
+name = turtle.textinput('이름', '이름을 입력하세요 :')
+turtle.title(str(name) + ' 님의 그림판')   # 취소하면 None 이므로 str() 로 감싼다
+
+turtle.shape('turtle')
+turtle.onkey(keyClear, 'c')
+turtle.onkey(keyUp, 'Up')
+turtle.listen()                 # 이 줄이 있어야 키 입력을 받는다
+turtle.done()`, dialogs: ['홍길동'],
+            desc: '<code>textinput(제목, 질문)</code> 은 작은 입력 창을 띄워 글자를 받아 옵니다(취소하면 <code>None</code>). 실행한 뒤 <b>거북이 창을 한 번 클릭해 선택하고</b> <kbd>c</kbd> 나 <kbd>↑</kbd> 를 눌러 보세요. 키 이름은 소문자 한 글자, 또는 <code>\'Up\'</code>, <code>\'Down\'</code>, <code>\'space\'</code>, <code>\'Return\'</code> 처럼 씁니다.' },
+          { type: 'callout', kind: 'more', title: '📘 여기서 배운 것이 이어지는 곳', html: '“등록해 두고 기다리다가, 이벤트가 오면 함수가 불린다”는 구조는 파이썬만의 이야기가 아닙니다. 웹 페이지의 버튼(자바스크립트), 스마트폰 앱, 10장에서 배울 <b>tkinter 윈도 프로그래밍</b>, 게임 라이브러리 <b>pygame</b> 이 모두 같은 방식으로 동작합니다. 지금 만든 32줄짜리 그림판이 그 모든 것의 축소판인 셈입니다.' }
         ],
         practice: [
+          {
+            title: '실습 2-20. 클릭한 좌표 확인하기',
+            level: 1,
+            desc: '<p>거북이 창을 <b>왼쪽 버튼으로 클릭</b>하면 클릭한 좌표를 콘솔에 출력하는 프로그램을 만드세요. 창의 네 귀퉁이와 한가운데를 눌러 좌표가 어떻게 변하는지 확인해 보세요.</p><pre>클릭한 곳 : 120.0 -85.0</pre>',
+            hint: '클릭에 연결할 함수는 <code>def clickPrint(x, y) :</code> 처럼 매개변수 두 개를 받아야 합니다. 등록은 <code>turtle.onscreenclick(clickPrint, 1)</code> — <b>괄호 없이 이름만</b> 넘깁니다.',
+            starter: `import turtle
+
+## 함수 선언 부분 ##
+def clickPrint(x, y) :
+    """클릭한 좌표를 콘솔에 출력한다."""
+    # TODO: x, y 출력
+    pass
+
+## 메인 코드 부분 ##
+turtle.title('클릭 좌표 확인')
+turtle.shape('turtle')
+# TODO: 왼쪽 버튼에 clickPrint 연결
+
+turtle.done()
+`,
+            solution: `import turtle
+
+## 함수 선언 부분 ##
+def clickPrint(x, y) :
+    """클릭한 좌표를 콘솔에 출력한다."""
+    print("클릭한 곳 :", x, y)
+
+## 메인 코드 부분 ##
+turtle.title('클릭 좌표 확인')
+turtle.shape('turtle')
+turtle.onscreenclick(clickPrint, 1)
+
+turtle.done()
+`
+          },
+          {
+            title: '실습 2-21. 임의의 색으로 점 30개 찍기',
+            level: 1,
+            desc: '<p>화면 아무 곳에나 <b>임의의 위치 · 임의의 색</b>으로 지름 20인 점 30개를 찍으세요. 실행할 때마다 다른 그림이 나와야 합니다.</p>',
+            hint: '위치는 <code>random.randrange(-250, 251)</code>, 색은 <code>(random.random(), random.random(), random.random())</code>. 점은 <code>myT.dot(20, 색)</code> 으로 찍고, 이동할 때 선이 생기지 않도록 <code>penup()</code> 을 먼저 해 두세요.',
+            starter: `import turtle
+import random
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+myT = turtle.Turtle()
+myT.hideturtle()
+myT.penup()
+
+for i in range(0, 30) :
+    # TODO: 임의의 x, y 로 이동해 임의의 색 점 찍기
+    pass
+
+turtle.done()
+`,
+            solution: `import turtle
+import random
+
+## 변수 선언 부분 ##
+myT = None
+
+## 메인 코드 부분 ##
+myT = turtle.Turtle()
+myT.hideturtle()
+myT.penup()
+
+for i in range(0, 30) :
+    x = random.randrange(-250, 251)
+    y = random.randrange(-200, 201)
+    myT.goto(x, y)
+    myT.dot(20, (random.random(), random.random(), random.random()))
+
+turtle.done()
+`
+          },
           {
             title: 'SELF STUDY 2-1. 왼쪽 버튼에 가운데 버튼 기능 합치기',
             level: 2,
@@ -1439,7 +2602,7 @@ turtle.done()
 `
           },
           {
-            title: '실습 2-11. 클릭한 곳에 점 찍기',
+            title: '실습 2-22. 클릭한 곳에 점 찍기',
             level: 2,
             desc: '<p>Code02-07 의 오른쪽 클릭 기능을 바꿔서, 오른쪽 버튼을 누르면 선 없이 이동한 뒤 그 자리에 <b>지름 30 인 점</b>을 현재 색 <code>(r, g, b)</code> 로 찍도록 하세요.</p>',
             hint: '<code>turtle.dot(지름, 색)</code> 으로 점을 찍습니다. 전역 변수 r, g, b 는 읽기만 하므로 global 이 없어도 됩니다.',
@@ -1521,7 +2684,7 @@ turtle.done()
 `
           },
           {
-            title: '실습 2-12. 키보드로 지우고 펜 두께 바꾸기',
+            title: '실습 2-23. 키보드로 지우고 펜 두께 바꾸기',
             level: 3,
             desc: '<p>Code02-07 에 키보드 기능을 추가하세요.</p><ul><li><kbd>c</kbd> 키: 그린 그림을 모두 지운다 (<code>turtle.clear()</code>)</li><li><kbd>space</kbd> 키: 펜 두께 <code>pSize</code> 를 1 ~ 20 중 임의의 값으로 바꾼다</li></ul><p>(거북이 창을 한 번 클릭해 선택한 뒤 키를 눌러야 합니다)</p>',
             hint: '키에 함수를 연결하는 것은 <code>turtle.onkey(함수명, \'c\')</code>, <code>turtle.onkey(함수명, \'space\')</code> 이고, 마지막에 <code>turtle.listen()</code> 으로 키 입력을 받기 시작합니다. 키 함수는 매개변수가 없습니다. pSize 를 바꾸므로 <code>global pSize</code> 가 필요합니다.',
@@ -1614,6 +2777,140 @@ turtle.listen()
 
 turtle.done()
 `
+          },
+          {
+            title: '🚀 프로젝트 2-4. 나만의 그림판 완성하기',
+            level: 3,
+            desc: '<p>Code02-07 을 바탕으로 <b>실제로 쓸 만한 그림판</b>을 만드세요. 마우스와 키보드를 모두 사용합니다.</p><p><b>요구 사항</b></p><ol><li><b>마우스 왼쪽</b> 클릭 — 현재 색 · 현재 두께로 클릭한 곳까지 선을 그린다</li><li><b>마우스 오른쪽</b> 클릭 — 선을 그리지 않고 이동만 한다</li><li><b>마우스 가운데</b> 클릭 — 펜 색을 임의의 색으로 바꾼다</li><li><b>키 1 · 2 · 3</b> — 펜 색을 빨강 · 초록 · 파랑으로 고정한다</li><li><b>키 ↑ · ↓</b> — 펜 두께를 1 ~ 20 사이에서 1씩 늘리고 줄인다 (범위를 벗어나지 않게 한다)</li><li><b>키 c</b> — 그림을 모두 지우고 거북이를 가운데로 되돌린다</li><li><b>키 s</b> — 현재 펜 두께와 색을 콘솔에 출력한다 (예: <code>펜 두께 : 10 / 색 : (1.0, 0.0, 0.0)</code>)</li><li>펜 두께 · 색은 <b>전역 변수</b>로 두고, 콜백 안에서 바꿀 때 <code>global</code> 을 선언한다</li><li>키 입력을 받으려면 <code>turtle.listen()</code> 을 잊지 말 것</li></ol><p><b>실행 방법</b> — 거북이 창을 한 번 클릭해 선택한 뒤 키를 누르세요.</p><p><b>더 해 보기</b> — ① 키 <kbd>d</kbd> 로 현재 위치에 점(<code>dot</code>)을 찍어 보세요. ② 색 목록을 만들고 <code>random.choice()</code> 로 고르게 해 보세요. ③ <code>turtle.write()</code> 로 화면 위쪽에 현재 두께를 표시해 보세요. ④ 09장을 배운 뒤 “지금까지 클릭한 좌표를 리스트에 모아 두었다가 다시 그리기(재생)”에 도전해 보세요.</p>',
+            hint: '색을 바꾸는 함수가 여러 개(가운데 클릭 · 키 1 · 2 · 3)이므로, <code>setColor(newR, newG, newB)</code> 처럼 <b>색을 정하는 함수 하나</b>를 만들어 두고 나머지는 그 함수를 부르게 하면 코드가 훨씬 짧아집니다. 두께 조절은 <code>if penSize &lt; 20 :</code> 처럼 범위를 확인한 뒤 <code>+= 1</code> 하세요.',
+            starter: `import turtle
+import random
+
+## 함수 선언 부분 ##
+def screenLeftClick(x, y) :
+    """클릭한 곳까지 선을 그리며 이동한다."""
+    turtle.pencolor((r, g, b))
+    turtle.pendown()
+    turtle.goto(x, y)
+
+def screenRightClick(x, y) :
+    """선을 그리지 않고 이동한다."""
+    turtle.penup()
+    turtle.goto(x, y)
+
+def screenMidClick(x, y) :
+    """펜 색을 임의의 색으로 바꾼다."""
+    global r, g, b
+    # TODO: r, g, b 를 임의의 값으로
+
+def setColor(newR, newG, newB) :
+    """펜 색을 정한다."""
+    global r, g, b
+    r, g, b = newR, newG, newB
+
+# TODO: keyRed / keyGreen / keyBlue 함수
+# TODO: keyUp / keyDown — 펜 두께 1 ~ 20
+# TODO: keyClear — 지우고 가운데로
+# TODO: keyStatus — 현재 상태 출력
+
+## 변수 선언 부분 ##
+penSize = 10
+r, g, b = 0.0, 0.0, 0.0
+
+## 메인 코드 부분 ##
+turtle.title('나만의 그림판')
+turtle.shape('turtle')
+turtle.pensize(penSize)
+
+turtle.onscreenclick(screenLeftClick, 1)
+turtle.onscreenclick(screenMidClick, 2)
+turtle.onscreenclick(screenRightClick, 3)
+# TODO: 키 연결과 listen()
+
+turtle.done()
+`,
+            solution: `import turtle
+import random
+
+## 함수 선언 부분 ##
+def screenLeftClick(x, y) :
+    """클릭한 곳까지 현재 색 · 두께로 선을 그린다."""
+    turtle.pencolor((r, g, b))
+    turtle.pendown()
+    turtle.goto(x, y)
+
+def screenRightClick(x, y) :
+    """선을 그리지 않고 이동한다."""
+    turtle.penup()
+    turtle.goto(x, y)
+
+def screenMidClick(x, y) :
+    """펜 색을 임의의 색으로 바꾼다."""
+    setColor(random.random(), random.random(), random.random())
+
+def setColor(newR, newG, newB) :
+    """펜 색을 정한다."""
+    global r, g, b
+    r, g, b = newR, newG, newB
+    turtle.pencolor((r, g, b))
+
+def keyRed() :
+    setColor(1.0, 0.0, 0.0)
+
+def keyGreen() :
+    setColor(0.0, 0.7, 0.0)
+
+def keyBlue() :
+    setColor(0.0, 0.0, 1.0)
+
+def keyUp() :
+    """펜 두께를 1 늘린다 (최대 20)."""
+    global penSize
+    if penSize < 20 :
+        penSize += 1
+        turtle.pensize(penSize)
+
+def keyDown() :
+    """펜 두께를 1 줄인다 (최소 1)."""
+    global penSize
+    if penSize > 1 :
+        penSize -= 1
+        turtle.pensize(penSize)
+
+def keyClear() :
+    """그림을 지우고 거북이를 가운데로."""
+    turtle.clear()
+    turtle.penup()
+    turtle.home()
+
+def keyStatus() :
+    """현재 펜 두께와 색을 출력한다."""
+    print("펜 두께 :", penSize, "/ 색 :", (round(r, 2), round(g, 2), round(b, 2)))
+
+## 변수 선언 부분 ##
+penSize = 10
+r, g, b = 0.0, 0.0, 0.0
+
+## 메인 코드 부분 ##
+turtle.title('나만의 그림판')
+turtle.shape('turtle')
+turtle.pensize(penSize)
+
+turtle.onscreenclick(screenLeftClick, 1)
+turtle.onscreenclick(screenMidClick, 2)
+turtle.onscreenclick(screenRightClick, 3)
+
+turtle.onkey(keyRed, '1')
+turtle.onkey(keyGreen, '2')
+turtle.onkey(keyBlue, '3')
+turtle.onkey(keyUp, 'Up')
+turtle.onkey(keyDown, 'Down')
+turtle.onkey(keyClear, 'c')
+turtle.onkey(keyStatus, 's')
+turtle.listen()
+
+turtle.done()
+`
           }
         ],
         quiz: [
@@ -1621,7 +2918,8 @@ turtle.done()
           { q: '클릭에 연결하는 함수가 <code>def screenLeftClick(x, y) :</code> 처럼 매개변수 x, y 를 갖는 이유는?', options: ['x, y 를 전역 변수로 만들기 위해', '클릭한 지점의 좌표를 넘겨받기 위해', '거북이의 크기를 정하기 위해', '특별한 이유 없이 관습이다'], answer: 1, explain: '클릭하면 파이썬이 클릭한 지점의 좌표를 x, y 로 넘겨주며 함수를 호출합니다.' },
           { q: '<code>random.randrange(1, 10)</code> 이 돌려줄 수 <b>없는</b> 값은?', options: ['1', '5', '9', '10'], answer: 3, explain: 'randrange(1, 10) 은 1 이상 10 미만, 즉 1 ~ 9 중 하나입니다.' },
           { q: '<code>screenMidClick()</code> 에서 <code>global r, g, b</code> 를 빼면 어떻게 되는가?', options: ['아무 차이가 없다', '함수 안의 r, g, b 가 지역 변수가 되어 다음 왼쪽 클릭의 선 색이 바뀌지 않는다', '거북이 크기가 바뀌지 않는다', '가운데 버튼 클릭이 인식되지 않는다'], answer: 1, explain: '대입하는 변수는 global 이 없으면 함수 안의 지역 변수가 되어, 전역 r, g, b 는 계속 0.0 (검정) 입니다.' },
-          { q: '펜을 들어 선을 그리지 않고 이동하게 하는 함수는?', options: ['turtle.pendown()', 'turtle.penup()', 'turtle.pensize(0)', 'turtle.done()'], answer: 1, explain: 'penup() 은 펜을 들고, pendown() 은 펜을 내립니다.' }
+          { q: '펜을 들어 선을 그리지 않고 이동하게 하는 함수는?', options: ['turtle.pendown()', 'turtle.penup()', 'turtle.pensize(0)', 'turtle.done()'], answer: 1, explain: 'penup() 은 펜을 들고, pendown() 은 펜을 내립니다.' },
+          { q: '<code>turtle.onkey(keyClear, \'c\')</code> 로 키를 연결했는데 c 를 눌러도 아무 일이 없습니다. 가장 흔한 원인은?', options: ['onkey 대신 onscreenclick 을 써야 한다', '<code>turtle.listen()</code> 을 부르지 않았다', 'keyClear 함수에 x, y 매개변수가 없다', 'c 는 예약된 키라서 쓸 수 없다'], answer: 1, explain: '키 이벤트는 <code>listen()</code> 을 불러야 받기 시작합니다. (창을 한 번 클릭해 선택하는 것도 필요합니다) 키 콜백은 좌표를 받지 않으므로 매개변수가 없는 것이 맞습니다.' }
         ],
         slides: [
           { layout: 'title', title: '[프로그램 2] 마우스로 그리는 터틀 그래픽', subtitle: 'Chapter 02 · Section 05 (2)', badge: '02-5',
@@ -1650,12 +2948,21 @@ turtle.done()
             notes: '<p><b>[4분]</b> 이 슬라이드는 코드 뒷부분만 보여 주는 조각이라 단독 실행하지 않습니다. 전체 프로그램은 학생용 문서의 “[프로그램 2] 완성: Code02-07.py”에서 ▶ 실행하세요.</p><p>실행 후 가운데 클릭 → 왼쪽 클릭 순서로 색이 바뀌는 것을 보여 주세요.</p>' },
           { layout: 'table', title: '표 2-1. Code02-07.py 에 사용된 기타 함수', head: ['함수', '설명'], rows: [['turtle.title(\'제목\')', '윈도창의 제목 설정'], ['turtle.pensize(펜 두께)', '그릴 선의 두께 설정'], ['turtle.onscreenclick(함수명, 번호)', '창을 클릭하면 함수 작동 — 1 왼쪽, 2 가운데, 3 오른쪽 버튼']],
             notes: '<p><b>[2분]</b> 이 밖에 shape, pencolor, pendown/penup, goto, shapesize, done 을 한 번 더 짚어 줍니다.</p><p>“done() 에서 멈춰 클릭을 기다리는” 이벤트 기반 방식이 계산기(위에서 아래로 한 번)와 다르다는 점을 강조하세요.</p>' },
+          { layout: 'diagram', title: '한 걸음 더 ① — 이벤트 기반 프로그램', html: SVG_EVENT, caption: '등록 → 대기(done) → 이벤트 발생 → 콜백 실행 → 다시 대기',
+            notes: '<p><b>[5분]</b> 이 교시에서 가장 중요한 개념 슬라이드입니다. 계산기와 그림판의 <b>흐름 자체가 다르다</b>는 것을 그림으로 확인시키세요.</p><p>용어 두 개만 남기면 됩니다: <b>콜백</b>(나중에 불릴 함수), <b>이벤트 루프</b>(기다리는 반복). <code>done()</code> 과 <code>mainloop()</code> 는 같은 일을 합니다.</p><p>덧붙일 이야기: 콜백 안에서 오래 걸리는 일을 하면 창이 멈춘 것처럼 보입니다 → 애니메이션은 <code>ontimer()</code> 로 잘게 나눕니다. 10장 tkinter, 게임(pygame), 웹의 버튼도 모두 같은 구조입니다.</p>' },
+          { layout: 'code', title: '한 걸음 더 ② — random 모아 보기', code: "import random\n\nrandom.seed(5)\n\nprint(\"0.0 ~ 1.0 실수 :\", random.random())\nprint(\"1 ~ 9 정수 :\", random.randrange(1, 10))\nprint(\"1 ~ 10 정수 :\", random.randint(1, 10))\nprint(\"색 고르기 :\", random.choice(['red', 'green', 'blue']))\nprint(\"로또 번호 :\", random.sample(range(1, 46), 6))\n\ncolors = ['red', 'green', 'blue']\nrandom.shuffle(colors)\nprint(\"섞은 결과 :\", colors)",
+            points: ['<code>randrange(1, 10)</code> 끝 미포함 / <code>randint</code> 포함', '<code>choice</code> 하나 고르기 · <code>sample</code> 겹치지 않게', '<code>shuffle</code> 은 목록 자체를 섞음 (돌려주지 않음)', '<code>seed()</code> — 결과를 <b>재현</b>할 수 있다'],
+            notes: '<p><b>[4분]</b> seed 를 고정했으므로 교실의 모든 화면에 같은 값이 나옵니다. seed 줄을 지우고 다시 실행해 비교해 보세요.</p><p>자주 하는 실수: <code>colors = random.shuffle(colors)</code> → None 이 들어갑니다. 그리고 random 은 보안용이 아니며, 비밀번호 생성 등에는 <code>secrets</code> 모듈을 씁니다.</p>' },
           { layout: 'quiz', title: '확인 문제', q: '<code>random.randrange(1, 10)</code> 이 돌려줄 수 <b>없는</b> 값은?', options: ['1', '5', '9', '10'], answer: 3, explain: '끝 숫자 10 은 포함되지 않습니다 (1 ~ 9).',
             notes: '<p><b>[2분]</b> range 계열 함수는 “끝 숫자 미포함”이 공통 규칙입니다. 6장 range() 에서도 다시 나옵니다.</p>' },
           { layout: 'practice', title: 'SELF STUDY 2-1', desc: '<p>Code02-07 을 수정해서 <b>왼쪽 버튼만 눌러도</b> 임의의 색상이 지정되고 거북이 크기가 바뀌면서 선이 그려지도록 하세요.</p>',
             starter: "import turtle\nimport random\n\ndef screenLeftClick(x, y) :\n    global r, g, b\n    # TODO: 크기와 색을 임의로\n    turtle.pencolor((r, g, b))\n    turtle.pendown()\n    turtle.goto(x, y)\n\ndef screenRightClick(x, y) :\n    turtle.penup()\n    turtle.goto(x, y)\n\npSize = 10\nr, g, b = 0.0, 0.0, 0.0\nturtle.title('거북이로 그림 그리기')\nturtle.shape('turtle')\nturtle.pensize(pSize)\nturtle.onscreenclick(screenLeftClick, 1)\nturtle.onscreenclick(screenRightClick, 3)\nturtle.done()\n",
             solution: "import turtle\nimport random\n\n## 함수 선언 부분 ##\ndef screenLeftClick(x, y) :\n    global r, g, b\n    tSize = random.randrange(1, 10)\n    turtle.shapesize(tSize)\n    r = random.random()\n    g = random.random()\n    b = random.random()\n    turtle.pencolor((r, g, b))\n    turtle.pendown()\n    turtle.goto(x, y)\n\ndef screenRightClick(x, y) :\n    turtle.penup()\n    turtle.goto(x, y)\n\n## 변수 선언 부분 ##\npSize = 10\nr, g, b = 0.0, 0.0, 0.0\n\n## 메인 코드 부분 ##\nturtle.title('거북이로 그림 그리기')\nturtle.shape('turtle')\nturtle.pensize(pSize)\n\nturtle.onscreenclick(screenLeftClick, 1)\nturtle.onscreenclick(screenRightClick, 3)\n\nturtle.done()\n",
-            notes: '<p><b>[10분]</b> 가운데 버튼이 없는 노트북 사용자에게 특히 유용한 수정입니다.</p><p>포인트: 색을 정하는 코드가 pencolor() <b>앞</b>에 와야 그 클릭의 선에 새 색이 적용됩니다. 뒤에 두면 “다음” 선에 적용되는 차이를 실험해 보게 하세요.</p><p>빠른 학생: 실습 2-11(점 찍기), 2-12(키보드 onkey).</p>' },
+            notes: '<p><b>[10분]</b> 가운데 버튼이 없는 노트북 사용자에게 특히 유용한 수정입니다.</p><p>포인트: 색을 정하는 코드가 pencolor() <b>앞</b>에 와야 그 클릭의 선에 새 색이 적용됩니다. 뒤에 두면 “다음” 선에 적용되는 차이를 실험해 보게 하세요.</p><p>순서 추천: 실습 2-20(좌표 확인) · 2-21(점 30개)으로 몸을 풀고 → SELF STUDY 2-1 → 2-22(점 찍기) → 2-23(키보드 onkey) → 🚀 프로젝트 2-4.</p>' },
+          { layout: 'practice', title: '🚀 프로젝트 2-4. 나만의 그림판', desc: '<p>Code02-07 을 확장해 실제로 쓸 만한 그림판을 만드세요.</p><ul><li>왼쪽 = 그리기 · 오른쪽 = 이동 · 가운데 = 임의의 색</li><li>키 <b>1 · 2 · 3</b> = 빨강 · 초록 · 파랑</li><li>키 <b>↑ ↓</b> = 펜 두께 1 ~ 20</li><li>키 <b>c</b> = 지우고 가운데로 · 키 <b>s</b> = 현재 상태 출력</li><li>전역 변수 + <code>global</code>, 마지막에 <code>listen()</code></li></ul>',
+            starter: "import turtle\nimport random\n\ndef screenLeftClick(x, y) :\n    turtle.pencolor((r, g, b))\n    turtle.pendown()\n    turtle.goto(x, y)\n\ndef setColor(newR, newG, newB) :\n    global r, g, b\n    r, g, b = newR, newG, newB\n\n# TODO: keyRed/keyGreen/keyBlue, keyUp/keyDown, keyClear, keyStatus\n\npenSize = 10\nr, g, b = 0.0, 0.0, 0.0\nturtle.shape('turtle')\nturtle.pensize(penSize)\nturtle.onscreenclick(screenLeftClick, 1)\n# TODO: 키 연결과 listen()\nturtle.done()\n",
+            solution: "import turtle\nimport random\n\ndef screenLeftClick(x, y) :\n    turtle.pencolor((r, g, b))\n    turtle.pendown()\n    turtle.goto(x, y)\n\ndef setColor(newR, newG, newB) :\n    global r, g, b\n    r, g, b = newR, newG, newB\n    turtle.pencolor((r, g, b))\n\ndef keyRed() :\n    setColor(1.0, 0.0, 0.0)\n\ndef keyUp() :\n    global penSize\n    if penSize < 20 :\n        penSize += 1\n        turtle.pensize(penSize)\n\ndef keyStatus() :\n    print(\"펜 두께 :\", penSize, \"/ 색 :\", (r, g, b))\n\npenSize = 10\nr, g, b = 0.0, 0.0, 0.0\nturtle.title('나만의 그림판')\nturtle.shape('turtle')\nturtle.pensize(penSize)\nturtle.onscreenclick(screenLeftClick, 1)\nturtle.onkey(keyRed, '1')\nturtle.onkey(keyUp, 'Up')\nturtle.onkey(keyStatus, 's')\nturtle.listen()\nturtle.done()\n",
+            notes: '<p><b>[15분 · 남는 시간은 과제]</b> 이 장의 마무리 프로젝트입니다. 학생용 문서에는 요구 사항 9개와 전체 정답이 들어 있습니다(여기 슬라이드는 일부만 줄인 버전).</p><p>지도 포인트: ① 색을 바꾸는 곳이 네 군데(가운데 클릭 · 키 1 · 2 · 3)이므로 <code>setColor()</code> 함수 하나로 모으게 하세요 — 오늘 배운 “같은 덩어리는 함수로”의 실전입니다. ② 두께를 바꿀 때 범위 확인(1 ~ 20). ③ <code>listen()</code> 을 빠뜨리면 키가 먹지 않습니다.</p><p>완성한 학생에게는 확장 과제: 점 찍기(d), 색 목록 + <code>random.choice()</code>, 화면에 현재 두께 표시.</p>' },
           { layout: 'summary', title: '정리', bullets: ['<code>onscreenclick(함수명, 번호)</code> — 클릭에 함수 연결 (1 왼 · 2 가운데 · 3 오른)', '클릭 함수는 좌표 <code>x, y</code> 를 매개변수로 받음', '<code>pendown</code>/<code>penup</code> + <code>goto(x, y)</code>', '<code>random.random()</code> 0.0~1.0, <code>randrange(1, 10)</code> 1~9', '<b>[프로그램 2] 터틀 그래픽 그림판 완성!</b>'],
             notes: '<p><b>[1분]</b> 2장 전체 정리: 변수 · print · input · int · 파일 저장 · 프로그램 구조 · 이벤트. 다음 장(3장)에서 변수와 데이터형을 본격적으로 배웁니다.</p>' }
         ]

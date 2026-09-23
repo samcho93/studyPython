@@ -231,7 +231,7 @@
       } else if (a === 'run-col') {
         const c = s[act.dataset.col];
         this.showConsole(true);
-        this.app.runCode(c.code, { label: `${s.title} · ${c.title || ''}`, repl: !!c.repl, stdin: c.repl ? c.code : undefined });
+        this.app.runCode(c.code, { label: `${s.title} · ${c.title || ''}`, repl: !!c.repl, stdin: c.repl ? c.code : c.stdin });
       }
     }
 

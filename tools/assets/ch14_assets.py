@@ -4,20 +4,27 @@
 
 - assets/JPG/picture01.jpg ~ picture04.jpg : [프로젝트 1] 미니 포토샵에서 열어 볼 사진 (직접 그린 그림)
 - assets/game/ship02.png, monster01~10.png, missile.png : [프로젝트 2] 슈팅 게임 그림 (배경 투명 PNG)
+- assets/game/shoot.wav, boom.wav : [프로젝트 2] 확장용 짧은 효과음 (wave 모듈로 직접 합성)
+- assets/ch14/typing.txt : [프로젝트 3] 타자 연습 문장 목록
+- assets/ch14/sales.csv : [프로젝트 4] 월별 판매량 데이터 (가상의 값)
 
 교재 그림(저작권)을 쓰지 않고 Pillow 로 직접 그린다. 난수 씨앗을 고정해서 항상 같은 그림이 나온다.
 """
 import math
 import os
 import random
+import struct
+import wave
 
 from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'assets')
 JPG = os.path.join(ROOT, 'JPG')
 GAME = os.path.join(ROOT, 'game')
+DATA = os.path.join(ROOT, 'ch14')
 os.makedirs(JPG, exist_ok=True)
 os.makedirs(GAME, exist_ok=True)
+os.makedirs(DATA, exist_ok=True)
 
 S = 3  # 크게 그린 뒤 줄여서 부드럽게(안티에일리어싱)
 
@@ -301,6 +308,66 @@ def missile():
     im.save(os.path.join(GAME, 'missile.png'), optimize=True)
 
 
+# ---------------------------------------------------------------- 효과음 (wave 모듈로 직접 합성)
+def write_wav(name, samples, rate=11025):
+    path = os.path.join(GAME, name)
+    with wave.open(path, 'wb') as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(rate)
+        w.writeframes(b''.join(struct.pack('<h', max(-32000, min(32000, int(s)))) for s in samples))
+
+
+def shoot_wav():
+    rate, n = 11025, int(11025 * 0.12)
+    out = []
+    for i in range(n):
+        t = i / rate
+        f = 1400 - 900 * (i / n)                      # 높은 음에서 낮은 음으로
+        env = (1 - i / n) ** 2
+        out.append(9000 * env * math.sin(2 * math.pi * f * t))
+    write_wav('shoot.wav', out, rate)
+
+
+def boom_wav():
+    rate, n = 11025, int(11025 * 0.22)
+    rnd = random.Random(14)
+    out, prev = [], 0.0
+    for i in range(n):
+        env = (1 - i / n) ** 2
+        prev = prev * 0.6 + rnd.uniform(-1, 1) * 0.4  # 잡음을 부드럽게(저역 통과)
+        out.append(11000 * env * prev)
+    write_wav('boom.wav', out, rate)
+
+
+# ---------------------------------------------------------------- 데이터 파일
+TYPING_LINES = [
+    '파이썬은 배우기 쉬운 프로그래밍 언어이다',
+    '작게 만들고 자주 실행해 보자',
+    '변수 이름은 뜻이 드러나게 짓는다',
+    '반복되는 코드는 함수로 묶는다',
+    '오류 메시지는 친절한 안내문이다',
+    '좋은 프로그램은 읽기 쉬운 프로그램이다',
+    '기능을 나누면 문제도 작아진다',
+    '오늘도 한 줄씩 꾸준히 써 보자',
+]
+
+SALES_ROWS = [
+    (1, 120, 430), (2, 150, 380), (3, 240, 260), (4, 380, 150),
+    (5, 520, 90), (6, 760, 40), (7, 980, 20), (8, 1040, 30),
+    (9, 620, 70), (10, 330, 180), (11, 200, 340), (12, 140, 460),
+]
+
+
+def data_files():
+    with open(os.path.join(DATA, 'typing.txt'), 'w', encoding='utf-8', newline='\n') as fp:
+        fp.write('\n'.join(TYPING_LINES) + '\n')
+    with open(os.path.join(DATA, 'sales.csv'), 'w', encoding='utf-8', newline='\n') as fp:
+        fp.write('월,아이스크림,호빵\n')
+        for m, a, b in SALES_ROWS:
+            fp.write('%d,%d,%d\n' % (m, a, b))
+
+
 if __name__ == '__main__':
     picture01()
     picture02()
@@ -310,8 +377,11 @@ if __name__ == '__main__':
     for i, (c, deco) in enumerate(MONSTERS, 1):
         monster(i, c, deco)
     missile()
+    shoot_wav()
+    boom_wav()
+    data_files()
     total = 0
-    for folder in (JPG, GAME):
+    for folder in (JPG, GAME, DATA):
         for f in sorted(os.listdir(folder)):
             p = os.path.join(folder, f)
             total += os.path.getsize(p)
